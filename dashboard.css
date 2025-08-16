@@ -1,0 +1,379 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+  margin: 0px;
+  padding: 0px;
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  /* Colors */
+  --body-color: #e4e9f7;
+  --sidebar-color: #fff;
+  --primary-color: #695cfe;
+  --primary-color-light: #f6f5ff;
+  --toggle-color: #ddd;
+  --text-color: #707070;
+  --hover-color: linear-gradient(to right, #000000, #0f4c75);
+
+  /* transition */
+  --tran-02: all 0.2s ease;
+  --tran-03: all 0.2s ease;
+  --tran-04: all 0.4s ease;
+  --tran-05: all 0.5s ease;
+}
+
+body {
+  background: var(--body-color);
+  height: 100vh;
+}
+
+.sidebar .image {
+  width: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar .text {
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  width: 15vw;
+  color: var(--text-color);
+}
+
+.sidebar .text .name,
+.date {
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar .text .date {
+  margin-top: -2px;
+}
+
+.sidebar .text .name {
+  font-weight: 700;
+}
+
+.sidebar {
+  background: var(--sidebar-color);
+  top: 0;
+  left: 0;
+  width: 15vw;
+  height: 100vh;
+  transition: var(--tran-04);
+}
+
+.bottom {
+  margin-top: 60px;
+}
+
+.fix {
+  position: sticky;
+  bottom: 0;
+}
+
+.sidebar .text-img .image img {
+  width: 7rem;
+  border-radius: 6px;
+}
+
+.sidebar header {
+  position: relative;
+}
+
+.sidebar .text-img {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar .icons i {
+  position: absolute;
+  top: 50%;
+  right: -15px;
+  transform: translateY(-50%);
+  height: 30px;
+  width: 30px;
+  background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--sidebar-color);
+  font-size: 17px;
+}
+
+.sidebar .icons i:hover {
+  cursor: pointer;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar li {
+  height: 50px;
+  margin-top: 10px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.menubar .menu .nav-link input {
+  border-style: none;
+}
+
+.sidebar li .icon,
+.sidebar li .text {
+  font-size: 20px;
+  margin: 0px 10px;
+  color: var(--text-color);
+}
+
+.nav-link a {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar li a {
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  transition: var(--tran-04);
+}
+
+.sidebar li .sidebar .search-box {
+  background: var(--primary-color-light);
+  border-radius: 6px;
+}
+
+.search-box input {
+  height: 100%;
+  width: 100%;
+  background: var(--primary-color-light);
+  text-align: left;
+  outline: none;
+  border: none;
+  border-radius: 6px;
+}
+
+.menu-links {
+  height: 72vh;
+}
+
+.sidebar li a:hover {
+  background: linear-gradient(to right, #000000, #0f4c75);
+}
+
+.sidebar li a:hover .icon,
+.sidebar li a:hover .text {
+  color: white;
+}
+
+.sidebar .menu-links .nav-link a {
+  transition: var(--tran-04);
+}
+
+.sidebar .menu-links .nav-link i,
+.sidebar .menu-links .nav-link span {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+}
+
+.sidebar .menubar {
+  background: red;
+}
+
+.bottom {
+  position: relative;
+}
+
+.move {
+  height: 20px;
+  width: 70px;
+  background-color: var(--text-color);
+  margin-right: 20px;
+  border-radius: 10px;
+}
+
+/* .bottom::after{
+  content:'';
+  background: var(--primary-color-light);
+  position: absolute;
+  height:15px;
+  width:15px;
+  left:210px;
+  top:76.8px;
+  transform: rotateY(-50%);
+  border-radius: 50%;
+  transition: var(--tran-03);
+  cursor:pointer;
+} */
+
+body.dark .bottom::after {
+  left: 180px;
+}
+
+.sidebar .move:hover {
+  cursor: pointer;
+}
+
+body.dark {
+  --body-color: #18191a;
+  --sidebar-color: #242526;
+  --primary-color: #3a3b3c;
+  --primary-color-light: #3a3b3c;
+  --toggle-color: #fff;
+  --text-color: #ccc;
+}
+
+.sidebar.close {
+  transition: var(--tran-04);
+  width: 40px;
+}
+
+.sidebar.close .text {
+  opacity: 0;
+}
+
+.sidebar.close .bottom::after {
+  opacity: 0;
+}
+
+.sidebar.close .image img {
+  transition: var(--tran-04);
+  width: 40px;
+}
+
+.sidebar .toggle:hover {
+  cursor: pointer;
+}
+.sidebar.close .image {
+  min-width: 10px;
+}
+
+.sidebar.close .text {
+  transition: all 0.1s ease-out;
+}
+
+.sidebar .text {
+  transition: var(--tran-04);
+}
+
+.sidebar .image img {
+  transition: var(--tran-04);
+}
+
+.sidebar.close .toggle {
+  transform: translateY(120%);
+  transition: var(--tran-04);
+  transform: translateY(120%) rotate(180deg);
+}
+
+.sidebar .toggle {
+  transition: var(--tran-04);
+}
+
+.sunny {
+  position: absolute;
+  transform: translateY(-210%) translateX(60%);
+  opacity: 0;
+}
+
+body.dark .sunny {
+  opacity: 1;
+  color: var(--text-color);
+}
+
+body.dark .moon {
+  opacity: 0;
+}
+
+.menu-bar .menu .menu-links a .text {
+  font-size: 1.5rem;
+}
+
+/* for bigger ones */
+@media (max-width: 1300px) {
+  .menu-bar .menu .menu-links a .text {
+    font-size: 1rem;
+  }
+
+  .text-img .text .name a{
+    font-size: 1.5rem;
+  }
+
+  .text-img .image a img{
+    height:auto;
+    width:100%;
+  }
+}
+
+/* for smaller ones */
+@media (max-width: 1010px) {
+  .menu-bar .menu .menu-links a .text, .bottom .nav-link a .text{
+    display:none;
+  }
+
+  .text-img .text .name a{
+    display:none;
+  }
+
+  .sidebar{
+    min-width:0.2vw;
+  }
+
+  .menu-bar .menu .menu-links a .icon, .bottom .fix a .icon{
+    font-size: 1.2rem;
+    transform: translateX(-7px);
+    display: flex;
+    justify-content: center;
+  }
+
+  .sidebar .text-img .image img{
+    width:2rem;
+    border-radius: 50%;
+  }
+ 
+}
+
+@media(min-width:281px) and (max-width:1010px){
+    
+  .menu-bar .menu .menu-links a .icon, .bottom .fix a .icon{
+    font-size: 1.2rem;
+    transform: translateX(15px);
+  }
+
+  .sidebar .text-img .image img{
+    width:4rem;
+    border-radius: 50%;
+  }
+}
+
+
+@media (min-width:0px) and (max-width:568px){
+    .menu-bar .menu .menu-links a .icon, .bottom .fix a .icon{
+    font-size: 1.2rem;
+    transform: translateX(5px);
+    display: flex;
+    justify-content: center;
+  }
+
+  .sidebar .text-img .image img{
+    width:3rem;
+    border-radius: 50%;
+  }
+}
+
+@media (min-width:1024px){
+    .sidebar .text-img .image img{
+    width:4rem;
+    border-radius: 50%;
+  }
+}
