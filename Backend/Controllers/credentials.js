@@ -4,9 +4,9 @@ const mail = require("nodemailer");
 const oppponent = require("../Model/opponent");
 const jwt = require("jsonwebtoken");
 const opponent = require("../Model/opponent");
-const futsals = require('../Model/futsal')
+const futsals = require("../Model/futsal");
 const teammate = require("../Model/teammate");
-const path = require('path');
+const path = require("path");
 
 require("dotenv").config();
 
@@ -427,41 +427,96 @@ const upload = async (req, res) => {
 
   try {
     const fut = await futsals.create({
-    userId,
-    images: imagePaths, 
-    owner,
-    futsal,
-    location,
-    email,
-    contact,
-    address,
-    artificialTurf: artificialTurf === "false" ? false : true,
-    floodlights: floodlights === "false" ? false : true,
-    changingRooms: changingRooms === "false" ? false : true,
-    showers: showers === "false" ? false : true,
-    parking: parking === "false" ? false : true,
-    cafeteria: cafeteria === "false" ? false : true,
-    firstAid: firstAid === "false" ? false : true,
-    equipmentRental: equipmentRental === "false" ? false : true,
-    price,
-    capacity,
-    about, 
-  });
-  res.status(200).json({msg:"made",data:fut,user:req.user});
+      userId,
+      images: imagePaths,
+      owner,
+      futsal,
+      location,
+      email,
+      contact,
+      address,
+      artificialTurf: artificialTurf === "false" ? false : true,
+      floodlights: floodlights === "false" ? false : true,
+      changingRooms: changingRooms === "false" ? false : true,
+      showers: showers === "false" ? false : true,
+      parking: parking === "false" ? false : true,
+      cafeteria: cafeteria === "false" ? false : true,
+      firstAid: firstAid === "false" ? false : true,
+      equipmentRental: equipmentRental === "false" ? false : true,
+      price,
+      capacity,
+      about,
+    });
+    res.status(200).json({ msg: "made", data: fut, user: req.user });
   } catch (error) {
-    res.status(400).json({msg:error.message});
+    res.status(400).json({ msg: error.message });
   }
 };
 
-const checkOwner=async(req,res)=>{
+const checkOwner = async (req, res) => {
   try {
     const userId = req.user.id;
-    const own = await futsals.findOne({userId})
-    res.status(200).json({msg:"completed",data:own, user:req.user});
+    const own = await futsals.findOne({ userId });
+    res.status(200).json({ msg: "completed", data: own, user: req.user });
   } catch (error) {
-    res.status(400).json({msg:error.message});
+    res.status(400).json({ msg: error.message });
   }
-}
+};
+
+const updateOwner = async (req, res) => {
+  try {
+    const imagePaths = req.files.map((file) => `/uploads/${file.filename}`);
+    const userId = req.user.id;
+    const {
+      images,
+      owner,
+      futsal,
+      location,
+      email,
+      contact,
+      address,
+      artificialTurf,
+      floodlights,
+      changingRooms,
+      showers,
+      parking,
+      cafeteria,
+      firstAid,
+      equipmentRental,
+      price,
+      capacity,
+      about,
+    } = req.body;
+    const upd = await futsals.findOneAndUpdate(
+      { userId },
+      {
+        userId,
+        images: imagePaths,
+        owner,
+        futsal,
+        location,
+        email,
+        contact,
+        address,
+        artificialTurf: artificialTurf === "true",
+        floodlights: floodlights === "true",
+        changingRooms: changingRooms === "true",
+        showers: showers === "true",
+        parking: parking === "true",
+        cafeteria: cafeteria === "true",
+        firstAid: firstAid === "true",
+        equipmentRental: equipmentRental === "true",
+        price,
+        capacity,
+        about,
+      },
+      { new: true, runValidators: true }
+    );
+    res.status(200).json({ msg: "updated", data: upd });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};
 
 module.exports = {
   getCredentials,
@@ -483,5 +538,6 @@ module.exports = {
   editMyPosting,
   validateOwner,
   upload,
-  checkOwner
+  checkOwner,
+  updateOwner,
 };

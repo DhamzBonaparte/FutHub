@@ -6,6 +6,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 export default function Futsal() {
+  const [showMsg, setShowMsg] = useState(false);
+  const [venue, setVenue] = useState({});
   const [edit, setEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
@@ -23,7 +25,7 @@ export default function Futsal() {
   const [cafeteria, setCafeteria] = useState(false);
   const [firstAid, setFirstAid] = useState(false);
   const [equipmentRental, setEquipmentRental] = useState(false);
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(venue?.price ? venue?.price : "");
   const [capacity, setCapacity] = useState("");
   const [about, setAbout] = useState("");
   const [preview, setPreview] = useState(false);
@@ -31,7 +33,30 @@ export default function Futsal() {
   useEffect(() => {
     getFutsal();
   }, []);
-  const [venue, setVenue] = useState({});
+
+  const formData = new FormData();
+
+  images.forEach(({ file }) => {
+    formData.append("updatefutsalPic", file);
+  });
+
+  formData.append("owner", owner);
+  formData.append("futsal", futsal);
+  formData.append("location", location);
+  formData.append("email", email);
+  formData.append("contact", contact);
+  formData.append("address", address);
+  formData.append("artificialTurf", artificialTurf);
+  formData.append("floodlights", floodlights);
+  formData.append("changingRooms", changingRooms);
+  formData.append("showers", showers);
+  formData.append("parking", parking);
+  formData.append("cafeteria", cafeteria);
+  formData.append("firstAid", firstAid);
+  formData.append("equipmentRental", equipmentRental);
+  formData.append("price", price);
+  formData.append("capacity", capacity);
+  formData.append("about", about);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -42,8 +67,6 @@ export default function Futsal() {
     setImages(previews);
   };
 
-  console.log(venue?.images?.map((img, index) => img));
-
   const getFutsal = async () => {
     setLoading(true);
     try {
@@ -52,6 +75,23 @@ export default function Futsal() {
         { withCredentials: true }
       );
       setVenue(check.data.data);
+      setOwner(check.data.data.owner);
+      setFutsal(check.data.data.futsal);
+      setLocation(check.data.data.location);
+      setEmail(check.data.data.email);
+      setContact(check.data.data.contact);
+      setAddress(check.data.data.address);
+      setArtificialTurf(check.data.data.artificialTurf);
+      setFloodlights(check.data.data.floodlights);
+      setChangingRooms(check.data.data.changingRooms);
+      setShowers(check.data.data.showers);
+      setParking(check.data.data.parking);
+      setCafeteria(check.data.data.cafeteria);
+      setFirstAid(check.data.data.firstAid);
+      setEquipmentRental(check.data.data.equipmentRental);
+      setPrice(check.data.data.price);
+      setCapacity(check.data.data.capacity);
+      setAbout(check.data.data.about);
       console.log(check);
     } catch (error) {
       console.log(error.message);
@@ -60,8 +100,54 @@ export default function Futsal() {
     }
   };
 
+  const handleChanges = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.patch(
+        "http://localhost:3000/api/v1/owner/check-owner",
+        formData,
+        { withCredentials: true }
+      );
+      await getFutsal();
+      setShowMsg(true);
+      setEdit(false);
+      setTimeout(() => {
+        setShowMsg(false);
+      }, 2500);
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+  console.log(showMsg);
   return (
     <>
+      <div>
+        <div
+          className="msg"
+          style={{
+            display: showMsg ? "block" : "none",
+            background: "#d4edda", // light green background
+            color: "#155724", // deep green text
+            padding: "15px 20px",
+            borderRadius: "8px",
+            border: "1px solid #c3e6cb", // matching border
+            fontSize: "16px",
+            fontWeight: "500",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+            marginTop: "15px",
+          }}
+        >
+          <p style={{ margin: 0 }}>
+            You have updated the details of your futsal. Our team shall verify
+            and update them accordingly.
+          </p>
+        </div>
+      </div>
+
       <div
         className="load"
         style={{
@@ -104,11 +190,7 @@ export default function Futsal() {
               borderRadius: "8px",
               border: "1px solid #ccc",
             }}
-            defaultValue={
-              venue?.owner
-                ? venue.owner.charAt(0).toUpperCase() + venue.owner.slice(1)
-                : ""
-            }
+            value={owner?.charAt(0).toUpperCase() + owner?.slice(1)}
             onChange={(e) => setOwner(e.target.value)}
           />
           <input
@@ -119,29 +201,29 @@ export default function Futsal() {
               borderRadius: "8px",
               border: "1px solid #ccc",
             }}
-            defaultValue={
-              venue?.futsal
-                ? venue.futsal.charAt(0).toUpperCase() + venue.futsal.slice(1)
-                : ""
-            }
+            value={futsal?.charAt(0).toUpperCase() + futsal?.slice(1)}
             onChange={(e) => setFutsal(e.target.value)}
           />
-          <input
-            type="text"
-            placeholder="Location"
+
+          <select
+            id="location"
+            required
             style={{
               padding: "10px",
               borderRadius: "8px",
               border: "1px solid #ccc",
             }}
-            defaultValue={
-              venue?.location
-                ? venue.location.charAt(0).toUpperCase() +
-                  venue.location.slice(1)
-                : ""
-            }
+            value={location}
             onChange={(e) => setLocation(e.target.value)}
-          />
+          >
+            <option value="">Select Location</option>
+            <option value="kathmandu">Kathmandu</option>
+            <option value="bhaktapur">Bhaktapur</option>
+            <option value="lalitpur">Lalitpur</option>
+            <option value="pokhara">Pokhara</option>
+            <option value="chitwan">Chitwan</option>
+            <option value="biratnagar">Biratnagar</option>
+          </select>
           <input
             type="email"
             placeholder="Email"
@@ -150,7 +232,7 @@ export default function Futsal() {
               borderRadius: "8px",
               border: "1px solid #ccc",
             }}
-            defaultValue={venue?.email}
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
@@ -161,7 +243,7 @@ export default function Futsal() {
               borderRadius: "8px",
               border: "1px solid #ccc",
             }}
-            defaultValue={venue?.contact ? venue.contact : ""}
+            value={contact}
             onChange={(e) => setContact(e.target.value)}
             minLength={10}
             maxLength={10}
@@ -177,12 +259,7 @@ export default function Futsal() {
               borderRadius: "8px",
               border: "1px solid #ccc",
             }}
-            value={
-              venue?.address
-                ? venue?.address?.split(" ")[0].slice(0, 1).toUpperCase() +
-                  venue?.address?.slice(1)
-                : ""
-            }
+            value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
 
@@ -209,9 +286,8 @@ export default function Futsal() {
             >
               <input
                 type="checkbox"
-                value="artificial_turf"
-                checked={venue?.artificialTurf}
-                onChange={(e) => setArtificialTurf(e.target.value)}
+                checked={artificialTurf}
+                onChange={(e) => setArtificialTurf(e.target.checked)}
               />{" "}
               Artificial Turf
             </label>
@@ -229,9 +305,8 @@ export default function Futsal() {
             >
               <input
                 type="checkbox"
-                value="floodlights"
-                checked={venue?.floodlights}
-                onChange={(e) => setFloodlights(e.target.value)}
+                checked={floodlights}
+                onChange={(e) => setFloodlights(e.target.checked)}
               />{" "}
               Floodlights
             </label>
@@ -249,9 +324,8 @@ export default function Futsal() {
             >
               <input
                 type="checkbox"
-                value="changing_rooms"
-                checked={venue?.changingRooms}
-                onChange={(e) => setChangingRooms(e.target.value)}
+                checked={changingRooms}
+                onChange={(e) => setChangingRooms(e.target.checked)}
               />{" "}
               Changing Rooms
             </label>
@@ -269,9 +343,8 @@ export default function Futsal() {
             >
               <input
                 type="checkbox"
-                onChange={(e) => setShowers(e.target.value)}
-                value="showers"
-                checked={venue?.showers}
+                onChange={(e) => setShowers(e.target.checked)}
+                checked={showers}
               />{" "}
               Showers
             </label>
@@ -289,9 +362,8 @@ export default function Futsal() {
             >
               <input
                 type="checkbox"
-                value="parking"
-                onChange={(e) => setParking(e.target.value)}
-                checked={venue?.parking}
+                onChange={(e) => setParking(e.target.checked)}
+                checked={parking}
               />{" "}
               Parking
             </label>
@@ -309,9 +381,8 @@ export default function Futsal() {
             >
               <input
                 type="checkbox"
-                onChange={(e) => setCafeteria(e.target.value)}
-                value="cafeteria"
-                checked={venue?.cafeteria}
+                onChange={(e) => setCafeteria(e.target.checked)}
+                checked={cafeteria}
               />{" "}
               Cafeteria
             </label>
@@ -329,9 +400,8 @@ export default function Futsal() {
             >
               <input
                 type="checkbox"
-                value="first_aid"
-                checked={venue?.firstAid}
-                onChange={(e) => setFirstAid(e.target.value)}
+                checked={firstAid}
+                onChange={(e) => setFirstAid(e.target.checked)}
               />{" "}
               First Aid
             </label>
@@ -349,9 +419,8 @@ export default function Futsal() {
             >
               <input
                 type="checkbox"
-                onChange={(e) => setEquipmentRental(e.target.value)}
-                value="equipment_rental"
-                checked={venue?.equipmentRental}
+                onChange={(e) => setEquipmentRental(e.target.checked)}
+                checked={equipmentRental}
               />{" "}
               Equipment Rental
             </label>
@@ -365,7 +434,7 @@ export default function Futsal() {
               borderRadius: "8px",
               border: "1px solid #ccc",
             }}
-            defaultValue={venue?.price ? venue?.price : ""}
+            value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
           <select
@@ -380,7 +449,7 @@ export default function Futsal() {
               transition: "var(--transition)",
             }}
             required
-            value={venue?.capacity ? venue?.capacity : ""}
+            value={capacity}
           >
             <option value="">Select Capacity</option>
             <option value="5">5-a-side</option>
@@ -388,7 +457,28 @@ export default function Futsal() {
             <option value="11">11-a-side</option>
           </select>
 
-          <label>Futsal Photos (Upload at least 3 photos) *</label>
+            <div>
+  <div
+    className="msg"
+    style={{
+      background: "#d1ecf1", // light teal background
+      color: "#0c5460", // deep teal text
+      padding: "15px 20px",
+      borderRadius: "8px",
+      border: "1px solid #bee5eb", // matching border
+      fontSize: "16px",
+      fontWeight: "500",
+      boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+      marginTop: "15px",
+    }}
+  >
+    <p style={{ margin: 0 }}>
+      Note: All the photos you upload here will overwrite the previously uploaded photos
+    </p>
+  </div>
+</div>
+
+          <label>Futsal Photos </label>
           <div
             className="photo-upload"
             style={{
@@ -408,7 +498,7 @@ export default function Futsal() {
               type="file"
               id="photoInput"
               multiple
-              name="futsalPic"
+              name="updatefutsalPic"
               accept="image/*"
               style={{ display: "none" }}
               onChange={(e) => {
@@ -473,7 +563,7 @@ export default function Futsal() {
               border: "1px solid #ccc",
               resize: "none",
             }}
-            defaultValue={venue?.about ? venue?.about : ""}
+            value={about}
             onChange={(e) => setAbout(e.target.value)}
           />
 
@@ -489,12 +579,16 @@ export default function Futsal() {
               fontWeight: 600,
               marginTop: "10px",
             }}
+            onClick={(e) => {
+              handleChanges(e);
+              setShowMsg(true);
+            }}
           >
             Save Changes
           </button>
           <button
             style={{
-              background: "#ff1900ff",
+              background: "#ef4532ff",
               color: "#fff",
               padding: "12px",
               border: "none",
@@ -845,8 +939,7 @@ export default function Futsal() {
                 }}
               >
                 <InfoIcon style={{ color: "#415245ff", marginRight: "6px" }} />
-                {venue?.about?.slice(0, 1).toUpperCase() +
-                  venue?.about?.slice(1)}
+                {about?.slice(0, 1).toUpperCase() + about?.slice(1)}
               </div>
               {/* Action button */}
               <button

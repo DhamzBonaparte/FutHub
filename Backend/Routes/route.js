@@ -23,7 +23,8 @@ const {
   editMyPosting,
   validateOwner,
   upload,
-  checkOwner
+  checkOwner,
+  updateOwner,
 } = require("../Controllers/credentials");
 
 const storage = multer.diskStorage({
@@ -73,8 +74,10 @@ router
 //owner part started
 router.route("/owner").get(authorize, validateOwner);
 
-router.route("/upload").post(authorize,place.array("futsalPic"), upload);
-router.route('/owner/check-owner').get(authorize,checkOwner)
-
+router.route("/upload").post(authorize, place.array("futsalPic"), upload);
+router
+  .route("/owner/check-owner")
+  .get(authorize, checkOwner)
+  .patch(authorize, place.array("updatefutsalPic"), updateOwner);
 
 module.exports = router;
