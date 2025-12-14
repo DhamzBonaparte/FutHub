@@ -4,6 +4,7 @@ import LocationPinIcon from "@mui/icons-material/LocationPin";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import InfoIcon from "@mui/icons-material/Info";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { useNavigate } from "react-router-dom";
 
 export default function Futsal() {
   const [showMsg, setShowMsg] = useState(false);
@@ -29,6 +30,8 @@ export default function Futsal() {
   const [capacity, setCapacity] = useState("");
   const [about, setAbout] = useState("");
   const [preview, setPreview] = useState(false);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     getFutsal();
@@ -110,10 +113,10 @@ export default function Futsal() {
       );
       await getFutsal();
       setShowMsg(true);
-      setEdit(false);
       setTimeout(() => {
         setShowMsg(false);
       }, 2500);
+      setEdit(false);
       window.scrollTo({
         top: 0,
         behavior: "smooth",
@@ -597,7 +600,9 @@ export default function Futsal() {
               fontWeight: 600,
               marginTop: "10px",
             }}
-            onClick={() => setEdit(false)}
+            onClick={() => {setEdit(false);
+              navigate('/owner/my-futsal')
+            }}
           >
             Cancel
           </button>

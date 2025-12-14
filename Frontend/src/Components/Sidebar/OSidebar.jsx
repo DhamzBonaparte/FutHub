@@ -5,16 +5,16 @@ import ReviewsIcon from "@mui/icons-material/Reviews";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useState, useEffect } from "react";
 
 export default function OSidebar() {
   const [data, setData] = useState({});
-  const [error,setError]=useState("");
+  const [error, setError] = useState("");
   const [active, setActive] = useState("dashboard");
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     validate();
   }, []);
@@ -98,8 +98,7 @@ export default function OSidebar() {
             <Link
               to="/owner"
               style={{ color: "black" }}
-              className={active == "dashboard" ? "active" : ""}
-              onClick={() => setActive("dashboard")}
+              className={location.pathname === "/owner" ? "active" : ""}
             >
               <SpaceDashboardIcon style={{ marginRight: "15px" }} />
               <span>Dashboard</span>
@@ -109,8 +108,9 @@ export default function OSidebar() {
             <Link
               to="/owner/my-futsal"
               style={{ color: "black" }}
-              className={active == "book" ? "active" : ""}
-              onClick={() => setActive("book")}
+              className={
+                location.pathname === "/owner/my-futsal" ? "active" : ""
+              }
             >
               <StorefrontIcon style={{ marginRight: "15px" }} />
               <span>My Futsal</span>
@@ -120,8 +120,9 @@ export default function OSidebar() {
             <Link
               to="/owner/book-futsal"
               style={{ color: "black" }}
-              className={active == "opponent" ? "active" : ""}
-              onClick={() => setActive("opponent")}
+              className={
+                location.pathname === "/owner/book-futsal" ? "active" : ""
+              }
             >
               <BookmarkAddedIcon style={{ marginRight: "15px" }} />
               <span>Bookings</span>
@@ -131,8 +132,7 @@ export default function OSidebar() {
             <Link
               to="/owner/review"
               style={{ color: "black" }}
-              className={active == "team" ? "active" : ""}
-              onClick={() => setActive("team")}
+              className={location.pathname === "/owner/review" ? "active" : ""}
             >
               <ReviewsIcon style={{ marginRight: "15px" }} />
               <span>Reviews</span>
@@ -142,17 +142,15 @@ export default function OSidebar() {
             <Link
               to="/"
               style={{ color: "black" }}
-              className={active == "logout" ? "active" : ""}
-              onClick={() => {
-                setActive("logout");
-                Logout();
-              }}
+              className={location.pathname === "/" ? "active" : ""}
+              onClick={Logout}
             >
               <LogoutIcon style={{ marginRight: "15px" }} />
               <span>Logout</span>
             </Link>
           </li>
         </ul>
+      
       </div>
     </>
   );

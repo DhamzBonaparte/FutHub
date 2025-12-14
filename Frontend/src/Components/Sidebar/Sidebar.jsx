@@ -6,7 +6,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 export default function Sidebar({ goToFav }) {
@@ -14,6 +14,7 @@ export default function Sidebar({ goToFav }) {
   const [error, setError] = useState("");
   const [active, setActive] = useState("dashboard");
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     getAllData();
@@ -86,13 +87,11 @@ export default function Sidebar({ goToFav }) {
             </p>
           </div>
         </div>
-
         <ul className="nav-menu">
           <li>
             <Link
               to="/player"
-              className={active == "dashboard" ? "active" : ""}
-              onClick={() => setActive("dashboard")}
+              className={location.pathname === "/player" ? "active" : ""}
             >
               <DashboardIcon className="icon" />
               <span>Dashboard</span>
@@ -101,8 +100,9 @@ export default function Sidebar({ goToFav }) {
           <li>
             <Link
               to="/player/booking"
-              className={active == "book" ? "active" : ""}
-              onClick={() => setActive("book")}
+              className={
+                location.pathname === "/player/booking" ? "active" : ""
+              }
             >
               <BookIcon className="icon" />
               <span>Booking</span>
@@ -111,8 +111,9 @@ export default function Sidebar({ goToFav }) {
           <li>
             <Link
               to="/player/find-opponent"
-              className={active == "opponent" ? "active" : ""}
-              onClick={() => setActive("opponent")}
+              className={
+                location.pathname === "/player/find-opponent" ? "active" : ""
+              }
             >
               <PersonAddIcon className="icon" />
               <span>Opponents</span>
@@ -120,9 +121,10 @@ export default function Sidebar({ goToFav }) {
           </li>
           <li>
             <Link
-              to="find-teammates"
-              className={active == "team" ? "active" : ""}
-              onClick={() => setActive("team")}
+              to="/player/find-teammates"
+              className={
+                location.pathname === "/player/find-teammates" ? "active" : ""
+              }
             >
               <GroupsIcon className="icon" />
               <span>Teammates</span>
@@ -131,11 +133,8 @@ export default function Sidebar({ goToFav }) {
           <li>
             <Link
               to="/"
-              className={active == "logout" ? "active" : ""}
-              onClick={() => {
-                setActive("logout");
-                Logout();
-              }}
+              className={location.pathname === "/" ? "active" : ""}
+              onClick={Logout}
             >
               <LogoutIcon className="icon" />
               <span>Logout</span>
