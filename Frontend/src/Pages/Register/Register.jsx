@@ -71,7 +71,7 @@ export default function Register() {
           withCredentials: true,
         }
       );
-      console.log(fut);
+      setShowMsg(true);
     } catch (error) {
       console.log(error.message);
     }
@@ -347,8 +347,8 @@ export default function Register() {
                     gridTemplateColumns:
                       "repeat(auto-fill, minmax(200px, 1fr))",
                     gap: "1.2 rem",
-                    justifyItems: "center", // centers horizontally
-                    alignItems: "center", // centers vertically
+                    justifyItems: "center", 
+                    alignItems: "center", 
                   }}
                 >
                   <label>
@@ -450,8 +450,8 @@ export default function Register() {
                       name="facilities"
                       value="cafeteria"
                       style={{
-                        marginRight: "0.5rem", // small gap between checkbox and text
-                        verticalAlign: "middle", // keeps checkbox aligned with text baseline
+                        marginRight: "0.5rem", 
+                        verticalAlign: "middle", 
                       }}
                     />
                     Cafeteria
@@ -524,7 +524,6 @@ export default function Register() {
                     onChange={handleImageChange}
                   />
 
-                  {/* Preview section */}
                   <div
                     style={{
                       display: "grid",
@@ -660,11 +659,11 @@ export default function Register() {
           className="msg"
           style={{
             display: showMsg ? "block" : "none",
-            background: "#d1ecf1", // light teal background
-            color: "#0c5460", // deep teal text
+            background: "#d1ecf1", 
+            color: "#0c5460", 
             padding: "15px 20px",
             borderRadius: "8px",
-            border: "1px solid #bee5eb", // matching border
+            border: "1px solid #bee5eb", 
             fontSize: "16px",
             fontWeight: "500",
             boxShadow: "0 4px 12px rgba(0,0,0,0.05)",

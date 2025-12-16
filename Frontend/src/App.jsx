@@ -15,6 +15,7 @@ import BookFutsal from "./Pages/Dashboard/Owner/Book/BookFutsal";
 import Review from "./Pages/Dashboard/Owner/Reviews/Review";
 import Futsal from "./Pages/Dashboard/Owner/My Futsal/Futsal";
 import Register from "./Pages/Register/Register";
+import Admin from "./Pages/Dashboard/Admin/Admin";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path='/player/find-teammates' element={<Teammate/>}/>
           <Route path='/player/booking' element={<Book/>}></Route>
         </Route>
+        <Route path='/admin' element={<Admin/>}>`</Route>
       </Routes>
     </>
   );

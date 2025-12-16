@@ -133,11 +133,11 @@ export default function Futsal() {
           className="msg"
           style={{
             display: showMsg ? "block" : "none",
-            background: "#d4edda", // light green background
-            color: "#155724", // deep green text
+            background: "#d4edda", 
+            color: "#155724", 
             padding: "15px 20px",
             borderRadius: "8px",
-            border: "1px solid #c3e6cb", // matching border
+            border: "1px solid #c3e6cb", 
             fontSize: "16px",
             fontWeight: "500",
             boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
@@ -266,7 +266,6 @@ export default function Futsal() {
             onChange={(e) => setAddress(e.target.value)}
           />
 
-          {/* Facilities checkboxes */}
           <div
             style={{
               display: "flex",
@@ -464,11 +463,11 @@ export default function Futsal() {
   <div
     className="msg"
     style={{
-      background: "#d1ecf1", // light teal background
-      color: "#0c5460", // deep teal text
+      background: "#d1ecf1", 
+      color: "#0c5460", 
       padding: "15px 20px",
       borderRadius: "8px",
-      border: "1px solid #bee5eb", // matching border
+      border: "1px solid #bee5eb",
       fontSize: "16px",
       fontWeight: "500",
       boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
@@ -510,7 +509,6 @@ export default function Futsal() {
               }}
             />
 
-            {/* Preview section */}
             <div
               style={{
                 display: !preview ? "grid" : "none",
@@ -519,7 +517,6 @@ export default function Futsal() {
                 marginTop: "1rem",
               }}
             >
-              {/* images */}
               {venue?.images?.map((img, index) => (
                 <img
                   key={index}
@@ -666,7 +663,6 @@ export default function Futsal() {
               (e.currentTarget.style.transform = "translateY(0)")
             }
           >
-            {/* Left side: image */}
             <div
               style={{
                 flex: "1",
@@ -695,7 +691,6 @@ export default function Futsal() {
               })}
             </div>
 
-            {/* Right side: details */}
             <div
               style={{
                 flex: "2",
@@ -749,8 +744,6 @@ export default function Futsal() {
                   NPR {venue?.price}/hour • {venue?.capacity}-a-side
                 </p>
 
-                {/* Facilities as badges */}
-                {/* Facilities badges */}
                 <div
                   style={{
                     marginTop: "10px",
@@ -946,7 +939,6 @@ export default function Futsal() {
                 <InfoIcon style={{ color: "#415245ff", marginRight: "6px" }} />
                 {about?.slice(0, 1).toUpperCase() + about?.slice(1)}
               </div>
-              {/* Action button */}
               <button
                 style={{
                   background: "#007bff",

@@ -207,10 +207,10 @@ export default function Signup() {
                 <input
                   type="tel"
                   id="phone"
-                  name="phone"
-                  minLength="10"
                   className="form-input"
-                  pattern="[0-9]{10,}"
+                  minLength={10}
+                  maxLength={10}
+                  pattern="\d{10}"
                   placeholder="Enter your phone number"
                   required
                   value={phone}
@@ -229,9 +229,7 @@ export default function Signup() {
                 >
                   Signing up as:
                 </label>
-                {/* //lkj */}
                 <div style={{ display: "flex", gap: "20px" }}>
-                  {/* Owner box */}
                   <label
                     htmlFor="role-owner"
                     style={{
@@ -265,8 +263,6 @@ export default function Signup() {
                       Owner
                     </span>
                   </label>
-
-                  {/* Player box */}
                   <label
                     htmlFor="role-player"
                     style={{

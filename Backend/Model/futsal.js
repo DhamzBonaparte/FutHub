@@ -8,7 +8,7 @@ const futsalSchema = new mongoose.Schema(
       unique: true,
     },
     images: {
-      type: [String], // store file paths or URLs
+      type: [String], 
       default: [],
     },
     owner: {

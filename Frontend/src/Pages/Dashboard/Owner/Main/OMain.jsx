@@ -111,7 +111,6 @@ export default function OMain() {
                           data={data}
                           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
                         >
-                          {/* Gradient definitions */}
                           <defs>
                             <linearGradient
                               id="colorRevenue"
@@ -199,7 +198,6 @@ export default function OMain() {
                           cy="50%"
                           outerRadius="70%"
                           label
-                          //   isAnimationActive={isAnimationActive}
                         >
                           {bookingData.map((_, index) => (
                             <Cell

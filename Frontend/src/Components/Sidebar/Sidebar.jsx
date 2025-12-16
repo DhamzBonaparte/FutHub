@@ -9,10 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-export default function Sidebar({ goToFav }) {
+export default function Sidebar() {
   const [data, setData] = useState({});
   const [error, setError] = useState("");
-  const [active, setActive] = useState("dashboard");
   const navigate = useNavigate();
   const location = useLocation();
 

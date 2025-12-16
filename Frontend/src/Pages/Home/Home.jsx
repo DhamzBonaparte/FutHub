@@ -515,7 +515,6 @@ export default function Home() {
               <li>
                 <PhoneSharpIcon className="icon" /> +977 9840267722, +977
                 9811734678 <br />
-                {/* <PhoneSharpIcon className="icon"/>  +977 9811734678 */}
               </li>
               <li>
                 <EmailSharpIcon className="icon" /> sulavdhami420@gmail.com ,
