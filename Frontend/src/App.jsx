@@ -17,6 +17,8 @@ import Futsal from "./Pages/Dashboard/Owner/My Futsal/Futsal";
 import Register from "./Pages/Register/Register";
 import Admin from "./Pages/Dashboard/Admin/Admin";
 import AdminLogin from "./Pages/Dashboard/Admin/adminLogin/adminLogin";
+import Player from "./Pages/Dashboard/Admin/Players/Player";
+import Owner from "./Pages/Dashboard/Admin/Owners/Owner";
 function App() {
   return (
     <>
@@ -24,24 +26,28 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/player" element={<PDashboard />}></Route>
-        <Route path='/register' element={<Register/>}></Route>
+        <Route path="/register" element={<Register />}></Route>
         <Route path="/owner" element={<ODashboard />}>
-          <Route index element={<OMain/>}></Route>
-          <Route path="/owner/book-futsal" element={<BookFutsal/>}></Route>
-          <Route path='/owner/review' element={<Review/>}/>
-          <Route path='/owner/my-futsal' element={<Futsal/>}></Route>
+          <Route index element={<OMain />}></Route>
+          <Route path="/owner/book-futsal" element={<BookFutsal />}></Route>
+          <Route path="/owner/review" element={<Review />} />
+          <Route path="/owner/my-futsal" element={<Futsal />}></Route>
         </Route>
         <Route path="/terms" element={<TOC />}></Route>
         <Route path="/" element={<Home />}></Route>
         <Route path="/service" element={<Service />}></Route>
         <Route path="/player" element={<PDashboard />}>
-          <Route index element={<Main/>}></Route>
+          <Route index element={<Main />}></Route>
           <Route path="/player/find-opponent" element={<Opponent />}></Route>
-          <Route path='/player/find-teammates' element={<Teammate/>}/>
-          <Route path='/player/booking' element={<Book/>}></Route>
+          <Route path="/player/find-teammates" element={<Teammate />} />
+          <Route path="/player/booking" element={<Book />}></Route>
         </Route>
-        <Route path='/admin-login'element={<AdminLogin/>}></Route>
-        <Route path='/admin' element={<Admin/>}></Route>
+        <Route path="/admin-login" element={<AdminLogin />}></Route>
+        <Route path="/admin" element={<Admin />}>
+          <Route path='/admin/futsals' element={<Futsal/>}></Route>
+          <Route path='/admin/players' element={<Player/>}></Route>
+          <Route path='/admin/owners' element={<Owner/>}></Route>
+        </Route>
       </Routes>
     </>
   );

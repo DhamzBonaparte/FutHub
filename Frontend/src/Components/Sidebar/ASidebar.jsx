@@ -95,9 +95,9 @@ export default function ASidebar() {
         <ul className="nav-menu">
           <li>
             <Link
-              to="/owner"
+              to="/admin"
               style={{ color: "#20C997" }}
-              className={location.pathname === "/owner" ? "active" : ""}
+              className={location.pathname === "/admin" ? "active" : ""}
             >
               <SpaceDashboardIcon style={{ color: "#20C997", marginRight: "15px" }} />
               <span>Dashboard</span>
@@ -105,36 +105,36 @@ export default function ASidebar() {
           </li>
           <li>
             <Link
-              to="/owner/my-futsal"
+              to="/admin/futsals"
               style={{ color: "#20C997" }}
               className={
-                location.pathname === "/owner/my-futsal" ? "active" : ""
+                location.pathname === "/admin/futsal" ? "active" : ""
               }
             >
               <StorefrontIcon style={{ color: "#20C997", marginRight: "15px" }} />
-              <span>My Futsal</span>
+              <span> Futsals</span>
             </Link>
           </li>
           <li>
             <Link
-              to="/owner/book-futsal"
+              to="/admin/players"
               style={{ color: "#20C997" }}
               className={
-                location.pathname === "/owner/book-futsal" ? "active" : ""
+                location.pathname === "/admin/players" ? "active" : ""
               }
             >
               <BookmarkAddedIcon style={{ color: "#20C997",marginRight: "15px" }} />
-              <span>Bookings</span>
+              <span>Players</span>
             </Link>
           </li>
           <li>
             <Link
-              to="/owner/review"
+              to="/admin/owners"
               style={{ color: "#20C997" }}
-              className={location.pathname === "/owner/review" ? "active" : ""}
+              className={location.pathname === "/admin/owners" ? "active" : ""}
             >
               <ReviewsIcon style={{ marginRight: "15px" }} />
-              <span>Reviews</span>
+              <span>Owners</span>
             </Link>
           </li>
           <li>
