@@ -37,7 +37,9 @@ export default function Sidebar() {
         navigate("/login");
       } else if (err.response?.status === 403) {
         setError("Session expired. Please login again.");
-        navigate("/login");
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
       } else {
         setError("Something went wrong. Please try again");
       }

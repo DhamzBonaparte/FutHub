@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const opponent = require("../Model/opponent");
 const futsals = require("../Model/futsal");
 const teammate = require("../Model/teammate");
+const admin = require("../Model/admin");
 const path = require("path");
 
 require("dotenv").config();
@@ -518,6 +519,31 @@ const updateOwner = async (req, res) => {
   }
 };
 
+const getFutsals = async (req, res) => {
+  try {
+    const all = await futsals.find();
+    res.status(200).json({ msg: "completed", data: all });
+  } catch (err) {
+    res.status(400).json({ msg: err.message });
+  }
+};
+
+const adminCheck = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const approved = await admin.findOne({ admin: username });
+    const pass = await bcrypt.compare(password, approved.password);
+    if (pass) {
+      res.status(200).json({ msg: "admin is approved", data: approved });
+    } else {
+      res.status(403).json({msg:"Invalis username or password."});
+    }
+    console.log(pass);
+  } catch (err) {
+    res.status(400).json({ msg: err.message });
+  }
+};
+
 module.exports = {
   getCredentials,
   setCredentials,
@@ -540,4 +566,6 @@ module.exports = {
   upload,
   checkOwner,
   updateOwner,
+  getFutsals,
+  adminCheck,
 };

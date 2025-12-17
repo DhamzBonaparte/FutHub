@@ -25,6 +25,8 @@ const {
   upload,
   checkOwner,
   updateOwner,
+  adminCheck,
+  getFutsals
 } = require("../Controllers/credentials");
 
 const storage = multer.diskStorage({
@@ -71,6 +73,8 @@ router
   .route("/player/my-teammate-listing/:id")
   .delete(authorize, deleteMyPosting);
 
+router.route('/player/book-futsal').get(authorize,getFutsals)
+
 //owner part started
 router.route("/owner").get(authorize, validateOwner);
 
@@ -79,5 +83,7 @@ router
   .route("/owner/check-owner")
   .get(authorize, checkOwner)
   .patch(authorize, place.array("updatefutsalPic"), updateOwner);
+
+router.route('/admin/login').post(adminCheck)
 
 module.exports = router;

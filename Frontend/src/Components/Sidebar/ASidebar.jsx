@@ -9,43 +9,43 @@ import { Link, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useState, useEffect } from "react";
 
-export default function OSidebar() {
+export default function ASidebar() {
   const [data, setData] = useState({});
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    validate();
-  }, []);
+  //   useEffect(() => {
+  //     validate();
+  //   }, []);
 
-  const validate = async () => {
-    try {
-      const res = await axios.get("http://localhost:3000/api/v1/owner", {
-        withCredentials: true,
-      });
-      setData(res.data.data);
-      if (res.data.data.role !== "owner") {
-        alert("Login as owner to enter!");
-        navigate("/login");
-      }
-      console.log(res.data.data);
-    } catch (error) {
-      console.log(error);
-      if (error?.response?.status === 401) {
-        setError(error.message);
-        alert("You must Login to view dashboard!");
-        navigate("/login");
-      } else if (error.response?.status === 403) {
-        setError("Session expired. Please login again.");
-        alert("Session expired. Please login again.");
-        setTimeout(() => {
-          navigate("/login");
-        }, 500);
-      } else {
-        setError("Something went wrong. Please try again");
-      }
-    }
-  };
+  //   const validate = async () => {
+  //     try {
+  //       const res = await axios.get("http://localhost:3000/api/v1/owner", {
+  //         withCredentials: true,
+  //       });
+  //       setData(res.data.data);
+  //       if (res.data.data.role !== "owner") {
+  //         alert("Login as owner to enter!");
+  //         navigate("/login");
+  //       }
+  //       console.log(res.data.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //       if (error?.response?.status === 401) {
+  //         setError(error.message);
+  //         alert("You must Login to view dashboard!");
+  //         navigate("/login");
+  //       } else if (error.response?.status === 403) {
+  //         setError("Session expired. Please login again.");
+  //         alert("Session expired. Please login again.");
+  //         setTimeout(() => {
+  //           navigate("/login");
+  //         }, 500);
+  //       } else {
+  //         setError("Something went wrong. Please try again");
+  //       }
+  //     }
+  //   };
 
   const Logout = async () => {
     try {
@@ -63,8 +63,8 @@ export default function OSidebar() {
 
   return (
     <>
-      <div className="sidebar" style={{ background: "#ddb518ff" }}>
-        <div className="logo2" style={{ color: "black" }}>
+      <div className="sidebar" style={{ background: "#1B2626" }}>
+        <div className="logo2" style={{ color: "white" }}>
           Fut{" "}
           <span style={{ color: "#145A32", margin: "0", padding: "0" }}>
             Hub
@@ -74,7 +74,7 @@ export default function OSidebar() {
         <div className="user-profile">
           <div
             className="user-avatar"
-            style={{ background: "#145A32", color: "#c0bb2cff" }}
+            style={{ background: "#20C997", color: "#c0bb2cff" }}
           >
             {data?.firstName?.slice(0, 1) || ""}
           </div>
@@ -96,41 +96,41 @@ export default function OSidebar() {
           <li>
             <Link
               to="/owner"
-              style={{ color: "black" }}
+              style={{ color: "#20C997" }}
               className={location.pathname === "/owner" ? "active" : ""}
             >
-              <SpaceDashboardIcon style={{ marginRight: "15px" }} />
+              <SpaceDashboardIcon style={{ color: "#20C997", marginRight: "15px" }} />
               <span>Dashboard</span>
             </Link>
           </li>
           <li>
             <Link
               to="/owner/my-futsal"
-              style={{ color: "black" }}
+              style={{ color: "#20C997" }}
               className={
                 location.pathname === "/owner/my-futsal" ? "active" : ""
               }
             >
-              <StorefrontIcon style={{ marginRight: "15px" }} />
+              <StorefrontIcon style={{ color: "#20C997", marginRight: "15px" }} />
               <span>My Futsal</span>
             </Link>
           </li>
           <li>
             <Link
               to="/owner/book-futsal"
-              style={{ color: "black" }}
+              style={{ color: "#20C997" }}
               className={
                 location.pathname === "/owner/book-futsal" ? "active" : ""
               }
             >
-              <BookmarkAddedIcon style={{ marginRight: "15px" }} />
+              <BookmarkAddedIcon style={{ color: "#20C997",marginRight: "15px" }} />
               <span>Bookings</span>
             </Link>
           </li>
           <li>
             <Link
               to="/owner/review"
-              style={{ color: "black" }}
+              style={{ color: "#20C997" }}
               className={location.pathname === "/owner/review" ? "active" : ""}
             >
               <ReviewsIcon style={{ marginRight: "15px" }} />
@@ -140,7 +140,7 @@ export default function OSidebar() {
           <li>
             <Link
               to="/"
-              style={{ color: "black" }}
+              style={{ color: "#20C997" }}
               className={location.pathname === "/" ? "active" : ""}
               onClick={Logout}
             >
@@ -149,7 +149,6 @@ export default function OSidebar() {
             </Link>
           </li>
         </ul>
-      
       </div>
     </>
   );
