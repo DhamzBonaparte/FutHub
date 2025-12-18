@@ -152,42 +152,52 @@ export default function Book() {
                   </span>
                 </p>
 
-                <div style={{ marginTop: "10px" }}>
-                  <p
-                    style={{
-                      ...textStyle,
-                      marginBottom: "5px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Facilities:
-                  </p>
-                  <ul
-                    style={{
-                      ...textStyle,
-                      listStyleType: "none",
-                      paddingLeft: 0,
-                      margin: 0,
-                    }}
-                  >
-                    {[
-                      futsal.artificialTurf && "Artificial Turf",
-                      futsal.floodlights && "Floodlights",
-                      futsal.changingRooms && "Changing Rooms",
-                      futsal.showers && "Showers",
-                      futsal.parking && "Parking",
-                      futsal.cafeteria && "Cafeteria",
-                      futsal.firstAid && "First Aid",
-                      futsal.equipmentRental && "Equipment Rental",
-                    ]
-                      .filter(Boolean)
-                      .map((facility, index) => (
-                        <li key={index} style={{ marginBottom: "4px" }}>
-                          ✅ {facility}
-                        </li>
-                      ))}
-                  </ul>
-                </div>
+                <p
+                  style={{
+                    fontWeight: "bold",
+                    marginTop: "10px",
+                    marginBottom: "5px",
+                    color: "#1B2626",
+                  }}
+                >
+                  Facilities:
+                </p>
+                <ul
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: "6px",
+                    listStyleType: "none",
+                    paddingLeft: 0,
+                    margin: 0,
+                  }}
+                >
+                  {[
+                    futsal.artificialTurf && "Artificial Turf",
+                    futsal.floodlights && "Floodlights",
+                    futsal.changingRooms && "Changing Rooms",
+                    futsal.showers && "Showers",
+                    futsal.parking && "Parking",
+                    futsal.cafeteria && "Cafeteria",
+                    futsal.firstAid && "First Aid",
+                    futsal.equipmentRental && "Equipment Rental",
+                  ]
+                    .filter(Boolean)
+                    .map((facility, index) => (
+                      <li
+                        key={index}
+                        style={{
+                          background: "#f4f6f8",
+                          padding: "6px 10px",
+                          borderRadius: "6px",
+                          fontSize: "0.9rem",
+                          color: "#1B2626",
+                        }}
+                      >
+                        {facility}
+                      </li>
+                    ))}
+                </ul>
 
                 <p style={textStyle}>
                   <span>

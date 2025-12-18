@@ -32,7 +32,6 @@ export default function Futsal() {
   const [preview, setPreview] = useState(false);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     getFutsal();
   }, []);
@@ -133,11 +132,11 @@ export default function Futsal() {
           className="msg"
           style={{
             display: showMsg ? "block" : "none",
-            background: "#d4edda", 
-            color: "#155724", 
+            background: "#d4edda",
+            color: "#155724",
             padding: "15px 20px",
             borderRadius: "8px",
-            border: "1px solid #c3e6cb", 
+            border: "1px solid #c3e6cb",
             fontSize: "16px",
             fontWeight: "500",
             boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
@@ -459,26 +458,27 @@ export default function Futsal() {
             <option value="11">11-a-side</option>
           </select>
 
-            <div>
-  <div
-    className="msg"
-    style={{
-      background: "#d1ecf1", 
-      color: "#0c5460", 
-      padding: "15px 20px",
-      borderRadius: "8px",
-      border: "1px solid #bee5eb",
-      fontSize: "16px",
-      fontWeight: "500",
-      boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-      marginTop: "15px",
-    }}
-  >
-    <p style={{ margin: 0 }}>
-      Note: All the photos you upload here will overwrite the previously uploaded photos
-    </p>
-  </div>
-</div>
+          <div>
+            <div
+              className="msg"
+              style={{
+                background: "#d1ecf1",
+                color: "#0c5460",
+                padding: "15px 20px",
+                borderRadius: "8px",
+                border: "1px solid #bee5eb",
+                fontSize: "16px",
+                fontWeight: "500",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                marginTop: "15px",
+              }}
+            >
+              <p style={{ margin: 0 }}>
+                Note: All the photos you upload here will overwrite the
+                previously uploaded photos
+              </p>
+            </div>
+          </div>
 
           <label>Futsal Photos </label>
           <div
@@ -597,8 +597,9 @@ export default function Futsal() {
               fontWeight: 600,
               marginTop: "10px",
             }}
-            onClick={() => {setEdit(false);
-              navigate('/owner/my-futsal')
+            onClick={() => {
+              setEdit(false);
+              navigate("/owner/my-futsal");
             }}
           >
             Cancel

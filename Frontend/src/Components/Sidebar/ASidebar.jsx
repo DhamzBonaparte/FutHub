@@ -13,39 +13,7 @@ export default function ASidebar() {
   const [data, setData] = useState({});
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
-  //   useEffect(() => {
-  //     validate();
-  //   }, []);
-
-  //   const validate = async () => {
-  //     try {
-  //       const res = await axios.get("http://localhost:3000/api/v1/owner", {
-  //         withCredentials: true,
-  //       });
-  //       setData(res.data.data);
-  //       if (res.data.data.role !== "owner") {
-  //         alert("Login as owner to enter!");
-  //         navigate("/login");
-  //       }
-  //       console.log(res.data.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //       if (error?.response?.status === 401) {
-  //         setError(error.message);
-  //         alert("You must Login to view dashboard!");
-  //         navigate("/login");
-  //       } else if (error.response?.status === 403) {
-  //         setError("Session expired. Please login again.");
-  //         alert("Session expired. Please login again.");
-  //         setTimeout(() => {
-  //           navigate("/login");
-  //         }, 500);
-  //       } else {
-  //         setError("Something went wrong. Please try again");
-  //       }
-  //     }
-  //   };
+  const location = useLocation();
 
   const Logout = async () => {
     try {
@@ -74,21 +42,13 @@ export default function ASidebar() {
         <div className="user-profile">
           <div
             className="user-avatar"
-            style={{ background: "#20C997", color: "#c0bb2cff" }}
+            style={{ background: "white", color: "gray" }}
           >
-            {data?.firstName?.slice(0, 1) || ""}
+            A
           </div>
           <div className="user-info">
-            <h3 style={{ color: "black" }}>
-              {data?.firstName?.slice(0, 1).toUpperCase() +
-                data?.firstName?.slice(1)}{" "}
-              {data?.lastName?.slice(0, 1).toUpperCase() +
-                data?.lastName?.slice(1)}
-            </h3>
-            <p style={{ color: "black" }}>
-              {data?.role?.charAt(0).toUpperCase() || ""}
-              {data?.role?.slice(1) || ""}
-            </p>
+            <h3 style={{ color: "white" }}>Admin</h3>
+            <p style={{ color: "white" }}>Admin</p>
           </div>
         </div>
 
@@ -96,55 +56,57 @@ export default function ASidebar() {
           <li>
             <Link
               to="/admin"
-              style={{ color: "#20C997" }}
+              style={{ color: "white" }}
               className={location.pathname === "/admin" ? "active" : ""}
             >
-              <SpaceDashboardIcon style={{ color: "#20C997", marginRight: "15px" }} />
+              <SpaceDashboardIcon
+                style={{ color:"gray", marginRight: "15px" }}
+              />
               <span>Dashboard</span>
             </Link>
           </li>
           <li>
             <Link
               to="/admin/futsals"
-              style={{ color: "#20C997" }}
-              className={
-                location.pathname === "/admin/futsal" ? "active" : ""
-              }
+              style={{ color: "white" }}
+              className={location.pathname === "/admin/futsals" ? "active" : ""}
             >
-              <StorefrontIcon style={{ color: "#20C997", marginRight: "15px" }} />
+              <StorefrontIcon
+                style={{ color:"gray", marginRight: "15px" }}
+              />
               <span> Futsals</span>
             </Link>
           </li>
           <li>
             <Link
               to="/admin/players"
-              style={{ color: "#20C997" }}
-              className={
-                location.pathname === "/admin/players" ? "active" : ""
-              }
+              style={{ color: "white" }}
+              className={location.pathname === "/admin/players" ? "active" : ""}
             >
-              <BookmarkAddedIcon style={{ color: "#20C997",marginRight: "15px" }} />
+              <BookmarkAddedIcon
+                style={{ color:"gray", marginRight: "15px" }}
+              />
               <span>Players</span>
             </Link>
           </li>
           <li>
             <Link
               to="/admin/owners"
-              style={{ color: "#20C997" }}
+              style={{ color: "white" }}
               className={location.pathname === "/admin/owners" ? "active" : ""}
             >
-              <ReviewsIcon style={{ marginRight: "15px" }} />
+              <ReviewsIcon style={{ marginRight: "15px", color:"gray" }} />
               <span>Owners</span>
             </Link>
           </li>
           <li>
             <Link
               to="/"
-              style={{ color: "#20C997" }}
+              style={{ color: "white" }}
               className={location.pathname === "/" ? "active" : ""}
               onClick={Logout}
             >
-              <LogoutIcon style={{ marginRight: "15px" }} />
+              <LogoutIcon style={{ marginRight: "15px",color:"gray" }} />
               <span>Logout</span>
             </Link>
           </li>

@@ -13,6 +13,7 @@ export default function OSidebar() {
   const [data, setData] = useState({});
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     validate();
@@ -149,7 +150,6 @@ export default function OSidebar() {
             </Link>
           </li>
         </ul>
-      
       </div>
     </>
   );

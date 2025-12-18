@@ -536,11 +536,25 @@ const adminCheck = async (req, res) => {
     if (pass) {
       res.status(200).json({ msg: "admin is approved", data: approved });
     } else {
-      res.status(403).json({msg:"Invalis username or password."});
+      res.status(403).json({ msg: "Invalis username or password." });
     }
     console.log(pass);
   } catch (err) {
     res.status(400).json({ msg: err.message });
+  }
+};
+
+const approve = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const appro = await futsals.findOneAndUpdate(
+      { userId: id },
+      { $set: { approved: true } },
+      { new: true, runValidators: true }
+    );
+    res.status(200).json({ msg: "approved", data: appro });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
   }
 };
 
@@ -568,4 +582,5 @@ module.exports = {
   updateOwner,
   getFutsals,
   adminCheck,
+  approve,
 };

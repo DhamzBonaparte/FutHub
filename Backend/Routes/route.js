@@ -26,7 +26,8 @@ const {
   checkOwner,
   updateOwner,
   adminCheck,
-  getFutsals
+  getFutsals,
+  approve
 } = require("../Controllers/credentials");
 
 const storage = multer.diskStorage({
@@ -84,6 +85,8 @@ router
   .get(authorize, checkOwner)
   .patch(authorize, place.array("updatefutsalPic"), updateOwner);
 
-router.route('/admin/login').post(adminCheck)
+router.route('/admin/login').post(adminCheck);
+router.route('/admin/approve-futsals/:id').patch(approve)
+router.route('/admin/futsals').get(getFutsals)
 
 module.exports = router;

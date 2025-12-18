@@ -19,6 +19,8 @@ import Admin from "./Pages/Dashboard/Admin/Admin";
 import AdminLogin from "./Pages/Dashboard/Admin/adminLogin/adminLogin";
 import Player from "./Pages/Dashboard/Admin/Players/Player";
 import Owner from "./Pages/Dashboard/Admin/Owners/Owner";
+import ADashboard from "./Pages/Dashboard/Admin/adminDashboard/ADashboard";
+import Futsals from "./Pages/Dashboard/Admin/Futsals/Futsal";
 function App() {
   return (
     <>
@@ -44,9 +46,11 @@ function App() {
         </Route>
         <Route path="/admin-login" element={<AdminLogin />}></Route>
         <Route path="/admin" element={<Admin />}>
-          <Route path='/admin/futsals' element={<Futsal/>}></Route>
-          <Route path='/admin/players' element={<Player/>}></Route>
-          <Route path='/admin/owners' element={<Owner/>}></Route>
+          <Route index element={<ADashboard />}></Route>
+
+          <Route path="/admin/futsals" element={<Futsals />}></Route>
+          <Route path="/admin/players" element={<Player />}></Route>
+          <Route path="/admin/owners" element={<Owner />}></Route>
         </Route>
       </Routes>
     </>
