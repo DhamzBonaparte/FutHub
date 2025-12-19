@@ -12,8 +12,9 @@ export default function Owner() {
 
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
   const [owners, setOwners] = useState([]);
+  const [data, setData] = useState([]);
+  const [showDetails, setShowDetails] = useState(false);
 
   const getOwners = async () => {
     try {
@@ -29,15 +30,35 @@ export default function Owner() {
 
   const handleDelete = async (id) => {
     try {
-      const del = await axios.delete(
-        `http://localhost:3000/api/v1/admin/owners/${id}`
-      );
-      console.log(del);
+      await axios.delete(`http://localhost:3000/api/v1/admin/owners/${id}`);
       await getOwners();
     } catch (Err) {
       setErr(Err.message);
     }
   };
+
+const handleDetails = async (email) => {
+  try {
+    setLoading(true);
+    setShowDetails(true);
+
+    const hi = await axios.post("http://localhost:3000/api/v1/admin/owners", {
+      email,
+    });
+
+    setData(hi?.data?.details || []);
+  } catch (err) {
+    setShowDetails(false);
+    setErr(err.message);
+
+    if (err.response?.status === 404) {
+      setData([]);
+      alert("No futsal registered");
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>
@@ -47,6 +68,7 @@ export default function Owner() {
           backgroundColor: "#f9fafb",
           padding: "40px",
           fontFamily: "Segoe UI, sans-serif",
+          display: showDetails ? "none" : "block",
         }}
       >
         <h1
@@ -58,7 +80,7 @@ export default function Owner() {
             fontWeight: "700",
           }}
         >
-          Futsal Management
+          Owner Management
         </h1>
 
         <div
@@ -69,6 +91,7 @@ export default function Owner() {
             textAlign: "center",
             fontFamily: "Arial",
             fontSize: "1.6rem",
+            marginBottom: "20px",
           }}
         >
           Loading owner data...
@@ -79,7 +102,6 @@ export default function Owner() {
             borderRadius: "12px",
             boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
             overflowX: "auto",
-            // display:showDetails?"none":"block"
           }}
         >
           <table
@@ -126,7 +148,9 @@ export default function Owner() {
                       `${owner.firstName
                         .charAt(0)
                         .toUpperCase()}${owner.firstName.slice(1)} 
-  ${owner.lastName.charAt(0).toUpperCase()}${owner.lastName.slice(1)}`}
+                     ${owner.lastName
+                       .charAt(0)
+                       .toUpperCase()}${owner.lastName.slice(1)}`}
                   </td>
                   <td style={{ padding: "14px 20px", color: "#444" }}>
                     {owner.email}
@@ -175,15 +199,19 @@ export default function Owner() {
                     </button>
                     <button
                       style={{
-                        background: "#2dd05bff",
-                        borderRadius: "10px",
-                        height: "60px",
-                        marginTop: "10px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
+                        marginTop: "12px",
+                        width: "100%",
+                        padding: "10px",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        transition: "background 0.2s ease",
+                        bottom: 0,
+                        background: "#41c312ff",
+                        color: "#f5f5f5ff",
                       }}
-                      onClick={() => handleDetails(owner._id)}
+                      onClick={() => handleDetails(owner.email)}
                     >
                       View Details
                     </button>
@@ -192,6 +220,278 @@ export default function Owner() {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <div
+          className="loadi"
+          style={{
+            display: loading ? "block" : "none",
+            fontWeight: 700,
+            textAlign: "center",
+            fontFamily: "Arial",
+            fontSize: "1.6rem",
+            marginBottom: "20px",
+          }}
+        >
+          Loading owner data...
+        </div>
+
+      {/* show details */}
+      <div
+        style={{
+          backgroundColor: "#f4f6f8",
+          padding: "40px",
+          fontFamily: "Segoe UI, sans-serif",
+          justifyContent: "center",
+          display: showDetails ? "flex" : "none",
+          height: "100%",
+        }}
+      >
+        
+        <div
+          style={{
+            backgroundColor: "#fff",
+            borderRadius: "12px",
+            boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
+            maxWidth: "900px",
+            width: "100%",
+            padding: "30px",
+          }}
+        >
+            
+          {/* Header */}
+          <h1
+            style={{
+              marginBottom: "20px",
+              fontSize: "1.8rem",
+              fontWeight: "700",
+              color: "#20C997",
+              textAlign: "center",
+            }}
+          >
+            {data?.futsal?.charAt(0)?.toUpperCase() + data?.futsal?.slice(1)} —
+            Details
+          </h1>
+
+          {/* Owner & Contact Info */}
+          <div style={{ marginBottom: "20px" }}>
+            <p style={{ margin: "6px 0", color: "#444" }}>
+              <strong>Owner:</strong>{" "}
+              {data?.owner?.charAt(0).toUpperCase() + data?.owner?.slice(1)}
+            </p>
+            <p style={{ margin: "6px 0", color: "#444" }}>
+              <strong>Email:</strong> {data?.email}
+            </p>
+            <p style={{ margin: "6px 0", color: "#444" }}>
+              <strong>Contact:</strong> {data?.contact}
+            </p>
+            <p style={{ margin: "6px 0", color: "#444" }}>
+              <strong>Address:</strong>{" "}
+              {data?.address?.charAt(0).toUpperCase() + data?.address?.slice(1)}
+            </p>
+          </div>
+
+          {/* Facilities */}
+          <h2
+            style={{
+              fontSize: "1.3rem",
+              fontWeight: "600",
+              marginBottom: "12px",
+              color: "#1B2626",
+            }}
+          >
+            Facilities
+          </h2>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+              gap: "12px",
+              marginBottom: "20px",
+            }}
+          >
+            <span
+              style={{
+                display: "inline-block",
+                padding: "8px 14px",
+                backgroundColor:
+                  data?.artificialTurf == true ? "#2ecc71" : "#f28b82",
+                color: "#fff",
+                borderRadius: "20px",
+                fontSize: "0.85rem",
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              Artificial Turf: {data?.artificialTurf == true ? "Yes" : "No"}
+            </span>
+            <span
+              style={{
+                display: "inline-block",
+                padding: "8px 14px",
+                backgroundColor:
+                  data?.floodlights == true ? "#2ecc71" : "#f28b82",
+                color: "#fff",
+                borderRadius: "20px",
+                fontSize: "0.85rem",
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              Floodlights: {data?.floodlights == true ? "Yes" : "No"}
+            </span>
+            <span
+              style={{
+                display: "inline-block",
+                padding: "8px 14px",
+                backgroundColor:
+                  data?.changingRooms == true ? "#2ecc71" : "#f28b82",
+                color: "#fff",
+                borderRadius: "20px",
+                fontSize: "0.85rem",
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              Changing Showers: {data?.changingRooms == true ? "Yes" : "No"}
+            </span>
+            <span
+              style={{
+                display: "inline-block",
+                padding: "8px 14px",
+                backgroundColor: data?.showers == true ? "#2ecc71" : "#f28b82",
+                color: "#fff",
+                borderRadius: "20px",
+                fontSize: "0.85rem",
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              Showers: {data?.showers == true ? "Yes" : "No"}
+            </span>
+            <span
+              style={{
+                display: "inline-block",
+                padding: "8px 14px",
+                backgroundColor: data?.parking == true ? "#2ecc71" : "#f28b82",
+                color: "#fff",
+                borderRadius: "20px",
+                fontSize: "0.85rem",
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              Parking: {data?.parking == true ? "Yes" : "No"}
+            </span>
+            <span
+              style={{
+                display: "inline-block",
+                padding: "8px 14px",
+                backgroundColor:
+                  data?.cafeteria == true ? "#2ecc71" : "#f28b82",
+                color: "#fff",
+                borderRadius: "20px",
+                fontSize: "0.85rem",
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              Cafeteria: {data?.cafeteria == true ? "Yes" : "No"}
+            </span>
+            <span
+              style={{
+                display: "inline-block",
+                padding: "8px 14px",
+                backgroundColor: data?.firstAid == true ? "#2ecc71" : "#f28b82",
+                color: "#fff",
+                borderRadius: "20px",
+                fontSize: "0.85rem",
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              First Aid: {data?.firstAid == true ? "Yes" : "No"}
+            </span>
+            <span
+              style={{
+                display: "inline-block",
+                padding: "8px 14px",
+                backgroundColor:
+                  data?.equipmentRental == true ? "#2ecc71" : "#f28b82",
+                color: "#fff",
+                borderRadius: "20px",
+                fontSize: "0.85rem",
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              Rental Equipment: {data?.equipmentRental == true ? "Yes" : "No"}
+            </span>
+          </div>
+
+          {/* Pricing & Capacity */}
+          <div style={{ marginBottom: "20px" }}>
+            <p style={{ margin: "6px 0", color: "#444" }}>
+              <strong>Price:</strong> Rs. {data?.price} per hour
+            </p>
+            <p style={{ margin: "6px 0", color: "#444" }}>
+              <strong>Capacity:</strong> {data?.capacity}-a-side
+            </p>
+          </div>
+
+          {/* About */}
+          <div style={{ marginBottom: "20px" }}>
+            <h2
+              style={{
+                fontSize: "1.3rem",
+                fontWeight: "600",
+                marginBottom: "12px",
+                color: "#1B2626",
+              }}
+            >
+              About
+            </h2>
+            <p style={{ color: "#444", lineHeight: "1.5" }}>
+              {data?.about?.charAt(0).toUpperCase() + data?.about?.slice(1)}
+            </p>
+          </div>
+
+          {/* Approval Status */}
+          <div style={{ textAlign: "center" }}>
+            <span
+              style={{
+                display: "inline-block",
+                padding: "10px 20px",
+                backgroundColor:
+                  data?.approved === true ? "#2ecc71" : "#c43007ff",
+                color: "#fff",
+                borderRadius: "25px",
+                fontSize: "1rem",
+                fontWeight: "600",
+              }}
+            >
+              {data?.approved === true ? "Approved" : "Not Approved"}
+            </span>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <button
+              style={{
+                display: "inline-block",
+                padding: "10px 20px",
+                background: "#c43007ff",
+                color: "#fff",
+                borderRadius: "25px",
+                fontSize: "1rem",
+                fontWeight: "600",
+                width: "100%",
+                marginTop: "20px",
+              }}
+              onClick={() => setShowDetails(false)}
+            >
+              Close
+            </button>
+          </div>
         </div>
       </div>
     </>

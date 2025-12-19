@@ -23,6 +23,7 @@ export default function Register() {
   const [price, setPrice] = useState("");
   const [capacity, setCapacity] = useState("");
   const [about, setAbout] = useState("");
+  const [em,setEm]=useState("");
   const navigate = useNavigate();
   useEffect(() => {
     checkOwner();
@@ -83,7 +84,7 @@ export default function Register() {
         "http://localhost:3000/api/v1/owner/check-owner",
         { withCredentials: true }
       );
-      console.log(check.data);
+      setEm(check.data.user.email);
 
       if (check.data.data) {
         setShowMsg(true);
@@ -245,6 +246,8 @@ export default function Register() {
                   id="ownerEmail"
                   required
                   placeholder="Enter your email"
+                  defaultValue={em}
+                  value={em}
                 />
               </div>
 
@@ -301,9 +304,6 @@ export default function Register() {
                   <option value="kathmandu">Kathmandu</option>
                   <option value="bhaktapur">Bhaktapur</option>
                   <option value="lalitpur">Lalitpur</option>
-                  <option value="pokhara">Pokhara</option>
-                  <option value="chitwan">Chitwan</option>
-                  <option value="biratnagar">Biratnagar</option>
                 </select>
               </div>
 

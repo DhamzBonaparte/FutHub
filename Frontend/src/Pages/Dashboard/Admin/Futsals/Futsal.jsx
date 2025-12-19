@@ -147,6 +147,18 @@ export default function Futsals() {
               <p
                 style={{ margin: "6px 0", color: "#444", fontSize: "0.95rem" }}
               >
+                <strong>Email:</strong>{" "}
+                {futsal.email}
+              </p>
+              <p
+                style={{ margin: "6px 0", color: "#444", fontSize: "0.95rem" }}
+              >
+                <strong>Price:</strong>{" "}
+                Rs. {futsal.price} per hour
+              </p>
+              <p
+                style={{ margin: "6px 0", color: "#444", fontSize: "0.95rem" }}
+              >
                 <strong>Location:</strong>{" "}
                 {futsal.address.charAt(0).toUpperCase() +
                   futsal.address.slice(1)}

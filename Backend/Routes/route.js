@@ -32,7 +32,8 @@ const {
   getPlayers,
   delPlayers,
   getOwners,
-  delOwners
+  delOwners,
+  getDetails
 } = require("../Controllers/credentials");
 
 const storage = multer.diskStorage({
@@ -95,7 +96,7 @@ router.route('/admin/login').post(adminCheck);
 router.route('/admin/approve-futsals/:id').patch(approve).delete(delFutsal)
 router.route('/admin/futsals').get(getFutsals)
 router.route('/admin/players').get(getPlayers);
-router.route('/admin/owners').get(getOwners);
+router.route('/admin/owners').get(getOwners).post(getDetails);
 router.route('/admin/players/:id').delete(delPlayers);
 router.route('/admin/owners/:id').delete(delOwners);
 

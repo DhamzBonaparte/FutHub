@@ -598,10 +598,23 @@ const getOwners = async (req, res) => {
 
 const delOwners = async (req, res) => {
   try {
-    const {id}=req.params;
+    const { id } = req.params;
     const del = await signup.findByIdAndDelete(id);
-    res.status(200).json({msg:"Delete",data:del});
+    res.status(200).json({ msg: "Delete", data: del });
   } catch (error) {
+    res.status(400).json({ msg: "not found", error: err.message });
+  }
+};
+
+const getDetails = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const details = await futsals.findOne({ email });
+    if (!details) {
+      return res.status(404).json({ msg: "Owner not found" });
+    }
+    res.status(200).json({ msg: "details got", details });
+  } catch (err) {
     res.status(400).json({ msg: "not found", error: err.message });
   }
 };
@@ -635,5 +648,6 @@ module.exports = {
   getPlayers,
   delPlayers,
   getOwners,
-  delOwners
+  delOwners,
+  getDetails,
 };
