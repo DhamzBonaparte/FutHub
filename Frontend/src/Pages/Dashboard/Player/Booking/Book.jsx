@@ -5,6 +5,10 @@ import Carousel from "react-bootstrap/Carousel";
 export default function Book() {
   useEffect(() => {
     getFutsals();
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    })
   }, []);
 
   const [error, setError] = useState("");
@@ -25,8 +29,6 @@ export default function Book() {
       setLoading(false);
     }
   };
-
-  console.log(futsals?.map((i) => i));
 
   const cardStyle = {
     backgroundColor: "#fff",
@@ -51,15 +53,6 @@ export default function Book() {
     margin: "8px 0",
     fontSize: "15px",
     color: "#444",
-  };
-
-  const statusStyle = {
-    padding: "3px 8px",
-    borderRadius: "5px",
-    fontWeight: "bold",
-    // backgroundColor:
-    //   booking.status === "Confirmed" ? "#d4edda" : "#fff3cd",
-    // color: booking.status === "Confirmed" ? "#155724" : "#856404",
   };
 
   const buttonStyle = {

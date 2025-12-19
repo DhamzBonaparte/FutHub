@@ -76,7 +76,11 @@ export default function Sidebar() {
             {data?.firstName?.slice(0, 1) || ""}
           </div>
           <div className="user-info">
-            <h3>
+            <h3
+            style={{
+              fontSize:'1rem'
+            }}
+            >
               {data?.firstName?.slice(0, 1).toUpperCase() +
                 data?.firstName?.slice(1)}{" "}
               {data?.lastName?.slice(0, 1).toUpperCase() +

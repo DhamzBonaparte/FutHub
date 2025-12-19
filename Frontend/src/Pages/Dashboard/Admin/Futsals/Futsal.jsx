@@ -1,24 +1,25 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
-import { useNavigate } from "react-router-dom";
 export default function Futsals() {
   useEffect(() => {
     getFutsals();
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    })
   }, []);
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [futsals, setFutsals] = useState([]);
-  const navigate = useNavigate();
 
   const getFutsals = async () => {
     setLoading(true);
     try {
-      const allFutsal = await axios.get(
-        "http://localhost:3000/api/v1/admin/futsals",
-        { withCredentials: true }
-      );
+      const allFutsal=await axios.get("http://localhost:3000/api/v1/admin/futsals", {
+        withCredentials: true,
+      });
       setFutsals(allFutsal.data.data);
     } catch (err) {
       setError(err.message);
@@ -32,7 +33,17 @@ export default function Futsals() {
       const appr = await axios.patch(
         `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`
       );
-      console.log(appr);
+      await getFutsals();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const deleteFutsal = async (fut) => {
+    try {
+      const del = await axios.delete(
+        `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`
+      );
       await getFutsals();
     } catch (err) {
       setError(err.message);
@@ -43,7 +54,7 @@ export default function Futsals() {
     <>
       <div className="header">
         <div className="dashboard-title" style={{ color: "gray" }}>
-          Pending Approvals
+          Futsal Management
         </div>
       </div>
       <div
@@ -68,7 +79,7 @@ export default function Futsals() {
           fontSize: "1.6rem",
         }}
       >
-        Loading approval pending futsals...
+        Loading all futsals...
       </div>
       <div
         id="opponents-grid"
@@ -219,9 +230,9 @@ export default function Futsals() {
                   padding: "10px",
                   color: futsal.approved ? "white" : "#20c928ff",
                   background: futsal.approved ? "gray" : "black",
-                  cursor: futsal.approved ? "not-allowed" : "pointer", // 👈 dynamic cursor
-                  opacity: futsal.approved ? 0.6 : 1, // 👈 optional visual feedback
-                  pointerEvents: futsal.approved ? "none" : "auto", // 👈 block clicks if approved
+                  cursor: futsal.approved ? "not-allowed" : "pointer",
+                  opacity: futsal.approved ? 0.6 : 1,
+                  pointerEvents: futsal.approved ? "none" : "auto",
                   border: "none",
                   borderRadius: "6px",
                   fontWeight: 600,
@@ -232,6 +243,24 @@ export default function Futsals() {
                 onClick={() => handleApprove(futsal.userId)}
               >
                 {futsal.approved ? "Already Approved" : "Approve Futsal"}
+              </button>
+              <button
+                style={{
+                  marginTop: "12px",
+                  width: "100%",
+                  padding: "10px",
+                  border: "none",
+                  borderRadius: "6px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "background 0.2s ease",
+                  bottom: 0,
+                  background: "#f35345ff", // soft red background
+                  color: "#f5f5f5ff",
+                }}
+                onClick={() => deleteFutsal(futsal.userId)}
+              >
+                Delete Futsal
               </button>
             </div>
           </div>

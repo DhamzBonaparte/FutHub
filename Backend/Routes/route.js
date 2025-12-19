@@ -27,7 +27,12 @@ const {
   updateOwner,
   adminCheck,
   getFutsals,
-  approve
+  approve,
+  delFutsal,
+  getPlayers,
+  delPlayers,
+  getOwners,
+  delOwners
 } = require("../Controllers/credentials");
 
 const storage = multer.diskStorage({
@@ -85,8 +90,14 @@ router
   .get(authorize, checkOwner)
   .patch(authorize, place.array("updatefutsalPic"), updateOwner);
 
+//admin started
 router.route('/admin/login').post(adminCheck);
-router.route('/admin/approve-futsals/:id').patch(approve)
+router.route('/admin/approve-futsals/:id').patch(approve).delete(delFutsal)
 router.route('/admin/futsals').get(getFutsals)
+router.route('/admin/players').get(getPlayers);
+router.route('/admin/owners').get(getOwners);
+router.route('/admin/players/:id').delete(delPlayers);
+router.route('/admin/owners/:id').delete(delOwners);
+
 
 module.exports = router;

@@ -5,11 +5,13 @@ const Schema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+    lowercase:true
   },
   lastName: {
     type: String,
     required: true,
     trim: true,
+    lowercase:true
   },
   email: {
     type: String,
@@ -26,12 +28,14 @@ const Schema = new mongoose.Schema({
   roles:{
     type:String,
     required:true,
-    trim: true
+    trim: true,
+    lowercase:true
   },
   location:{
     type:String,
     required:true,
-    trim: true
+    trim: true,
+    lowercase:true
   },
   phone:{
     type: String,

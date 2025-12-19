@@ -558,6 +558,54 @@ const approve = async (req, res) => {
   }
 };
 
+const delFutsal = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const del = await futsals.findOneAndDelete({ userId: id });
+    res.status(200).json({ msg: "deleted", data: del });
+  } catch (err) {
+    res.status(400).json({ msg: "not Deleted", error: err.message });
+  }
+};
+
+const delPlayers = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const del = await signup.findByIdAndDelete(id);
+    res.status(200).json({ msg: "user deleted!", data: del });
+  } catch (error) {
+    res.status(400).json({ msg: "not Deleted", error: err.message });
+  }
+};
+
+const getPlayers = async (req, res) => {
+  try {
+    const all = await signup.find();
+    res.status(200).json({ msg: "got it", data: all });
+  } catch (error) {
+    res.status(400).json({ msg: "not found", error: err.message });
+  }
+};
+
+const getOwners = async (req, res) => {
+  try {
+    const all = await signup.find();
+    res.status(200).json({ msg: "done work", data: all });
+  } catch (error) {
+    res.status(400).json({ msg: "not found", error: err.message });
+  }
+};
+
+const delOwners = async (req, res) => {
+  try {
+    const {id}=req.params;
+    const del = await signup.findByIdAndDelete(id);
+    res.status(200).json({msg:"Delete",data:del});
+  } catch (error) {
+    res.status(400).json({ msg: "not found", error: err.message });
+  }
+};
+
 module.exports = {
   getCredentials,
   setCredentials,
@@ -583,4 +631,9 @@ module.exports = {
   getFutsals,
   adminCheck,
   approve,
+  delFutsal,
+  getPlayers,
+  delPlayers,
+  getOwners,
+  delOwners
 };
