@@ -280,20 +280,6 @@ export default function Owner() {
         </div>
       </div>
 
-      <div
-        className="loadi"
-        style={{
-          display: loading ? "block" : "none",
-          fontWeight: 700,
-          textAlign: "center",
-          fontFamily: "Arial",
-          fontSize: "1.6rem",
-          marginBottom: "20px",
-        }}
-      >
-        Loading owner data...
-      </div>
-
       {/* show details */}
       <div
         style={{
