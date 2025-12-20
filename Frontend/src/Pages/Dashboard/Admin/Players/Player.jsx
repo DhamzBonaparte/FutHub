@@ -4,14 +4,15 @@ import { useState, useEffect } from "react";
 export default function Player() {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     getPlayers();
     window.scrollTo({
-      top:0,
-      behavior:"smooth"
-    })
+      top: 0,
+      behavior: "smooth",
+    });
   }, []);
 
   const getPlayers = async () => {
@@ -21,28 +22,81 @@ export default function Player() {
       setData(all.data.data.filter((items) => items.roles == "player"));
     } catch (error) {
       setError(error.message);
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete=async (id)=>{
+  const handleSearch = async (e) => {
     try {
-      await axios.delete(`http://localhost:3000/api/v1/admin/players/${id}`)
+      if (!e || e.trim() === "") {
+        await getPlayers();
+      }
+
+      setLoading(true);
+      setSearch(e);
+      const data = await axios.post(
+        "http://localhost:3000/api/v1/admin/search-player",
+        { value: e }
+      );
+      const fil = data.data.data.filter((items) => items.roles == "player");
+      setData(fil);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/api/v1/admin/players/${id}`);
       await getPlayers();
     } catch (error) {
       setError(error.message);
     }
-  }
+  };
   return (
     <>
       <div className="header">
         <div className="dashboard-title" style={{ color: "gray" }}>
           Player Management
         </div>
+        <div
+          style={{
+            width: "76%",
+            padding: "20px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Search owners, futsals, or locations..."
+            style={{
+              width: "100%",
+              maxWidth: "800px",
+              padding: "14px 20px",
+              borderRadius: "30px",
+              border: "1px solid #ddd",
+              fontSize: "1rem",
+              outline: "none",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
+              transition: "all 0.3s ease",
+            }}
+            onFocus={(e) =>
+              (e.target.style.boxShadow = "0 0 0 3px rgba(32, 201, 151, 0.4)")
+            }
+            onBlur={(e) =>
+              (e.target.style.boxShadow = "0 4px 10px rgba(0,0,0,0.08)")
+            }
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+        </div>
       </div>
 
-       <div
+      <div
         className="loadi"
         style={{
           display: loading ? "block" : "none",
@@ -133,9 +187,9 @@ export default function Player() {
                           style={{
                             display: "inline-block",
                             padding: "6px 14px",
-                            color: "#fffcfcff", 
+                            color: "#fffcfcff",
                             backgroundColor: "#32dd35ff",
-                            borderRadius: "20px", 
+                            borderRadius: "20px",
                             fontSize: "0.9rem",
                             fontWeight: "600",
                             textAlign: "center",
@@ -150,9 +204,9 @@ export default function Player() {
                           style={{
                             display: "inline-block",
                             padding: "6px 14px",
-                            color: "#ffffffff", 
+                            color: "#ffffffff",
                             backgroundColor: "#ff0000ff",
-                            borderRadius: "20px", 
+                            borderRadius: "20px",
                             fontSize: "0.9rem",
                             fontWeight: "600",
                             textAlign: "center",
@@ -167,10 +221,12 @@ export default function Player() {
                       <strong>Contact: </strong> {players?.phone}
                     </p>
                     <p style={{ margin: "6px 0", color: "#444" }}>
-                      <strong>Created on: </strong> {players?.createdAt.slice(0,10)}
+                      <strong>Created on: </strong>{" "}
+                      {players?.createdAt.slice(0, 10)}
                     </p>
                     <p style={{ margin: "6px 0", color: "#444" }}>
-                      <strong>Created at: </strong> {players?.createdAt.slice(11,19)}
+                      <strong>Created at: </strong>{" "}
+                      {players?.createdAt.slice(11, 19)}
                     </p>
                   </div>
 
@@ -194,9 +250,11 @@ export default function Player() {
                         fontWeight: "600",
                         cursor: "pointer",
                       }}
-                      onClick={()=>handleDelete(players._id)}
+                      onClick={() => handleDelete(players._id)}
                     >
-                      Delete {players?.firstName?.charAt(0).toUpperCase() + players?.firstName?.slice(1)}
+                      Delete{" "}
+                      {players?.firstName?.charAt(0).toUpperCase() +
+                        players?.firstName?.slice(1)}
                     </button>
                   </div>
                 </div>

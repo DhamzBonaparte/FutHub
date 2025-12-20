@@ -33,7 +33,8 @@ const {
   delPlayers,
   getOwners,
   delOwners,
-  getDetails
+  getDetails,
+  searchPlayer
 } = require("../Controllers/credentials");
 
 const storage = multer.diskStorage({
@@ -80,7 +81,7 @@ router
   .route("/player/my-teammate-listing/:id")
   .delete(authorize, deleteMyPosting);
 
-router.route('/player/book-futsal').get(authorize,getFutsals)
+router.route("/player/book-futsal").get(authorize, getFutsals);
 
 //owner part started
 router.route("/owner").get(authorize, validateOwner);
@@ -92,13 +93,13 @@ router
   .patch(authorize, place.array("updatefutsalPic"), updateOwner);
 
 //admin started
-router.route('/admin/login').post(adminCheck);
-router.route('/admin/approve-futsals/:id').patch(approve).delete(delFutsal)
-router.route('/admin/futsals').get(getFutsals)
-router.route('/admin/players').get(getPlayers);
-router.route('/admin/owners').get(getOwners).post(getDetails);
-router.route('/admin/players/:id').delete(delPlayers);
-router.route('/admin/owners/:id').delete(delOwners);
-
+router.route("/admin/login").post(adminCheck);
+router.route("/admin/approve-futsals/:id").patch(approve).delete(delFutsal);
+router.route("/admin/futsals").get(getFutsals);
+router.route("/admin/players").get(getPlayers);
+router.route("/admin/owners").get(getOwners).post(getDetails);
+router.route("/admin/players/:id").delete(delPlayers);
+router.route("/admin/owners/:id").delete(delOwners);
+router.route('/admin/search-player').post(searchPlayer)
 
 module.exports = router;

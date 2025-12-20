@@ -15,6 +15,7 @@ export default function Owner() {
   const [owners, setOwners] = useState([]);
   const [data, setData] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
+  const [search, setSearch] = useState("");
 
   const getOwners = async () => {
     try {
@@ -28,6 +29,30 @@ export default function Owner() {
     }
   };
 
+  const handleSearch = async (e) => {
+    try {
+
+      if (!e || e.trim() === "") {
+        await getOwners();
+      }
+
+      setLoading(true);
+      setSearch(e);
+      const data = await axios.post(
+        "http://localhost:3000/api/v1/admin/search-player",
+        { value: e }
+      );
+      const fil = data.data.data.filter((items) => items.roles == "owner");
+      setOwners(fil);
+    } catch (error) {
+      setErr(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  console.log(data);
+
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3000/api/v1/admin/owners/${id}`);
@@ -37,28 +62,28 @@ export default function Owner() {
     }
   };
 
-const handleDetails = async (email) => {
-  try {
-    setLoading(true);
-    setShowDetails(true);
+  const handleDetails = async (email) => {
+    try {
+      setLoading(true);
+      setShowDetails(true);
 
-    const hi = await axios.post("http://localhost:3000/api/v1/admin/owners", {
-      email,
-    });
+      const hi = await axios.post("http://localhost:3000/api/v1/admin/owners", {
+        email,
+      });
 
-    setData(hi?.data?.details || []);
-  } catch (err) {
-    setShowDetails(false);
-    setErr(err.message);
+      setData(hi?.data?.details || []);
+    } catch (err) {
+      setShowDetails(false);
+      setErr(err.message);
 
-    if (err.response?.status === 404) {
-      setData([]);
-      alert("No futsal registered");
+      if (err.response?.status === 404) {
+        setData([]);
+        alert("No futsal registered");
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <>
@@ -82,7 +107,39 @@ const handleDetails = async (email) => {
         >
           Owner Management
         </h1>
-
+        <div
+          style={{
+            width: "100%",
+            padding: "20px",
+            backgroundColor: "#f9fafb",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Search owners, futsals, or locations..."
+            style={{
+              width: "100%",
+              maxWidth: "800px",
+              padding: "14px 20px",
+              borderRadius: "30px",
+              border: "1px solid #ddd",
+              fontSize: "1rem",
+              outline: "none",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
+              transition: "all 0.3s ease",
+            }}
+            onFocus={(e) =>
+              (e.target.style.boxShadow = "0 0 0 3px rgba(32, 201, 151, 0.4)")
+            }
+            onBlur={(e) =>
+              (e.target.style.boxShadow = "0 4px 10px rgba(0,0,0,0.08)")
+            }
+            // value={search}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+        </div>
         <div
           className="loadi"
           style={{
@@ -224,18 +281,18 @@ const handleDetails = async (email) => {
       </div>
 
       <div
-          className="loadi"
-          style={{
-            display: loading ? "block" : "none",
-            fontWeight: 700,
-            textAlign: "center",
-            fontFamily: "Arial",
-            fontSize: "1.6rem",
-            marginBottom: "20px",
-          }}
-        >
-          Loading owner data...
-        </div>
+        className="loadi"
+        style={{
+          display: loading ? "block" : "none",
+          fontWeight: 700,
+          textAlign: "center",
+          fontFamily: "Arial",
+          fontSize: "1.6rem",
+          marginBottom: "20px",
+        }}
+      >
+        Loading owner data...
+      </div>
 
       {/* show details */}
       <div
@@ -248,7 +305,6 @@ const handleDetails = async (email) => {
           height: "100%",
         }}
       >
-        
         <div
           style={{
             backgroundColor: "#fff",
@@ -259,7 +315,6 @@ const handleDetails = async (email) => {
             padding: "30px",
           }}
         >
-            
           {/* Header */}
           <h1
             style={{

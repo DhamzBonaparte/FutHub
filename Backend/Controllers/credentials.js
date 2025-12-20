@@ -619,6 +619,32 @@ const getDetails = async (req, res) => {
   }
 };
 
+const searchPlayer = async (req, res) => {
+  try {
+    const { value } = req.body;
+
+    if (!value || value.trim() === "") {
+      return res.status(400).json({ msg: "Search value required" });
+    }
+
+    const data = await signup.find({
+      $or: [
+        { firstName: { $regex: value, $options: "i" } },
+        { lastName: { $regex: value, $options: "i" } },
+      ]
+    });
+
+    if (!data || data.length === 0) {
+      return res.status(404).json({ msg: "No players found" });
+    }
+
+    res.status(200).json({ msg: "Players found", data });
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", error: err.message });
+  }
+};
+
+
 module.exports = {
   getCredentials,
   setCredentials,
@@ -650,4 +676,5 @@ module.exports = {
   getOwners,
   delOwners,
   getDetails,
+  searchPlayer
 };
