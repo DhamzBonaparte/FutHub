@@ -5,9 +5,9 @@ export default function Futsals() {
   useEffect(() => {
     getFutsals();
     window.scrollTo({
-      top:0,
-      behavior:"smooth"
-    })
+      top: 0,
+      behavior: "smooth",
+    });
   }, []);
 
   const [error, setError] = useState("");
@@ -17,9 +17,12 @@ export default function Futsals() {
   const getFutsals = async () => {
     setLoading(true);
     try {
-      const allFutsal=await axios.get("http://localhost:3000/api/v1/admin/futsals", {
-        withCredentials: true,
-      });
+      const allFutsal = await axios.get(
+        "http://localhost:3000/api/v1/admin/futsals",
+        {
+          withCredentials: true,
+        }
+      );
       setFutsals(allFutsal.data.data);
     } catch (err) {
       setError(err.message);
@@ -147,14 +150,12 @@ export default function Futsals() {
               <p
                 style={{ margin: "6px 0", color: "#444", fontSize: "0.95rem" }}
               >
-                <strong>Email:</strong>{" "}
-                {futsal.email}
+                <strong>Email:</strong> {futsal.email}
               </p>
               <p
                 style={{ margin: "6px 0", color: "#444", fontSize: "0.95rem" }}
               >
-                <strong>Price:</strong>{" "}
-                Rs. {futsal.price} per hour
+                <strong>Price:</strong> Rs. {futsal.price} per hour
               </p>
               <p
                 style={{ margin: "6px 0", color: "#444", fontSize: "0.95rem" }}
@@ -162,6 +163,9 @@ export default function Futsals() {
                 <strong>Location:</strong>{" "}
                 {futsal.address.charAt(0).toUpperCase() +
                   futsal.address.slice(1)}
+                ,{" "}
+                {futsal.location.charAt(0).toUpperCase() +
+                  futsal.location.slice(1)}
               </p>
               <p
                 style={{ margin: "6px 0", color: "#444", fontSize: "0.95rem" }}

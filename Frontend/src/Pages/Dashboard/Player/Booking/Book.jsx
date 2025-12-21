@@ -127,8 +127,8 @@ export default function Book() {
                 <p style={textStyle}>
                   <span>
                     <strong>Location: </strong>
-                    {futsal.address.charAt(0).toUpperCase() +
-                      futsal.address.slice(1)}
+                    {futsal.address.charAt(0).toUpperCase() + futsal.address.slice(1)}, {" "} 
+                      {futsal.location.charAt(0).toUpperCase() + futsal.location.slice(1)}
                   </span>
                 </p>
                 <p style={textStyle}>
