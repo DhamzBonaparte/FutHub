@@ -6,9 +6,9 @@ export default function Book() {
   useEffect(() => {
     getFutsals();
     window.scrollTo({
-      top:0,
-      behavior:"smooth"
-    })
+      top: 0,
+      behavior: "smooth",
+    });
   }, []);
 
   const [error, setError] = useState("");
@@ -27,6 +27,19 @@ export default function Book() {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleConfirm = async (id) => {
+    try {
+      await axios.patch(
+        "http://localhost:3000/api/v1/player/confirm-futsal",
+        { id },
+        { withCredentials: true }
+      );
+      await getFutsals();
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -55,19 +68,6 @@ export default function Book() {
     color: "#444",
   };
 
-  const buttonStyle = {
-    marginTop: "15px",
-    padding: "8px 12px",
-    background: "#0d1b2a",
-    color: "rgba(86, 236, 98, 1)",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    fontSize: "14px",
-    display: "flex",
-    justifyContent: "center",
-    width: "100%",
-  };
   return (
     <>
       <div className="header" style={{ textAlign: "center" }}>
@@ -199,7 +199,26 @@ export default function Book() {
                       futsal.about.slice(1)}
                   </span>
                 </p>
-                <button style={buttonStyle}>Book Futsal</button>
+                <button
+                disabled={!!futsal.bookedBy}
+                  style={{
+                    marginTop: "15px",
+                    padding: "8px 12px",
+                    background: futsal.bookedBy ? "#d3d3d3" : "#0d1b2a", // grey if booked
+                    color: futsal.bookedBy ? "#888" : "rgba(86, 236, 98, 1)", // muted text if booked
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: futsal.bookedBy ? "not-allowed" : "pointer", // blocked cursor if booked
+                    fontSize: "14px",
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "100%",
+                    transition: "background 0.3s ease",
+                  }}
+                  onClick={() => handleConfirm(futsal._id)}
+                >
+                  {futsal.bookedBy ? "Already Booked" : "Book Now"}
+                </button>
               </div>
             </div>
           </div>

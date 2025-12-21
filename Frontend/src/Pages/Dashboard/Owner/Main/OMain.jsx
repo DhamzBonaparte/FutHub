@@ -58,7 +58,7 @@ export default function OMain() {
                     </div>
                     <div className="stat-title">Total Venues</div>
                     <div className="stat-value" id="totalVenues">
-                      2
+                      1
                     </div>
                   </div>
 

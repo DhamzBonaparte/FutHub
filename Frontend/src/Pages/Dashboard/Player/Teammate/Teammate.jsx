@@ -80,6 +80,20 @@ export default function Teammate() {
     }
   };
 
+  const handleConfirm = async (id) => {
+    try {
+      await axios.patch(
+        "http://localhost:3000/api/v1/player/confirm-teammate",
+        { id },
+        { withCredentials: true }
+      );
+      await getMyTeammateListings();
+      await  getTeams();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   const setActiveTab = (activeTab) => {
     setFind(activeTab === "find");
     setBecome(activeTab === "become");
@@ -94,7 +108,7 @@ export default function Teammate() {
     e.preventDefault();
     setLoading(true);
     try {
-      const upd=await axios.patch(
+      const upd = await axios.patch(
         `http://localhost:3000/api/v1/player/my-teammate-listing`,
         {
           name,
@@ -130,7 +144,6 @@ export default function Teammate() {
       setError(err.message);
     }
   };
-  
 
   const handleSearch = async (e) => {
     setLoading(true);
@@ -480,7 +493,7 @@ export default function Teammate() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setIsEdit(false)} 
+                    onClick={() => setIsEdit(false)}
                     style={{
                       background: "#e63946",
                       color: "#fff",
@@ -672,8 +685,8 @@ export default function Teammate() {
                   >
                     <div
                       style={{
-                        background: "#1f2937", 
-                        color: "#f8f9fa", 
+                        background: "#1f2937",
+                        color: "#f8f9fa",
                         padding: "15px",
                         fontSize: "20px",
                         fontWeight: "bold",
@@ -723,19 +736,23 @@ export default function Teammate() {
 
                     <div style={{ padding: "0 15px 15px" }}>
                       <button
+                       disabled={!!value.confirmedBy}
                         style={{
                           width: "100%",
-                          background: "#0d1b2a",
-                          color: "#5efc82",
+                          background: value.confirmedBy ? "#d3d3d3" : "#0d1b2a", // grey if confirmed
+                          color: value.confirmedBy ? "#888" : "#5efc82", // muted text if confirmed
                           padding: "12px",
                           border: "none",
                           borderRadius: "8px",
                           fontWeight: "bold",
-                          cursor: "pointer",
+                          cursor: value.confirmedBy ? "not-allowed" : "pointer", // blocked cursor if confirmed
                           transition: "background 0.3s ease",
                         }}
+                        onClick={() => handleConfirm(value._id)}
                       >
-                        Confirm as Teammate
+                        {value.confirmedBy
+                          ? "Already Chosen"
+                          : "Confirm as Opponent"}{" "}
                       </button>
                     </div>
                   </div>
@@ -748,8 +765,8 @@ export default function Teammate() {
               className="msg"
               style={{
                 display: !register ? "none" : "block",
-                background: "#fff3cd", 
-                color: "#856404", 
+                background: "#fff3cd",
+                color: "#856404",
                 padding: "15px 20px",
                 borderRadius: "8px",
                 border: "1px solid #ffeeba",
@@ -990,8 +1007,8 @@ export default function Teammate() {
               className="msg"
               style={{
                 display: register ? "none" : "block",
-                background: "#d4edda", 
-                color: "#155724", 
+                background: "#d4edda",
+                color: "#155724",
                 padding: "15px 20px",
                 borderRadius: "8px",
                 border: "1px solid #ffeeba",
@@ -1023,7 +1040,6 @@ export default function Teammate() {
                   "'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
               }}
             >
-              
               <div
                 style={{
                   borderBottom: "2px solid #007bff",
@@ -1042,9 +1058,8 @@ export default function Teammate() {
                 >
                   <span style={{ marginRight: "10px", color: "#6c757d" }}>
                     <Person style={{ fontSize: "1.8rem" }} />{" "}
-                    
                   </span>
-                  
+
                   {myData?.name?.slice(0, 1).toUpperCase() +
                     myData?.name?.slice(1) +
                     " "}
@@ -1061,7 +1076,6 @@ export default function Teammate() {
                 </h3>
               </div>
 
-             
               <div
                 style={{
                   display: "grid",
@@ -1072,15 +1086,14 @@ export default function Teammate() {
                   color: "#343a40",
                 }}
               >
-                
                 <DetailItem
-                  icon={LocationOn} 
+                  icon={LocationOn}
                   label="Location"
                   value={String(myData?.location)}
                 />
 
                 <DetailItem
-                  icon={Work} 
+                  icon={Work}
                   label="Position"
                   value={
                     myData?.position?.slice(0, 1).toUpperCase() +
@@ -1093,7 +1106,6 @@ export default function Teammate() {
                 >
                   <span style={{ marginRight: "8px", color: "#17a2b8" }}>
                     <AccessTime style={{ fontSize: "1.1rem" }} />{" "}
-                    
                   </span>
                   <strong>Experience:</strong>
                   <span style={{ marginLeft: "5px" }}>
@@ -1101,20 +1113,16 @@ export default function Teammate() {
                   </span>
                 </p>
 
-                <DetailItem
-                  icon={Wc} 
-                  label="Gender"
-                  value={myData?.gender}
-                />
+                <DetailItem icon={Wc} label="Gender" value={myData?.gender} />
 
                 <DetailItem
-                  icon={EventAvailable} 
+                  icon={EventAvailable}
                   label="Availability"
                   value={myData?.availability}
                 />
 
                 <DetailItem
-                  icon={Male} 
+                  icon={Male}
                   label="Contact"
                   value={myData?.contact}
                 />
@@ -1155,7 +1163,7 @@ export default function Teammate() {
 
               <div style={{ textAlign: "right", paddingTop: "15px" }}>
                 <button
-                  onClick={() => {               
+                  onClick={() => {
                     setIsEdit(true);
                     setName(myData?.name || "");
                     setAge(myData?.age || "");
@@ -1164,9 +1172,9 @@ export default function Teammate() {
                     setPosition(myData?.position || "");
                     setExperience(myData?.experience || "");
                     setGender(myData?.gender || "");
-                    setAvailable(myData?.availability || ""); 
+                    setAvailable(myData?.availability || "");
                     setAbout(myData?.about || "");
-                  }} 
+                  }}
                   style={{
                     background: "#007bff",
                     color: "white",
@@ -1177,7 +1185,7 @@ export default function Teammate() {
                     cursor: "pointer",
                     fontWeight: "bold",
                     transition: "background 0.3s ease",
-                    display: "inline-flex", 
+                    display: "inline-flex",
                     alignItems: "center",
                   }}
                 >
@@ -1194,7 +1202,7 @@ export default function Teammate() {
                     cursor: "pointer",
                     fontWeight: "bold",
                     transition: "background 0.3s ease",
-                    display: "inline-flex", 
+                    display: "inline-flex",
                     alignItems: "center",
                   }}
                   onClick={() => handleDelete()}

@@ -8,7 +8,7 @@ const futsalSchema = new mongoose.Schema(
       unique: true,
     },
     images: {
-      type: [String], 
+      type: [String],
       default: [],
     },
     owner: {
@@ -34,7 +34,7 @@ const futsalSchema = new mongoose.Schema(
       required: true,
       lowercase: true,
       trim: true,
-      unique:true
+      unique: true,
     },
     contact: {
       type: String,
@@ -62,6 +62,11 @@ const futsalSchema = new mongoose.Schema(
     about: { type: String, trim: true, required: true },
 
     approved: { type: Boolean, default: false },
+    bookedBy:{
+      type:String,
+      trim:true,
+      default:""
+    }
   },
   { timestamps: true }
 );

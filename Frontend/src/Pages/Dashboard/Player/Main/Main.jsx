@@ -120,9 +120,6 @@ export default function Main() {
 
         <div className="section-header">
           <h2>Booking History</h2>
-          <a href="#" className="view-all">
-            View All <i className="fas fa-arrow-right"></i>
-          </a>
         </div>
 
         <div className="booking-history">
@@ -170,9 +167,6 @@ export default function Main() {
 
         <div className="section-header">
           <h2>Opponents</h2>
-          <a href="#" className="view-all">
-            View All <i className="fas fa-arrow-right"></i>
-          </a>
         </div>
 
         <div className="booking-history">
@@ -217,41 +211,51 @@ export default function Main() {
             </tbody>
           </table>
         </div>
-
         <div className="section-header">
-          <h2>Favourite Venues</h2>
+          <h2>Teammate</h2>
         </div>
 
-        <div className="favourite-venues" ref={fav}>
-          <div className="venue-grid">
-            <div className="venue-card">
-              <div
-                className="venue-image"
-                style={{
-                  backgroundImage:
-                    "url('https://images.unsplash.com/photo-1518604666860-9ed391f76460?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60')",
-                }}
-              ></div>
-              <div className="venue-info">
-                <h4>Kathmandu Futsal Arena</h4>
-                <p>Thamel, Kathmandu • NPR 1,500/hr</p>
-              </div>
-            </div>
-
-            <div className="venue-card">
-              <div
-                className="venue-image"
-                style={{
-                  backgroundImage:
-                    "url('https://images.unsplash.com/photo-1556056504-5c7696c4c28d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60')",
-                }}
-              ></div>
-              <div className="venue-info">
-                <h4>Bhaktapur Sports Complex</h4>
-                <p>Bhaktapur • NPR 2,000/hr</p>
-              </div>
-            </div>
-          </div>
+        <div className="booking-history">
+          <table className="booking-table">
+            <thead>
+              <tr>
+                <th>Team Name</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Pokhara Titans</td>
+                <td>Pokhara</td>
+                <td>Dec 10, 2025</td>
+                <td>4:00 PM - 5:30 PM</td>
+                <td>
+                  <span className="status scheduled">Scheduled</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Chitwan Warriors</td>
+                <td>Chitwan</td>
+                <td>Dec 12, 2025</td>
+                <td>6:00 PM - 7:30 PM</td>
+                <td>
+                  <span className="status completed">Completed</span>
+                </td>
+              </tr>
+              <tr>
+                <td>Lalitpur Strikers</td>
+                <td>Lalitpur</td>
+                <td>Dec 15, 2025</td>
+                <td>3:00 PM - 4:30 PM</td>
+                <td>
+                  <span className="status cancelled">Cancelled</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -277,16 +281,6 @@ export default function Main() {
         </table>
       </div>
 
-      <div
-        id="favourites"
-        className="favourite-venues"
-        style={{ display: "none" }}
-      >
-        <div className="section-header">
-          <h2>My Favourite Venues</h2>
-        </div>
-        <div className="venue-grid"></div>
-      </div>
     </>
   );
 }

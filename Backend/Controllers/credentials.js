@@ -631,7 +631,7 @@ const searchPlayer = async (req, res) => {
       $or: [
         { firstName: { $regex: value, $options: "i" } },
         { lastName: { $regex: value, $options: "i" } },
-      ]
+      ],
     });
 
     if (!data || data.length === 0) {
@@ -644,6 +644,50 @@ const searchPlayer = async (req, res) => {
   }
 };
 
+const confirmOpponent = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.body;
+    const find = await opponent.findByIdAndUpdate(
+      id,
+      { confirmedBy: userId },
+      { new: true }
+    );
+    res.status(200).json({ find });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};
+
+const confirmTeammate = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.body;
+    const find = await teammate.findByIdAndUpdate(
+      id,
+      { confirmedBy: userId },
+      { new: true }
+    );
+    res.status(200).json({ find });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};
+
+const confirmFutsal = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.body;
+    const find = await futsals.findByIdAndUpdate(
+      id,
+      { bookedBy: userId },
+      { new: true }
+    );
+    res.status(200).json({ find });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};
 
 module.exports = {
   getCredentials,
@@ -676,5 +720,8 @@ module.exports = {
   getOwners,
   delOwners,
   getDetails,
-  searchPlayer
+  searchPlayer,
+  confirmOpponent,
+  confirmTeammate,
+  confirmFutsal,
 };

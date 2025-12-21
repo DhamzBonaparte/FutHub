@@ -45,6 +45,19 @@ export default function Opponent() {
     getMyOpponentListings();
   }, [length]);
 
+  const handleConfirm = async (id) => {
+    try {
+      await axios.patch(
+        "http://localhost:3000/api/v1/player/confirm-opponent",
+        { id },
+        { withCredentials: true }
+      );
+      await getOpponents();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   async function getMyOpponentListings() {
     setLoading(true);
     try {
@@ -53,7 +66,6 @@ export default function Opponent() {
         { withCredentials: true }
       );
       setMyOppPostings(value.data.data);
-      console.log(value.data.data);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -221,7 +233,7 @@ export default function Opponent() {
           zIndex: 1000,
           overflowY: "auto",
           boxSizing: "border-box",
-          padding: "40px 20px", 
+          padding: "40px 20px",
         }}
       >
         <div
@@ -236,13 +248,13 @@ export default function Opponent() {
         >
           <p
             style={{
-              margin: 0, 
+              margin: 0,
               textAlign: "center",
               fontSize: "30px",
               fontWeight: 700,
               color: "#0d1b2a",
               letterSpacing: "1px",
-              padding: "12px 20px", 
+              padding: "12px 20px",
               borderBottom: "2px solid #5efc82",
               fontFamily: "arial",
             }}
@@ -615,7 +627,7 @@ export default function Opponent() {
                   return (
                     <>
                       <div className="opponent-card" key={index}>
-                        <div className="opponent-header" key={index}>
+                        <div className="opponent-header">
                           <div className="opponent-name">
                             {opp.teamName.slice(0, 1).toUpperCase() +
                               opp.teamName.slice(1)}
@@ -697,9 +709,21 @@ export default function Opponent() {
                         </div>
                         <button
                           className="confirm-btn"
-                          style={{ background: "#0d1b2a", color: "#5efc82" }}
+                          disabled={!!opp.confirmedBy}
+                          style={{
+                            background: opp.confirmedBy ? "#d3d3d3" : "#0d1b2a",
+                            color: opp.confirmedBy ? "#888" : "#5efc82",
+                            cursor: opp.confirmedBy ? "not-allowed" : "pointer",
+                            padding: "10px 20px",
+                            border: "none",
+                            borderRadius: "6px",
+                            fontWeight: "600",
+                          }}
+                          onClick={() => handleConfirm(opp._id)}
                         >
-                          Confirm as Opponent
+                          {opp.confirmedBy
+                            ? "Not Available"
+                            : "Confirm As Opponent"}
                         </button>
                       </div>
                     </>
