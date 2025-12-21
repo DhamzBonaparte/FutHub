@@ -23,28 +23,75 @@ const formatWithOrdinal = (dateString) => {
   return `${day}${suffix} ${month}`;
 };
 
+const formatTo12Hour = (timeStr) => {
+  if (!timeStr) return "";
+  const [hour, minute] = timeStr.split(":").map(Number);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const adjustedHour = hour % 12 || 12; // convert 0 → 12
+  return `${adjustedHour}:${minute.toString().padStart(2, "0")} ${ampm}`;
+};
+
 export default function Main() {
   useEffect(() => {
     getMyBookings();
+    getMyOpponents();
+    getMyTeammates();
   }, []);
 
   const [opponents, setOpponents] = useState([]);
   const [teammates, setTeammates] = useState([]);
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [matches, setMatches] = useState(0);
+  const [opp, setOpp] = useState(0);
+  const [tem, setTem] = useState(0);
+  const [err, setErr] = useState("");
 
   const getMyBookings = async () => {
     try {
+      setLoading(true);
       const hi = await axios.get(
         "http://localhost:3000/api/v1/player/myBookings",
         { withCredentials: true }
       );
       setBookings(hi.data.data);
       setMatches(hi.data.data.length);
-      console.log(hi);
     } catch (error) {
       setErr(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getMyOpponents = async () => {
+    try {
+      setLoading(true);
+      const hi = await axios.get(
+        "http://localhost:3000/api/v1/player/myOpponents",
+        { withCredentials: true }
+      );
+      setOpponents(hi.data.data);
+      setOpp(hi.data.data.length);
+    } catch (error) {
+      setErr(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getMyTeammates = async () => {
+    try {
+      setLoading(true);
+      const hi = await axios.get(
+        "http://localhost:3000/api/v1/player/myTeammates",
+        { withCredentials: true }
+      );
+      setTeammates(hi.data.data);
+      setTem(hi.data.data.length);
+    } catch (error) {
+      setErr(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,6 +99,17 @@ export default function Main() {
     <>
       <div className="header">
         <div className="dashboard-title">Player Dashboard</div>
+      </div>
+      <div
+        className="load"
+        style={{
+          textAlign: "center",
+          fontWeight: 700,
+          fontSize: "30px",
+          display: loading ? "block" : "none",
+        }}
+      >
+        Loading Dashboard Details...
       </div>
       <div id="dashboard" className="dashboard-section">
         <div className="stats-container">
@@ -82,7 +140,7 @@ export default function Main() {
               <SportsSoccerIcon className="bigIcon" />
             </div>
             <div className="stat-title">Total Bookings</div>
-            <div className="stat-value">15</div>
+            <div className="stat-value">{matches}</div>
           </div>
 
           <div className="stat-card">
@@ -96,8 +154,8 @@ export default function Main() {
             >
               <FavoriteIcon className="bigIcon" />
             </div>
-            <div className="stat-title">Favourite Venues</div>
-            <div className="stat-value">4</div>
+            <div className="stat-title">Upcoming Teammates</div>
+            <div className="stat-value">{tem}</div>
           </div>
 
           <div className="stat-card">
@@ -111,8 +169,8 @@ export default function Main() {
             >
               <DirectionsRunIcon className="bigIcon" />
             </div>
-            <div className="stat-title">Matches Played</div>
-            <div className="stat-value">12</div>
+            <div className="stat-title">Upcoming Opponents</div>
+            <div className="stat-value">{opp}</div>
           </div>
         </div>
 
@@ -190,7 +248,8 @@ export default function Main() {
                       className="month"
                       style={{ fontSize: "0.9rem", fontWeight: "500" }}
                     >
-                      {formatWithOrdinal(items?.createdAt).slice(5, 8)}
+                      {formatWithOrdinal(items?.createdAt).slice(5, 8)},{" "}
+                      {items?.createdAt.slice(0, 4)}
                     </div>
                   </div>
 
@@ -225,8 +284,11 @@ export default function Main() {
                         textAlign: "center",
                       }}
                     >
-                      {items.address.charAt(0).toUpperCase() + items.address.slice(1)}, {" "} 
-                      {items.location.charAt(0).toUpperCase() + items.location.slice(1)}
+                      {items.address.charAt(0).toUpperCase() +
+                        items.address.slice(1)}
+                      ,{" "}
+                      {items.location.charAt(0).toUpperCase() +
+                        items.location.slice(1)}
                     </p>
                   </div>
 
@@ -378,6 +440,31 @@ export default function Main() {
                       NPR {items.price}/hr
                     </span>
                   </div>
+                  <button
+                    style={{
+                      background: "#d9534f", // red tone for cancel
+                      color: "#fff", // white text
+                      border: "none",
+                      borderRadius: "6px",
+                      padding: "10px 18px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                      transition: "background 0.3s ease",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.background = "#c9302c")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.background = "#d9534f")
+                    }
+                    onClick={() => {
+                      console.log("Cancel clicked");
+                      // add your cancel logic here
+                    }}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             );
@@ -411,9 +498,17 @@ export default function Main() {
                     <td> {formatWithOrdinal(items?.createdAt)}</td>
                     <td>NPR {items.price}/hr</td>
                     <td>{items.contact}</td>
-                    <td>{items.address.charAt(0).toUpperCase() + items.address.slice(1)}, {" "} 
-                      {items.location.charAt(0).toUpperCase() + items.location.slice(1)}</td>
-                    <td>{items.owner.charAt(0).toUpperCase() + items.owner.slice(1)}</td>
+                    <td>
+                      {items.address.charAt(0).toUpperCase() +
+                        items.address.slice(1)}
+                      ,{" "}
+                      {items.location.charAt(0).toUpperCase() +
+                        items.location.slice(1)}
+                    </td>
+                    <td>
+                      {items.owner.charAt(0).toUpperCase() +
+                        items.owner.slice(1)}
+                    </td>
                   </tr>
                 );
               })}
@@ -433,65 +528,148 @@ export default function Main() {
                 <th>Location</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Status</th>
+                <th>Average age</th>
+                <th>Contact</th>
+                <th>Venue</th>
+                <th>Gender</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Pokhara Titans</td>
-                <td>Pokhara</td>
-                <td>Dec 10, 2025</td>
-                <td>4:00 PM - 5:30 PM</td>
-                <td>
-                  <span className="status scheduled">Scheduled</span>
-                </td>
-              </tr>
+              {opponents?.map((items, id) => {
+                return (
+                  <tr key={id}>
+                    <td>
+                      {items.teamName.charAt(0).toUpperCase() +
+                        items.teamName.slice(1)}
+                    </td>
+                    <td>
+                      {items.location.charAt(0).toUpperCase() +
+                        items.location.slice(1)}
+                    </td>
+                    <td>
+                      {formatWithOrdinal(items.matchDate)},
+                      {items.matchDate.slice(0, 4)}
+                    </td>
+                    <td>
+                      {formatTo12Hour(items?.timeFrom)} -{" "}
+                      {formatTo12Hour(items?.timeTo)}
+                    </td>
+                    <td>{items.averageAge} years</td>
+                    <td>{items.contact}</td>
+                    <td>
+                      {items.venue.charAt(0).toUpperCase() +
+                        items.venue.slice(1)}
+                    </td>
+                    <td>
+                      {items.gender.charAt(0).toUpperCase() +
+                        items.gender.slice(1)}
+                    </td>
+                    <td>
+                      <button
+                        style={{
+                          background: "#d9534f", // red tone for cancel
+                          color: "#fff", // white text
+                          border: "none",
+                          borderRadius: "6px",
+                          padding: "10px 18px",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          cursor: "pointer",
+                          transition: "background 0.3s ease",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = "#c9302c")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.background = "#d9534f")
+                        }
+                        onClick={() => {
+                          console.log("Cancel clicked");
+                          // add your cancel logic here
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
         <div className="section-header">
           <h2>Teammate</h2>
         </div>
-
+        {/* header */}
         <div className="booking-history">
           <table className="booking-table">
             <thead>
               <tr>
-                <th>Team Name</th>
+                <th>Name</th>
                 <th>Location</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
+                <th>Age</th>
+                <th>Contact</th>
+                <th>Position</th>
+                <th>Experience</th>
+                <th>Gender</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Pokhara Titans</td>
-                <td>Pokhara</td>
-                <td>Dec 10, 2025</td>
-                <td>4:00 PM - 5:30 PM</td>
-                <td>
-                  <span className="status scheduled">Scheduled</span>
-                </td>
-              </tr>
-              <tr>
-                <td>Chitwan Warriors</td>
-                <td>Chitwan</td>
-                <td>Dec 12, 2025</td>
-                <td>6:00 PM - 7:30 PM</td>
-                <td>
-                  <span className="status completed">Completed</span>
-                </td>
-              </tr>
-              <tr>
-                <td>Lalitpur Strikers</td>
-                <td>Lalitpur</td>
-                <td>Dec 15, 2025</td>
-                <td>3:00 PM - 4:30 PM</td>
-                <td>
-                  <span className="status cancelled">Cancelled</span>
-                </td>
-              </tr>
+              {teammates?.map((items, id) => {
+                return (
+                  <tr>
+                    <td>
+                      {items.name.charAt(0).toUpperCase() + items.name.slice(1)}
+                    </td>
+                    <td>
+                      {items.location.charAt(0).toUpperCase() +
+                        items.location.slice(1)}
+                    </td>
+                    <td>{items.age} years </td>
+                    <td>{items.contact}</td>
+                    <td>
+                      {items.position.charAt(0).toUpperCase() +
+                        items.position.slice(1)}
+                    </td>
+                    <td>{items.experience} years</td>
+                    <td>
+                      {items.gender.charAt(0).toUpperCase() +
+                        items.gender.slice(1)}
+                    </td>
+                    <td>
+                      <button
+                        style={{
+                          background: "#d9534f", // red tone for cancel
+                          color: "#fff", // white text
+                          border: "none",
+                          borderRadius: "6px",
+                          padding: "10px 18px",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          cursor: "pointer",
+                          transition: "background 0.3s ease",
+                        }}
+                        onMouseEnter={(e) =>
+                          (e.currentTarget.style.background = "#c9302c")
+                        }
+                        onMouseLeave={(e) =>
+                          (e.currentTarget.style.background = "#d9534f")
+                        }
+                        onClick={() => {
+                          console.log("Cancel clicked");
+                          // add your cancel logic here
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

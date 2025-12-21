@@ -685,17 +685,37 @@ const confirmFutsal = async (req, res) => {
     );
     res.status(200).json({ find });
   } catch (error) {
-    res.status(500).json({ msg: "Server error", error: error.message });
+    res.status(400).json({ msg: "error", error: error.message });
   }
 };
 
 const myBookings = async (req, res) => {
   try {
     const userId = req.user.id;
-    const book = await futsals.find({bookedBy:userId});
-    res.status(200).json({msg:"got it",data:book})
+    const book = await futsals.find({ bookedBy: userId });
+    res.status(200).json({ msg: "got it", data: book });
   } catch (error) {
-    res.status(500).json({ msg: "Server error", error: error.message });
+    res.status(400).json({ msg: "error", error: error.message });
+  }
+};
+
+const getMyOpponents = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const book = await opponent.find({ confirmedBy: userId });
+    res.status(200).json({ msg: "got it", data: book });
+  } catch (error) {
+    res.status(400).json({ msg: "error", error: error.message });
+  }
+};
+
+const getMyTeammates = async (req, res) => {
+  try {
+     const userId = req.user.id;
+    const book = await teammate.find({ confirmedBy: userId });
+    res.status(200).json({ msg: "got it", data: book });
+  } catch (error) {
+    res.status(400).json({ msg: "error", error: error.message });
   }
 };
 
@@ -735,4 +755,6 @@ module.exports = {
   confirmTeammate,
   confirmFutsal,
   myBookings,
+  getMyOpponents,
+  getMyTeammates,
 };
