@@ -43,7 +43,9 @@ const {
   getMyTeammates,
   cancelTeammates,
   cancelOpponents,
-  cancelBookings
+  cancelBookings,
+  getBookers,
+  getBooking
 } = require("../Controllers/credentials");
 
 const storage = multer.diskStorage({
@@ -101,6 +103,8 @@ router
   .get(authorize, checkOwner)
   .patch(authorize, place.array("updatefutsalPic"), updateOwner);
 
+  router.route('/owner/get-Bookings').get(authorize,getBooking)
+  router.route('/owner/showBookers/:id').get(authorize,getBookers)
 //admin started
 router.route("/admin/login").post(adminCheck);
 router.route("/admin/approve-futsals/:id").patch(approve).delete(delFutsal);

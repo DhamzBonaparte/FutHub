@@ -659,8 +659,8 @@ const confirmOpponent = async (req, res) => {
   }
 };
 
-const cancelOpponents = async(req,res)=>{
-     try {
+const cancelOpponents = async (req, res) => {
+  try {
     const { id } = req.body;
     const find = await opponent.findByIdAndUpdate(
       id,
@@ -671,7 +671,7 @@ const cancelOpponents = async(req,res)=>{
   } catch (error) {
     res.status(500).json({ msg: "Server error", error: error.message });
   }
-}
+};
 
 const confirmTeammate = async (req, res) => {
   try {
@@ -688,8 +688,8 @@ const confirmTeammate = async (req, res) => {
   }
 };
 
-const cancelTeammates=async(req,res)=>{
-    try {
+const cancelTeammates = async (req, res) => {
+  try {
     const { id } = req.body;
     const find = await teammate.findByIdAndUpdate(
       id,
@@ -700,7 +700,7 @@ const cancelTeammates=async(req,res)=>{
   } catch (error) {
     res.status(500).json({ msg: "Server error", error: error.message });
   }
-}
+};
 
 const confirmFutsal = async (req, res) => {
   try {
@@ -717,7 +717,7 @@ const confirmFutsal = async (req, res) => {
   }
 };
 
-const cancelBookings = async(req,res)=>{
+const cancelBookings = async (req, res) => {
   try {
     const { id } = req.body;
     const find = await futsals.findByIdAndUpdate(
@@ -729,7 +729,7 @@ const cancelBookings = async(req,res)=>{
   } catch (error) {
     res.status(500).json({ msg: "Server error", error: error.message });
   }
-}
+};
 
 const myBookings = async (req, res) => {
   try {
@@ -753,13 +753,38 @@ const getMyOpponents = async (req, res) => {
 
 const getMyTeammates = async (req, res) => {
   try {
-     const userId = req.user.id;
+    const userId = req.user.id;
     const book = await teammate.find({ confirmedBy: userId });
     res.status(200).json({ msg: "got it", data: book });
   } catch (error) {
     res.status(400).json({ msg: "error", error: error.message });
   }
 };
+
+const getBooking = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const booked = await futsals.find({userId});
+
+    if (!booked || booked.length === 0) {
+      return res.status(200).json({ data: [], msg: "No bookings found" });
+    }
+
+    res.status(200).json({ data: booked });
+  } catch (err) {
+    res.status(400).json({ msg: "error", error: err.message });
+  }
+};
+
+const getBookers=async(req,res)=>{
+  try {
+    const {id} = req.params;
+    const booker = await signup.find({_id:id});
+    res.status(200).json({msg:booker});
+  } catch (error) {
+    res.status(400).json({msg:error.message});
+  }
+}
 
 module.exports = {
   getCredentials,
@@ -801,5 +826,7 @@ module.exports = {
   getMyTeammates,
   cancelTeammates,
   cancelOpponents,
-  cancelBookings
+  cancelBookings,
+  getBooking,
+  getBookers
 };
