@@ -1,7 +1,11 @@
 export default function BookFutsal(){
     return(
         <>
-        Book Futsal
+        <div className="header">
+        <div className="dashboard-title" style={{ color: "gray" }}>
+          Booked Futsals
+        </div>
+      </div>
         </>
     )
 }

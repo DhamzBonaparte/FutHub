@@ -33,7 +33,7 @@ export default function Futsals() {
 
   const handleApprove = async (fut) => {
     try {
-      const appr = await axios.patch(
+      await axios.patch(
         `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`
       );
       await getFutsals();
@@ -44,7 +44,7 @@ export default function Futsals() {
 
   const deleteFutsal = async (fut) => {
     try {
-      const del = await axios.delete(
+      await axios.delete(
         `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`
       );
       await getFutsals();
@@ -252,7 +252,6 @@ export default function Futsals() {
                   border: "none",
                   borderRadius: "6px",
                   fontWeight: 600,
-                  cursor: "pointer",
                   transition: "background 0.2s ease",
                   bottom: 0,
                 }}

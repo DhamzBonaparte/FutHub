@@ -27,7 +27,7 @@ const formatTo12Hour = (timeStr) => {
   if (!timeStr) return "";
   const [hour, minute] = timeStr.split(":").map(Number);
   const ampm = hour >= 12 ? "PM" : "AM";
-  const adjustedHour = hour % 12 || 12; // convert 0 → 12
+  const adjustedHour = hour % 12 || 12;
   return `${adjustedHour}:${minute.toString().padStart(2, "0")} ${ampm}`;
 };
 
@@ -63,6 +63,19 @@ export default function Main() {
     }
   };
 
+  const handleCancelBookings = async (id) => {
+    try {
+      await axios.patch(
+        "http://localhost:3000/api/v1/player/myBookings",
+        { id },
+        { withCredentials: true }
+      );
+      await getMyBookings();
+    } catch (error) {
+      setErr(error.message);
+    }
+  };
+
   const getMyOpponents = async () => {
     try {
       setLoading(true);
@@ -79,12 +92,27 @@ export default function Main() {
     }
   };
 
+  const handleCancelOpponents = async (id) => {
+    try {
+      await axios.patch(
+        "http://localhost:3000/api/v1/player/myOpponents",
+        { id },
+        { withCredentials: true }
+      );
+      await getMyOpponents();
+    } catch (error) {
+      setErr(error.message);
+    }
+  };
+
   const getMyTeammates = async () => {
     try {
       setLoading(true);
       const hi = await axios.get(
         "http://localhost:3000/api/v1/player/myTeammates",
-        { withCredentials: true }
+        {
+          withCredentials: true,
+        }
       );
       setTeammates(hi.data.data);
       setTem(hi.data.data.length);
@@ -92,6 +120,19 @@ export default function Main() {
       setErr(error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCancelTeammates = async (id) => {
+    try {
+      await axios.patch(
+        "http://localhost:3000/api/v1/player/myTeammates",
+        { id },
+        { withCredentials: true }
+      );
+      await getMyTeammates();
+    } catch (error) {
+      setErr(error.message);
     }
   };
 
@@ -189,6 +230,17 @@ export default function Main() {
             whiteSpace: "nowrap",
           }}
         >
+          <div
+            className="no"
+            style={{
+              display: matches == 0 ? "block" : "none",
+              textAlign: "center",
+            }}
+          >
+            <p style={{ fontSize: "20px", fontWeight: 600 }}>
+              No futsals booked
+            </p>
+          </div>
           {bookings?.map((items, id) => {
             return (
               <div
@@ -442,8 +494,8 @@ export default function Main() {
                   </div>
                   <button
                     style={{
-                      background: "#d9534f", // red tone for cancel
-                      color: "#fff", // white text
+                      background: "#d9534f",
+                      color: "#fff",
                       border: "none",
                       borderRadius: "6px",
                       padding: "10px 18px",
@@ -458,10 +510,7 @@ export default function Main() {
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.background = "#d9534f")
                     }
-                    onClick={() => {
-                      console.log("Cancel clicked");
-                      // add your cancel logic here
-                    }}
+                    onClick={() => handleCancelBookings(items._id)}
                   >
                     Cancel
                   </button>
@@ -514,6 +563,15 @@ export default function Main() {
               })}
             </tbody>
           </table>
+          {matches === 0 && (
+            <div className="no" style={{ padding: "10px" }}>
+              {" "}
+              <span style={{ fontSize: "20px", fontWeight: 600 }}>
+                {" "}
+                No booked futsals{" "}
+              </span>{" "}
+            </div>
+          )}
         </div>
 
         <div className="section-header">
@@ -535,6 +593,7 @@ export default function Main() {
                 <th>Action</th>
               </tr>
             </thead>
+
             <tbody>
               {opponents?.map((items, id) => {
                 return (
@@ -568,8 +627,8 @@ export default function Main() {
                     <td>
                       <button
                         style={{
-                          background: "#d9534f", // red tone for cancel
-                          color: "#fff", // white text
+                          background: "#d9534f",
+                          color: "#fff",
                           border: "none",
                           borderRadius: "6px",
                           padding: "10px 18px",
@@ -586,10 +645,7 @@ export default function Main() {
                         onMouseLeave={(e) =>
                           (e.currentTarget.style.background = "#d9534f")
                         }
-                        onClick={() => {
-                          console.log("Cancel clicked");
-                          // add your cancel logic here
-                        }}
+                        onClick={() => handleCancelOpponents(items._id)}
                       >
                         Cancel
                       </button>
@@ -599,6 +655,13 @@ export default function Main() {
               })}
             </tbody>
           </table>
+          {opp === 0 && (
+            <div className="no" style={{ padding: "10px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 600 }}>
+                No opponents Selected
+              </p>
+            </div>
+          )}
         </div>
         <div className="section-header">
           <h2>Teammate</h2>
@@ -618,10 +681,11 @@ export default function Main() {
                 <th>Action</th>
               </tr>
             </thead>
+
             <tbody>
               {teammates?.map((items, id) => {
                 return (
-                  <tr>
+                  <tr key={id}>
                     <td>
                       {items.name.charAt(0).toUpperCase() + items.name.slice(1)}
                     </td>
@@ -659,10 +723,7 @@ export default function Main() {
                         onMouseLeave={(e) =>
                           (e.currentTarget.style.background = "#d9534f")
                         }
-                        onClick={() => {
-                          console.log("Cancel clicked");
-                          // add your cancel logic here
-                        }}
+                        onClick={() => handleCancelTeammates(items._id)}
                       >
                         Cancel
                       </button>
@@ -672,6 +733,13 @@ export default function Main() {
               })}
             </tbody>
           </table>
+          {tem === 0 && (
+            <div className="no" style={{ padding: "10px" }}>
+              <p style={{ fontSize: "20px", fontWeight: 600 }}>
+                No teammates selected
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

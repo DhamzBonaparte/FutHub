@@ -659,6 +659,20 @@ const confirmOpponent = async (req, res) => {
   }
 };
 
+const cancelOpponents = async(req,res)=>{
+     try {
+    const { id } = req.body;
+    const find = await opponent.findByIdAndUpdate(
+      id,
+      { confirmedBy: " " },
+      { new: true }
+    );
+    res.status(200).json({ find });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+}
+
 const confirmTeammate = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -674,6 +688,20 @@ const confirmTeammate = async (req, res) => {
   }
 };
 
+const cancelTeammates=async(req,res)=>{
+    try {
+    const { id } = req.body;
+    const find = await teammate.findByIdAndUpdate(
+      id,
+      { confirmedBy: " " },
+      { new: true }
+    );
+    res.status(200).json({ find });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+}
+
 const confirmFutsal = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -688,6 +716,20 @@ const confirmFutsal = async (req, res) => {
     res.status(400).json({ msg: "error", error: error.message });
   }
 };
+
+const cancelBookings = async(req,res)=>{
+  try {
+    const { id } = req.body;
+    const find = await futsals.findByIdAndUpdate(
+      id,
+      { bookedBy: " " },
+      { new: true }
+    );
+    res.status(200).json({ find });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+}
 
 const myBookings = async (req, res) => {
   try {
@@ -757,4 +799,7 @@ module.exports = {
   myBookings,
   getMyOpponents,
   getMyTeammates,
+  cancelTeammates,
+  cancelOpponents,
+  cancelBookings
 };
