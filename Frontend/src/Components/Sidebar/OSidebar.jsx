@@ -77,7 +77,7 @@ export default function OSidebar() {
             className="user-avatar"
             style={{ background: "#145A32", color: "#c0bb2cff" }}
           >
-            {data?.firstName?.slice(0, 1) || ""}
+            {data?.firstName?.charAt(0).toUpperCase() || ""}
           </div>
           <div className="user-info">
             <h3 style={{ color: "black" }}>

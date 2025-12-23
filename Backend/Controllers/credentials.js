@@ -708,6 +708,7 @@ const confirmFutsal = async (req, res) => {
     const { id, selected } = req.body;
     const find = await futsals.findByIdAndUpdate(
       id,
+      { $push: { bookings: { userId, timeSlot: selected } } },
       { bookedBy: userId, $push: { bookedTime: selected } },
       { new: true }
     );
@@ -719,13 +720,18 @@ const confirmFutsal = async (req, res) => {
 
 const cancelBookings = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id,bid } = req.body;
     const find = await futsals.findByIdAndUpdate(
       id,
       { bookedBy: " " },
       { new: true }
     );
-    res.status(200).json({ find });
+    const updatedFutsal = await futsals.findByIdAndUpdate(
+      id,
+      { $pull: { bookings: { _id: bid} } },
+      { new: true }
+    );
+    res.status(200).json({ find, updatedFutsal });
   } catch (error) {
     res.status(500).json({ msg: "Server error", error: error.message });
   }
@@ -734,8 +740,9 @@ const cancelBookings = async (req, res) => {
 const myBookings = async (req, res) => {
   try {
     const userId = req.user.id;
-    const book = await futsals.find({ bookedBy: userId });
-    res.status(200).json({ msg: "got it", data: book });
+    const book = await futsals.find({ "bookings.userId": userId });
+
+    res.status(200).json({ msg: "got it", data: book, userId });
   } catch (error) {
     res.status(400).json({ msg: "error", error: error.message });
   }
@@ -786,6 +793,22 @@ const getBookers = async (req, res) => {
   }
 };
 
+const searchFutsal= async(req,res)=>{
+   try {
+    const { search } = req.body;
+    const filter = await futsals.find({
+      location: { $regex: search, $options: "i" },
+    });
+
+    res.status(200).json({
+      data: filter,
+    });
+    res.status(200).json({ msg: booker });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+} 
+
 module.exports = {
   getCredentials,
   setCredentials,
@@ -829,4 +852,5 @@ module.exports = {
   cancelBookings,
   getBooking,
   getBookers,
+  searchFutsal
 };

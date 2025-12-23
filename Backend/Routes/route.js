@@ -45,7 +45,8 @@ const {
   cancelOpponents,
   cancelBookings,
   getBookers,
-  getBooking
+  getBooking,
+  searchFutsal
 } = require("../Controllers/credentials");
 
 const storage = multer.diskStorage({
@@ -124,5 +125,6 @@ router.route('/player/confirm-futsal').patch(authorize,confirmFutsal);
 router.route('/player/myBookings').get(authorize,myBookings).patch(cancelBookings)
 router.route('/player/myOpponents').get(authorize,getMyOpponents).patch(cancelOpponents)
 router.route('/player/myTeammates').get(authorize,getMyTeammates).patch(cancelTeammates)
+router.route('/player/search-futsal').post(searchFutsal)
 
 module.exports = router;

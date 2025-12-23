@@ -15,7 +15,8 @@ export default function Book() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [futsals, setFutsals] = useState([]);
-  const [selected, setSelected] = useState(null);
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState({ id: null, time: null });
 
   const alltimes = [
     "6-7 AM",
@@ -36,6 +37,25 @@ export default function Book() {
     "9-10 PM",
   ];
 
+  const handleSearch = async (sea) => {
+    setLoading(true);
+    try {
+      if (!sea || sea.trim() === "") {
+        await getFutsals();
+      }
+      const se = await axios.post(
+        "http://localhost:3000/api/v1/player/search-futsal",
+        { search },
+        { withCredentials: true }
+      );
+      setFutsals(se.data.data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getFutsals = async () => {
     setLoading(true);
     try {
@@ -53,28 +73,29 @@ export default function Book() {
 
   const handleConfirm = async (id) => {
     try {
-      if (!selected) {
+      if (!selected.time || selected.id !== id) {
         Swal.fire({
           icon: "warning",
           title: "Oops...",
-          text: "Please select a time slot before continuing!",
+          text: "Please select a time slot for this specific futsal!",
           confirmButtonColor: "#4CAF50",
-          confirmButtonText: "Got it",
         });
         return;
       }
 
       await axios.patch(
         "http://localhost:3000/api/v1/player/confirm-futsal",
-        { id, selected },
+        { id, selected: selected.time },
         { withCredentials: true }
       );
+
+      setSelected({ id: null, time: null });
       await getFutsals();
 
       Swal.fire({
         icon: "success",
-        title: "Time Slot Selected",
-        text: `You chose: ${selected}`,
+        title: "Booking Confirmed",
+        text: `You chose: ${selected.time}`,
         confirmButtonColor: "#2196F3",
       });
     } catch (error) {
@@ -82,11 +103,11 @@ export default function Book() {
     }
   };
 
-  const handleSelect = (time) => {
-    if (selected === time) {
-      setSelected(null);
+  const handleSelect = (futsalId, time) => {
+    if (selected.id === futsalId && selected.time === time) {
+      setSelected({ id: null, time: null });
     } else {
-      setSelected(time);
+      setSelected({ id: futsalId, time: time });
     }
   };
 
@@ -120,7 +141,42 @@ export default function Book() {
       <div className="header" style={{ textAlign: "center" }}>
         <div className="dashboard-title">Booking Futsal</div>
       </div>
-
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          marginBottom: "30px",
+          maxWidth: "100%",
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Search location..."
+          style={{
+            flex: 1,
+            padding: "12px",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+            width: "100%",
+          }}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            handleSearch(e.target.value);
+          }}
+        />
+        <button
+          style={{
+            background: "#0d1b2a",
+            color: "#5efc82",
+            padding: "12px 30px",
+            border: "none",
+            borderRadius: "8px",
+            fontWeight: "bold",
+          }}
+        >
+          Search
+        </button>
+      </div>
       <div
         className="loadi"
         style={{
@@ -159,7 +215,6 @@ export default function Book() {
                 ))}
               </Carousel>
 
-              {/* Booking card */}
               <div style={cardStyle}>
                 <h2 style={headingStyle}>
                   {futsal.futsal.charAt(0).toUpperCase() +
@@ -246,41 +301,47 @@ export default function Book() {
                     margin: "20px auto",
                   }}
                 >
-                  {alltimes.map((time, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => handleSelect(time)}
-                      disabled={futsal.bookedTime.includes(time)} 
-                      style={{
-                        padding: "10px",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        borderRadius: "6px",
-                        border:
-                          selected === time
+                  {alltimes.map((time, index) => {
+                    const isBooked = futsal.bookings?.some(
+                      (b) => b.timeSlot === time
+                    );
+
+                    const isCurrentSelection =
+                      selected.id === futsal._id && selected.time === time;
+
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => handleSelect(futsal._id, time)}
+                        disabled={isBooked}
+                        style={{
+                          padding: "10px",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          borderRadius: "6px",
+                          border: isCurrentSelection
                             ? "2px solid #555"
                             : "1px solid #4CAF50",
-                        cursor: futsal.bookedTime.includes(time)
-                          ? "not-allowed"
-                          : "pointer",
-                        background: futsal.bookedTime.includes(time)
-                          ? "#d3d3d3" 
-                          : selected === time
-                          ? "#d3d3d3" 
-                          : "#e8f5e9", 
-                        color: futsal.bookedTime.includes(time)
-                          ? "#000"
-                          : selected === time
-                          ? "#000"
-                          : "#2e7d32",
-                        boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-                        transition: "all 0.3s ease",
-                      }}
-                    >
-                      {time}
-                    </button>
-                  ))}
+                          cursor: isBooked ? "not-allowed" : "pointer",
+                          background: isBooked
+                            ? "#d3d3d3"
+                            : isCurrentSelection
+                            ? "#d3d3d3"
+                            : "#e8f5e9",
+                          color: isBooked
+                            ? "#000"
+                            : isCurrentSelection
+                            ? "#000"
+                            : "#2e7d32",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                          transition: "all 0.3s ease",
+                        }}
+                      >
+                        {time}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 <p style={textStyle}>
@@ -294,11 +355,11 @@ export default function Book() {
                   style={{
                     marginTop: "15px",
                     padding: "8px 12px",
-                    background:  "#0d1b2a", 
-                    color:  "rgba(86, 236, 98, 1)", 
+                    background: "#0d1b2a",
+                    color: "rgba(86, 236, 98, 1)",
                     border: "none",
                     borderRadius: "6px",
-                    cursor: "pointer", 
+                    cursor: "pointer",
                     fontSize: "14px",
                     display: "flex",
                     justifyContent: "center",
@@ -307,7 +368,7 @@ export default function Book() {
                   }}
                   onClick={() => handleConfirm(futsal._id)}
                 >
-                  Book
+                  Book Futsal
                 </button>
               </div>
             </div>

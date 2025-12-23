@@ -62,15 +62,21 @@ const futsalSchema = new mongoose.Schema(
     about: { type: String, trim: true, required: true },
 
     approved: { type: Boolean, default: false },
-    bookedBy:{
-      type:String,
-      trim:true,
-      default:""
+    bookedBy: {
+      type: String,
+      trim: true,
+      default: "",
     },
     bookedTime: {
       type: [String],
       default: [],
     },
+    bookings: [
+      {
+        userId: { type: String, required: true },
+        timeSlot: { type: String, required: true },
+      },
+    ],
   },
   { timestamps: true }
 );

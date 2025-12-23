@@ -2,6 +2,8 @@ import DomainIcon from "@mui/icons-material/Domain";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import { PieChart, Pie, Legend, Cell } from "recharts";
+import Swal from "sweetalert2";
+
 import {
   AreaChart,
   Area,

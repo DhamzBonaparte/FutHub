@@ -43,6 +43,7 @@ export default function Main() {
   const [teammates, setTeammates] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [id, setId] = useState("");
   const [matches, setMatches] = useState(0);
   const [opp, setOpp] = useState(0);
   const [tem, setTem] = useState(0);
@@ -56,6 +57,22 @@ export default function Main() {
         { withCredentials: true }
       );
       setBookings(hi.data.data);
+      setId(hi.data.userId);
+
+      const myBookings = hi.data.data.flatMap((f) =>
+        f.bookings.filter((b) => {
+          console.log(
+            "Comparing booking userId:",
+            b.userId,
+            "with id:",
+            hi.data.userId
+          );
+          return String(b.userId) === String(hi.data.userId);
+        })
+      );
+
+      console.log("My bookings:", myBookings);
+
       setMatches(hi.data.data.length);
     } catch (error) {
       setErr(error.message);
@@ -64,16 +81,16 @@ export default function Main() {
     }
   };
 
-  const handleCancelBookings = async (id) => {
+  const handleCancelBookings = async (id,bid) => {
     try {
       await axios.patch(
         "http://localhost:3000/api/v1/player/myBookings",
-        { id },
+        { id,bid },
         { withCredentials: true }
       );
       await getMyBookings();
       Swal.fire({
-        icon: "error", // red cross icon
+        icon: "error",
         title: "Cancelled",
         text: "Your booking has been cancelled.",
         confirmButtonColor: "#4CAF50",
@@ -100,6 +117,10 @@ export default function Main() {
     }
   };
 
+  useEffect(() => {
+    console.log("Frontend id in render:", id, typeof id);
+  }, [id]);
+
   const handleCancelOpponents = async (id) => {
     try {
       await axios.patch(
@@ -109,7 +130,7 @@ export default function Main() {
       );
       await getMyOpponents();
       Swal.fire({
-        icon: "error", // red cross icon
+        icon: "error",
         title: "Cancelled",
         text: "Opponent has been cancelled.",
         confirmButtonColor: "#4CAF50",
@@ -147,7 +168,7 @@ export default function Main() {
       );
       await getMyTeammates();
       Swal.fire({
-        icon: "error", // red cross icon
+        icon: "error",
         title: "Cancelled",
         text: "Teammate has been cancelled.",
         confirmButtonColor: "#4CAF50",
@@ -157,6 +178,8 @@ export default function Main() {
       setErr(error.message);
     }
   };
+
+  console.log(bookings);
 
   return (
     <>
@@ -263,11 +286,11 @@ export default function Main() {
               No futsals booked
             </p>
           </div>
-          {bookings?.map((items, id) => {
+          {bookings?.map((items, index) => {
             return (
               <div
                 className="match-card"
-                key={id}
+                key={items._id}
                 style={{
                   flex: "0 0 auto",
                   background: "#fff",
@@ -491,6 +514,32 @@ export default function Main() {
                       {items.contact}
                     </span>
                   </div>
+                  {/* time */}
+                  <div
+                    className="match-time"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    <i
+                      className="far fa-clock"
+                      style={{ color: "#20C997" }}
+                    ></i>
+                    <span style={{ fontSize: "0.95rem", fontWeight: "bold" }}>
+                      {items.bookings
+                        ?.filter((b) => String(b.userId) === String(id))
+                        .map((b, i) => (
+                          <span key={i} style={{ display: "block" }}>
+                            {b.timeSlot}
+                          </span>
+                        ))}
+                      {items.bookings?.filter(
+                        (b) => String(b.userId) === String(id)
+                      ).length === 0 && "No slots found"}
+                    </span>
+                  </div>
 
                   {/* Price */}
                   <div
@@ -514,86 +563,38 @@ export default function Main() {
                       NPR {items.price}/hr
                     </span>
                   </div>
-                  <button
-                    style={{
-                      background: "#d9534f",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "6px",
-                      padding: "10px 18px",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      cursor: "pointer",
-                      transition: "background 0.3s ease",
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = "#c9302c")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = "#d9534f")
-                    }
-                    onClick={() => handleCancelBookings(items._id)}
-                  >
-                    Cancel
-                  </button>
+                  {items.bookings
+                    .filter((b) => String(b.userId) === String(id))
+                    .map((b, i) => (
+                      <div key={b._id} style={{ marginBottom: "8px" }}>
+                        <button
+                          onClick={() => handleCancelBookings(items._id, b._id)}
+                          style={{
+                            background: "#d9534f",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "6px",
+                            padding: "10px 18px",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                            transition: "background 0.3s ease",
+                          }}
+                          onMouseEnter={(e) =>
+                            (e.currentTarget.style.background = "#c9302c")
+                          }
+                          onMouseLeave={(e) =>
+                            (e.currentTarget.style.background = "#d9534f")
+                          }
+                        >
+                          Cancel {b.timeSlot}
+                        </button>
+                      </div>
+                    ))}
                 </div>
               </div>
             );
           })}
-        </div>
-
-        <div className="section-header">
-          <h2>Booking History</h2>
-        </div>
-
-        <div className="booking-history">
-          <table className="booking-table">
-            <thead>
-              <tr>
-                <th>Venue</th>
-                <th>Date</th>
-                <th>Price</th>
-                <th>Contact</th>
-                <th>Location</th>
-                <th>Owner</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bookings?.map((items, id) => {
-                return (
-                  <tr key={id}>
-                    <td>
-                      {items.futsal.charAt(0).toUpperCase() +
-                        items.futsal.slice(1)}
-                    </td>
-                    <td> {formatWithOrdinal(items?.createdAt)}</td>
-                    <td>NPR {items.price}/hr</td>
-                    <td>{items.contact}</td>
-                    <td>
-                      {items.address.charAt(0).toUpperCase() +
-                        items.address.slice(1)}
-                      ,{" "}
-                      {items.location.charAt(0).toUpperCase() +
-                        items.location.slice(1)}
-                    </td>
-                    <td>
-                      {items.owner.charAt(0).toUpperCase() +
-                        items.owner.slice(1)}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          {matches === 0 && (
-            <div className="no" style={{ padding: "10px" }}>
-              {" "}
-              <span style={{ fontSize: "20px", fontWeight: 600 }}>
-                {" "}
-                No booked futsals{" "}
-              </span>{" "}
-            </div>
-          )}
         </div>
 
         <div className="section-header">

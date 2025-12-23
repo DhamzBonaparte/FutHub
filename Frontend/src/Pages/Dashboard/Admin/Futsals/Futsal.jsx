@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
+import Swal from "sweetalert2";
+
 export default function Futsals() {
   useEffect(() => {
     getFutsals();
