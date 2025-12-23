@@ -705,10 +705,10 @@ const cancelTeammates = async (req, res) => {
 const confirmFutsal = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { id } = req.body;
+    const { id, selected } = req.body;
     const find = await futsals.findByIdAndUpdate(
       id,
-      { bookedBy: userId },
+      { bookedBy: userId, $push: { bookedTime: selected } },
       { new: true }
     );
     res.status(200).json({ find });
@@ -764,7 +764,7 @@ const getMyTeammates = async (req, res) => {
 const getBooking = async (req, res) => {
   try {
     const userId = req.user.id;
-    const booked = await futsals.find({userId});
+    const booked = await futsals.find({ userId });
 
     if (!booked || booked.length === 0) {
       return res.status(200).json({ data: [], msg: "No bookings found" });
@@ -776,15 +776,15 @@ const getBooking = async (req, res) => {
   }
 };
 
-const getBookers=async(req,res)=>{
+const getBookers = async (req, res) => {
   try {
-    const {id} = req.params;
-    const booker = await signup.find({_id:id});
-    res.status(200).json({msg:booker});
+    const { id } = req.params;
+    const booker = await signup.find({ _id: id });
+    res.status(200).json({ msg: booker });
   } catch (error) {
-    res.status(400).json({msg:error.message});
+    res.status(400).json({ msg: error.message });
   }
-}
+};
 
 module.exports = {
   getCredentials,
@@ -828,5 +828,5 @@ module.exports = {
   cancelOpponents,
   cancelBookings,
   getBooking,
-  getBookers
+  getBookers,
 };

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
+import Swal from "sweetalert2";
 
 export default function Book() {
   useEffect(() => {
@@ -14,6 +15,26 @@ export default function Book() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [futsals, setFutsals] = useState([]);
+  const [selected, setSelected] = useState(null);
+
+  const alltimes = [
+    "6-7 AM",
+    "7-8 AM",
+    "8-9 AM",
+    "9-10 AM",
+    "10-11 AM",
+    "11-12 AM",
+    "12-1 PM",
+    "1-2 PM",
+    "2-3 PM",
+    "3-4 PM",
+    "4-5 PM",
+    "5-6 PM",
+    "6-7 PM",
+    "7-8 PM",
+    "8-9 PM",
+    "9-10 PM",
+  ];
 
   const getFutsals = async () => {
     setLoading(true);
@@ -32,14 +53,40 @@ export default function Book() {
 
   const handleConfirm = async (id) => {
     try {
+      if (!selected) {
+        Swal.fire({
+          icon: "warning",
+          title: "Oops...",
+          text: "Please select a time slot before continuing!",
+          confirmButtonColor: "#4CAF50",
+          confirmButtonText: "Got it",
+        });
+        return;
+      }
+
       await axios.patch(
         "http://localhost:3000/api/v1/player/confirm-futsal",
-        { id },
+        { id, selected },
         { withCredentials: true }
       );
       await getFutsals();
+
+      Swal.fire({
+        icon: "success",
+        title: "Time Slot Selected",
+        text: `You chose: ${selected}`,
+        confirmButtonColor: "#2196F3",
+      });
     } catch (error) {
       setError(error.message);
+    }
+  };
+
+  const handleSelect = (time) => {
+    if (selected === time) {
+      setSelected(null);
+    } else {
+      setSelected(time);
     }
   };
 
@@ -73,6 +120,7 @@ export default function Book() {
       <div className="header" style={{ textAlign: "center" }}>
         <div className="dashboard-title">Booking Futsal</div>
       </div>
+
       <div
         className="loadi"
         style={{
@@ -119,16 +167,12 @@ export default function Book() {
                 </h2>
                 <p style={textStyle}>
                   <span>
-                    <strong>Owner:</strong>{" "}
-                    {futsal.owner.charAt(0).toUpperCase() +
-                      futsal.owner.slice(1)}
-                  </span>
-                </p>
-                <p style={textStyle}>
-                  <span>
                     <strong>Location: </strong>
-                    {futsal.address.charAt(0).toUpperCase() + futsal.address.slice(1)}, {" "} 
-                      {futsal.location.charAt(0).toUpperCase() + futsal.location.slice(1)}
+                    {futsal.address.charAt(0).toUpperCase() +
+                      futsal.address.slice(1)}
+                    ,{" "}
+                    {futsal.location.charAt(0).toUpperCase() +
+                      futsal.location.slice(1)}
                   </span>
                 </p>
                 <p style={textStyle}>
@@ -192,6 +236,53 @@ export default function Book() {
                     ))}
                 </ul>
 
+                <div
+                  className="times"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(4, 1fr)",
+                    gap: "10px",
+                    maxWidth: "400px",
+                    margin: "20px auto",
+                  }}
+                >
+                  {alltimes.map((time, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => handleSelect(time)}
+                      disabled={futsal.bookedTime.includes(time)} // prevent clicking if already booked
+                      style={{
+                        padding: "10px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        borderRadius: "6px",
+                        border:
+                          selected === time
+                            ? "2px solid #555"
+                            : "1px solid #4CAF50",
+                        cursor: futsal.bookedTime.includes(time)
+                          ? "not-allowed"
+                          : "pointer",
+                        background: futsal.bookedTime.includes(time)
+                          ? "#d3d3d3" // gray if booked
+                          : selected === time
+                          ? "#d3d3d3" // gray if selected
+                          : "#e8f5e9", // green otherwise
+                        color: futsal.bookedTime.includes(time)
+                          ? "#000"
+                          : selected === time
+                          ? "#000"
+                          : "#2e7d32",
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                        transition: "all 0.3s ease",
+                      }}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+
                 <p style={textStyle}>
                   <span>
                     <strong>About: </strong>
@@ -200,7 +291,7 @@ export default function Book() {
                   </span>
                 </p>
                 <button
-                disabled={!!futsal.bookedBy}
+                  disabled={!!futsal.bookedBy}
                   style={{
                     marginTop: "15px",
                     padding: "8px 12px",

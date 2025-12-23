@@ -66,7 +66,11 @@ const futsalSchema = new mongoose.Schema(
       type:String,
       trim:true,
       default:""
-    }
+    },
+    bookedTime: {
+      type: [String],
+      default: [],
+    },
   },
   { timestamps: true }
 );
