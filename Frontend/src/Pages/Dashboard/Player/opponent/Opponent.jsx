@@ -9,6 +9,7 @@ import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import PersonIcon from "@mui/icons-material/Person";
 import WcIcon from "@mui/icons-material/Wc";
+import Swal from "sweetalert2";
 
 export default function Opponent() {
   const [loading, setLoading] = useState(true);
@@ -53,6 +54,12 @@ export default function Opponent() {
         { withCredentials: true }
       );
       await getOpponents();
+      Swal.fire({
+        icon: "success",
+        title: "Opponent Confirmed",
+        text: `You chose a good one`,
+        confirmButtonColor: "#2196F3",
+      });
     } catch (error) {
       setError(error.message);
     }
@@ -99,6 +106,12 @@ export default function Opponent() {
       );
       getMyOpponentListings();
       setEdit(false);
+      Swal.fire({
+        icon: "success",
+        title: "Edited Successfully",
+        text: `Updated data ready to show`,
+        confirmButtonColor: "#2196F3",
+      });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -181,6 +194,13 @@ export default function Opponent() {
         `http://localhost:3000/api/v1/player/my-opponent-postings/${id}`,
         { withCredentials: true }
       );
+
+      Swal.fire({
+        title: "Deleted!",
+        text: "Your item has been deleted.",
+        icon: "success",
+        confirmButtonColor: "#4CAF50",
+      });
       getMyOpponentListings();
     } catch (err) {
       setError(err.message);

@@ -734,8 +734,11 @@ export default function Futsal() {
                     className="fas fa-map-marker-alt"
                     style={{ color: "var(--dark-green)", marginRight: "6px" }}
                   ></LocationPinIcon>
-                  {venue?.address?.charAt(0).toUpperCase() + venue?.address?.slice(1)}, {" "} 
-                      {venue?.location?.charAt(0).toUpperCase() + venue?.location?.slice(1)}
+                  {venue?.address?.charAt(0).toUpperCase() +
+                    venue?.address?.slice(1)}
+                  ,{" "}
+                  {venue?.location?.charAt(0).toUpperCase() +
+                    venue?.location?.slice(1)}
                 </p>
                 <p style={{ fontSize: "15px", color: "#555", margin: "6px 0" }}>
                   <AccountBalanceWalletIcon

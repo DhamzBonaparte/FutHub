@@ -4,6 +4,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const formatWithOrdinal = (dateString) => {
   if (!dateString) return "";
@@ -71,6 +72,13 @@ export default function Main() {
         { withCredentials: true }
       );
       await getMyBookings();
+      Swal.fire({
+        icon: "error", // red cross icon
+        title: "Cancelled",
+        text: "Your booking has been cancelled.",
+        confirmButtonColor: "#4CAF50",
+        confirmButtonText: "OK",
+      });
     } catch (error) {
       setErr(error.message);
     }
@@ -100,6 +108,13 @@ export default function Main() {
         { withCredentials: true }
       );
       await getMyOpponents();
+      Swal.fire({
+        icon: "error", // red cross icon
+        title: "Cancelled",
+        text: "Opponent has been cancelled.",
+        confirmButtonColor: "#4CAF50",
+        confirmButtonText: "OK",
+      });
     } catch (error) {
       setErr(error.message);
     }
@@ -131,6 +146,13 @@ export default function Main() {
         { withCredentials: true }
       );
       await getMyTeammates();
+      Swal.fire({
+        icon: "error", // red cross icon
+        title: "Cancelled",
+        text: "Teammate has been cancelled.",
+        confirmButtonColor: "#4CAF50",
+        confirmButtonText: "OK",
+      });
     } catch (error) {
       setErr(error.message);
     }

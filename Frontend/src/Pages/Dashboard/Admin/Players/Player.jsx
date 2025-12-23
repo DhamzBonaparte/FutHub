@@ -51,6 +51,12 @@ export default function Player() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3000/api/v1/admin/players/${id}`);
+      Swal.fire({
+        title: "Deleted!",
+        text: "This user has been deleted.",
+        icon: "success",
+        confirmButtonColor: "#4CAF50",
+      });
       await getPlayers();
     } catch (error) {
       setError(error.message);

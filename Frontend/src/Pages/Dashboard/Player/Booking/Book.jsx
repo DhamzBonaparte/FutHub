@@ -251,7 +251,7 @@ export default function Book() {
                       key={index}
                       type="button"
                       onClick={() => handleSelect(time)}
-                      disabled={futsal.bookedTime.includes(time)} // prevent clicking if already booked
+                      disabled={futsal.bookedTime.includes(time)} 
                       style={{
                         padding: "10px",
                         fontSize: "14px",
@@ -265,10 +265,10 @@ export default function Book() {
                           ? "not-allowed"
                           : "pointer",
                         background: futsal.bookedTime.includes(time)
-                          ? "#d3d3d3" // gray if booked
+                          ? "#d3d3d3" 
                           : selected === time
-                          ? "#d3d3d3" // gray if selected
-                          : "#e8f5e9", // green otherwise
+                          ? "#d3d3d3" 
+                          : "#e8f5e9", 
                         color: futsal.bookedTime.includes(time)
                           ? "#000"
                           : selected === time
@@ -291,15 +291,14 @@ export default function Book() {
                   </span>
                 </p>
                 <button
-                  disabled={!!futsal.bookedBy}
                   style={{
                     marginTop: "15px",
                     padding: "8px 12px",
-                    background: futsal.bookedBy ? "#d3d3d3" : "#0d1b2a", // grey if booked
-                    color: futsal.bookedBy ? "#888" : "rgba(86, 236, 98, 1)", // muted text if booked
+                    background:  "#0d1b2a", 
+                    color:  "rgba(86, 236, 98, 1)", 
                     border: "none",
                     borderRadius: "6px",
-                    cursor: futsal.bookedBy ? "not-allowed" : "pointer", // blocked cursor if booked
+                    cursor: "pointer", 
                     fontSize: "14px",
                     display: "flex",
                     justifyContent: "center",
@@ -308,7 +307,7 @@ export default function Book() {
                   }}
                   onClick={() => handleConfirm(futsal._id)}
                 >
-                  {futsal.bookedBy ? "Already Booked" : "Book Now"}
+                  Book
                 </button>
               </div>
             </div>

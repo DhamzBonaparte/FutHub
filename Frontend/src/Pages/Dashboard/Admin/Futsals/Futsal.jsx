@@ -37,6 +37,12 @@ export default function Futsals() {
         `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`
       );
       await getFutsals();
+      Swal.fire({
+        title: "Appproved!",
+        text: "This Futsal has been approved.",
+        icon: "success",
+        confirmButtonColor: "#4CAF50",
+      });
     } catch (err) {
       setError(err.message);
     }
@@ -48,6 +54,12 @@ export default function Futsals() {
         `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`
       );
       await getFutsals();
+      Swal.fire({
+        title: "Deleted!",
+        text: "This Futsal has been deleted.",
+        icon: "success",
+        confirmButtonColor: "#4CAF50",
+      });
     } catch (err) {
       setError(err.message);
     }

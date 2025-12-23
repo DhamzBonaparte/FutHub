@@ -12,6 +12,7 @@ import Info from "@mui/icons-material/Info";
 import Edit from "@mui/icons-material/Edit";
 import Delete from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const DetailItem = ({ icon: Icon, label, value }) => {
   const strValue = value ? String(value) : "";
@@ -88,7 +89,13 @@ export default function Teammate() {
         { withCredentials: true }
       );
       await getMyTeammateListings();
-      await  getTeams();
+      await getTeams();
+      Swal.fire({
+        icon: "success",
+        title: "Teammate Confirmed",
+        text: `New player retrieved`,
+        confirmButtonColor: "#2196F3",
+      });
     } catch (error) {
       setError(error.message);
     }
@@ -127,6 +134,12 @@ export default function Teammate() {
       await getTeams();
       navigate("/player/find-teammates");
       setIsEdit(false);
+      Swal.fire({
+        icon: "success",
+        title: "Edited Succesfully",
+        text: `Edited data is ready to show`,
+        confirmButtonColor: "#2196F3",
+      });
     } catch (err) {
       setError(err.message);
     }
@@ -137,6 +150,12 @@ export default function Teammate() {
         `http://localhost:3000/api/v1/player/my-teammate-listing/${myData?._id}`,
         { withCredentials: true }
       );
+      Swal.fire({
+        title: "Deleted!",
+        text: "Your item has been deleted.",
+        icon: "success",
+        confirmButtonColor: "#4CAF50",
+      });
       await getMyTeammateListings();
       await getTeams();
       navigate("/player/find-teammates");
@@ -736,7 +755,7 @@ export default function Teammate() {
 
                     <div style={{ padding: "0 15px 15px" }}>
                       <button
-                       disabled={!!value.confirmedBy}
+                        disabled={!!value.confirmedBy}
                         style={{
                           width: "100%",
                           background: value.confirmedBy ? "#d3d3d3" : "#0d1b2a", // grey if confirmed

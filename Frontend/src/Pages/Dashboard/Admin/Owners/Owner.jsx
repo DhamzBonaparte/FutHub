@@ -56,6 +56,12 @@ export default function Owner() {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:3000/api/v1/admin/owners/${id}`);
+      Swal.fire({
+        title: "Deleted!",
+        text: "This Futsal has been deleted.",
+        icon: "success",
+        confirmButtonColor: "#4CAF50",
+      });
       await getOwners();
     } catch (Err) {
       setErr(Err.message);
