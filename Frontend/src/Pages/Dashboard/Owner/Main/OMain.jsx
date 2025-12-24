@@ -2,6 +2,7 @@ import DomainIcon from "@mui/icons-material/Domain";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import { PieChart, Pie, Legend, Cell } from "recharts";
+import useBookers from "../../../../Hooks/useBookers";
 import Swal from "sweetalert2";
 
 import {
@@ -23,7 +24,10 @@ export default function OMain() {
       behavior:"smooth"
     })
   },[])
+  const [futsalsData,setFutsalsData]=useState([]);
 
+  const { datas, loading, err } = useBookers();
+  
   const data = [
     { name: "Jan", revenue: 4000 },
     { name: "Feb", revenue: 3000 },
@@ -70,7 +74,7 @@ export default function OMain() {
                     </div>
                     <div className="stat-title">Bookings This Month</div>
                     <div className="stat-value" id="monthlyBookings">
-                      18
+                      {datas?.length}
                     </div>
                   </div>
 

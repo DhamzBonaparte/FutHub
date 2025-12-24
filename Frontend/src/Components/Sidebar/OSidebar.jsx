@@ -131,7 +131,7 @@ export default function OSidebar() {
           <li>
             <Link
               to="/owner/review"
-              style={{ color: "black" }}
+              style={{ color: "black",display:"none" }}
               className={location.pathname === "/owner/review" ? "active" : ""}
             >
               <ReviewsIcon style={{ marginRight: "15px" }} />
