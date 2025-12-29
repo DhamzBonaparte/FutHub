@@ -73,7 +73,7 @@ export default function Sidebar() {
 
         <div className="user-profile">
           <div className="user-avatar">
-            {data?.firstName?.slice(0, 1) || ""}
+            {data?.firstName?.slice(0, 1).toUpperCase() || ""}
           </div>
           <div className="user-info">
             <h3

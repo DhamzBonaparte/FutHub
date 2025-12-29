@@ -64,6 +64,7 @@ export default function Book() {
         { withCredentials: true }
       );
       setFutsals(allFutsal.data.data);
+      
     } catch (err) {
       setError(err.message);
     } finally {
@@ -191,7 +192,7 @@ export default function Book() {
       </div>
       <div className="opponents-grid" id="opponents-grid">
         {futsals?.map((futsal, i) => (
-          <div className="opponent-card" key={i}>
+          <div className="opponent-card" key={i} style={{display:futsal.approved?"block":"none"}}>
             <div className="opponent-details">
               <Carousel>
                 {futsal.images.map((img, index) => (
@@ -219,6 +220,7 @@ export default function Book() {
                 <h2 style={headingStyle}>
                   {futsal.futsal.charAt(0).toUpperCase() +
                     futsal.futsal.slice(1)}
+                    
                 </h2>
                 <p style={textStyle}>
                   <span>

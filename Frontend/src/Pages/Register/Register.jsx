@@ -25,6 +25,7 @@ export default function Register() {
   const [about, setAbout] = useState("");
   const [em,setEm]=useState("");
   const navigate = useNavigate();
+
   useEffect(() => {
     checkOwner();
   }, []);
@@ -85,6 +86,8 @@ export default function Register() {
         { withCredentials: true }
       );
       setEm(check.data.user.email);
+      setEmail(check.data.user.email);
+      
 
       if (check.data.data) {
         setShowMsg(true);
@@ -241,13 +244,12 @@ export default function Register() {
                     fontSize: "1rem",
                     transition: "var(--transition)",
                   }}
-                  onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   id="ownerEmail"
                   required
                   placeholder="Enter your email"
-                  defaultValue={em}
                   value={em}
+                  readOnly
                 />
               </div>
 

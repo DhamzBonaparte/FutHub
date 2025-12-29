@@ -558,6 +558,20 @@ const approve = async (req, res) => {
   }
 };
 
+const disapprove = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const appro = await futsals.findOneAndUpdate(
+      { userId: id },
+      { $set: { approved: false } },
+      { new: true, runValidators: true }
+    );
+    res.status(200).json({ msg: "approved", data: appro });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};
+
 const delFutsal = async (req, res) => {
   try {
     const { id } = req.params;
@@ -720,7 +734,7 @@ const confirmFutsal = async (req, res) => {
 
 const cancelBookings = async (req, res) => {
   try {
-    const { id,bid } = req.body;
+    const { id, bid } = req.body;
     const find = await futsals.findByIdAndUpdate(
       id,
       { bookedBy: " " },
@@ -728,7 +742,7 @@ const cancelBookings = async (req, res) => {
     );
     const updatedFutsal = await futsals.findByIdAndUpdate(
       id,
-      { $pull: { bookings: { _id: bid} } },
+      { $pull: { bookings: { _id: bid } } },
       { new: true }
     );
     res.status(200).json({ find, updatedFutsal });
@@ -793,8 +807,8 @@ const getBookers = async (req, res) => {
   }
 };
 
-const searchFutsal= async(req,res)=>{
-   try {
+const searchFutsal = async (req, res) => {
+  try {
     const { search } = req.body;
     const filter = await futsals.find({
       location: { $regex: search, $options: "i" },
@@ -807,7 +821,7 @@ const searchFutsal= async(req,res)=>{
   } catch (error) {
     res.status(400).json({ msg: error.message });
   }
-} 
+};
 
 module.exports = {
   getCredentials,
@@ -852,5 +866,6 @@ module.exports = {
   cancelBookings,
   getBooking,
   getBookers,
-  searchFutsal
+  disapprove,
+  searchFutsal,
 };

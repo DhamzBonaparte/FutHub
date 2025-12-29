@@ -67,6 +67,23 @@ export default function Futsals() {
     }
   };
 
+  const handleDisapprove = async (fut) => {
+    try {
+      await axios.patch(
+        `http://localhost:3000/api/v1/admin/disapprove-futsals/${fut}`
+      );
+      await getFutsals();
+      Swal.fire({
+        title: "Disapproved!",
+        text: "This Futsal has been disapproved.",
+        icon: "error",
+        confirmButtonColor: "#f44336", 
+      });
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <>
       <div className="header">
@@ -272,6 +289,26 @@ export default function Futsals() {
                 onClick={() => handleApprove(futsal.userId)}
               >
                 {futsal.approved ? "Already Approved" : "Approve Futsal"}
+              </button>
+              <button
+                style={{
+                  marginTop: "12px",
+                  width: "100%",
+                  padding: "10px",
+                  color: !futsal.approved ? "white" : "#20c928ff",
+                  background: !futsal.approved ? "gray" : "black",
+                  cursor: !futsal.approved ? "not-allowed" : "pointer",
+                  opacity: !futsal.approved ? 0.6 : 1,
+                  pointerEvents: !futsal.approved ? "none" : "auto",
+                  border: "none",
+                  borderRadius: "6px",
+                  fontWeight: 600,
+                  transition: "background 0.2s ease",
+                  bottom: 0,
+                }}
+                onClick={() => handleDisapprove(futsal.userId)}
+              >
+                Disapprove
               </button>
               <button
                 style={{
