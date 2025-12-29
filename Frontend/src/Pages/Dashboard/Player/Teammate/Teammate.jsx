@@ -11,6 +11,7 @@ import Male from "@mui/icons-material/Male";
 import Info from "@mui/icons-material/Info";
 import Edit from "@mui/icons-material/Edit";
 import Delete from "@mui/icons-material/Delete";
+import ContactPhoneIcon from '@mui/icons-material/ContactMail';
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -1139,9 +1140,8 @@ export default function Teammate() {
                   label="Availability"
                   value={myData?.availability}
                 />
-
                 <DetailItem
-                  icon={Male}
+                  icon={ContactPhoneIcon}
                   label="Contact"
                   value={myData?.contact}
                 />

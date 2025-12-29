@@ -613,7 +613,6 @@ export default function Opponent() {
             My Postings of opponents
           </div>
         </div>
-
         <div
           id="find-opponents"
           className="opponent-tab"
