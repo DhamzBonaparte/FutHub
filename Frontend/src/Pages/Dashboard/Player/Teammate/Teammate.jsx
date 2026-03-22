@@ -353,7 +353,7 @@ export default function Teammate() {
                   value={contact}
                   minLength="10"
                   maxLength="10"
-                  pattern="[0-9]{10}"
+                  pattern="(97|98)\d{8}"
                   style={{
                     width: "100%",
                     padding: "10px",
@@ -772,7 +772,7 @@ export default function Teammate() {
                       >
                         {value.confirmedBy
                           ? "Already Chosen"
-                          : "Confirm as Opponent"}{" "}
+                          : "Confirm as Teammate"}{" "}
                       </button>
                     </div>
                   </div>
@@ -1209,7 +1209,7 @@ export default function Teammate() {
                   }}
                 >
                   <Edit style={{ fontSize: "1.1rem", marginRight: "5px" }} />{" "}
-                  Edit Profile
+                  Edit
                 </button>
                 <button
                   style={{
@@ -1227,7 +1227,7 @@ export default function Teammate() {
                   onClick={() => handleDelete()}
                 >
                   <Delete style={{ fontSize: "1.1rem", marginRight: "5px" }} />{" "}
-                  Delete Profile
+                  Delete
                 </button>
               </div>
             </div>

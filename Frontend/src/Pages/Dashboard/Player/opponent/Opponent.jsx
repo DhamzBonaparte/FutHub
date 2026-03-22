@@ -46,12 +46,13 @@ export default function Opponent() {
     getMyOpponentListings();
   }, [length]);
 
+
   const handleConfirm = async (id) => {
     try {
       await axios.patch(
         "http://localhost:3000/api/v1/player/confirm-opponent",
         { id },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       await getOpponents();
       Swal.fire({
@@ -70,7 +71,7 @@ export default function Opponent() {
     try {
       const value = await axios.get(
         "http://localhost:3000/api/v1/player/my-opponent-postings",
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setMyOppPostings(value.data.data);
     } catch (error) {
@@ -102,7 +103,7 @@ export default function Opponent() {
           timeFrom,
           timeTo,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       getMyOpponentListings();
       setEdit(false);
@@ -123,7 +124,7 @@ export default function Opponent() {
     setLoading(true);
     try {
       const oppo = await axios.get(
-        "http://localhost:3000/api/v1/player/find-opponent"
+        "http://localhost:3000/api/v1/player/find-opponent",
       );
       setOpponents(oppo.data);
       setLength(opponents.length);
@@ -142,7 +143,7 @@ export default function Opponent() {
         { search },
         {
           withCredentials: true,
-        }
+        },
       );
       setFilter(values.data.filteredData);
     } catch (err) {
@@ -162,7 +163,7 @@ export default function Opponent() {
     Edate,
     Eteam,
     Elevel,
-    Eid
+    Eid,
   ) {
     window.scrollTo({
       top: 0,
@@ -192,7 +193,7 @@ export default function Opponent() {
     try {
       await axios.delete(
         `http://localhost:3000/api/v1/player/my-opponent-postings/${id}`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       Swal.fire({
@@ -228,7 +229,7 @@ export default function Opponent() {
           timeFrom,
           timeTo,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
     } catch (error) {
       setError(error);
@@ -685,7 +686,7 @@ export default function Opponent() {
                               style={{ color: "black", marginRight: "10px" }}
                             />{" "}
                             {new Date(
-                              `1970-01-01T${opp.timeFrom}:00`
+                              `1970-01-01T${opp.timeFrom}:00`,
                             ).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
@@ -693,7 +694,7 @@ export default function Opponent() {
                             })}{" "}
                             -{" "}
                             {new Date(
-                              `1970-01-01T${opp.timeTo}:00`
+                              `1970-01-01T${opp.timeTo}:00`,
                             ).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
@@ -801,7 +802,7 @@ export default function Opponent() {
                               }}
                             />
                             {new Date(
-                              `1970-01-01T${opp.timeFrom}:00`
+                              `1970-01-01T${opp.timeFrom}:00`,
                             ).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
@@ -809,7 +810,7 @@ export default function Opponent() {
                             })}{" "}
                             -{" "}
                             {new Date(
-                              `1970-01-01T${opp.timeTo}:00`
+                              `1970-01-01T${opp.timeTo}:00`,
                             ).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
@@ -967,7 +968,7 @@ export default function Opponent() {
                     required
                     minLength="10"
                     maxLength="10"
-                    pattern="[0-9]{10}"
+                    pattern="(97|98)\d{8}"
                     placeholder="Enter contact number"
                     onChange={(e) => setContact(e.target.value)}
                   />
@@ -1214,6 +1215,7 @@ export default function Opponent() {
             </form>
           </div>
         </div>
+{/* here */}
 
         {myOppPostings?.map((opp) => (
           <div
@@ -1250,7 +1252,7 @@ export default function Opponent() {
                       hour: "2-digit",
                       minute: "2-digit",
                       hour12: true,
-                    }
+                    },
                   )}{" "}
                   -{" "}
                   {new Date(`1970-01-01T${opp.timeTo}:00`).toLocaleTimeString(
@@ -1259,7 +1261,7 @@ export default function Opponent() {
                       hour: "2-digit",
                       minute: "2-digit",
                       hour12: true,
-                    }
+                    },
                   )}{" "}
                   | <strong>Level:</strong>{" "}
                   {opp.level.slice(0, 1).toUpperCase() +
@@ -1275,11 +1277,8 @@ export default function Opponent() {
                     {opp.players.map((player, i) => (
                       <li key={i} type="none">
                         <PersonIcon className="icon" />
-                        {player.name.split(" ")[0].slice(0, 1).toUpperCase() +
-                          player.name.split(" ")[0].slice(1) +
-                          " " +
-                          player.name.split(" ")[1].slice(0, 1).toUpperCase() +
-                          player.name.split(" ")[1].slice(1)}{" "}
+                        {player?.name?.split(" ")[0].charAt(0).toUpperCase() +
+                          player?.name?.split(" ")[0].slice(1)}{" "}
                         {player.age ? `- ${player.age} yrs` : ""}
                       </li>
                     ))}
@@ -1306,7 +1305,7 @@ export default function Opponent() {
                         opp.matchDate,
                         opp.teamName,
                         opp.level,
-                        opp._id
+                        opp._id,
                       )
                     }
                   >

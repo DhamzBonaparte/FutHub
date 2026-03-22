@@ -16,7 +16,7 @@ app.use(
     origin: "http://localhost:5173",
     credentials: true,
   })
-);
+); 
 app.use(cookieParser());
 app.use("/api/v1", credentials);
 
@@ -28,7 +28,7 @@ const start = async () => {
     if (await connect(URL)) {
       console.log("Database Connected");
     }
-    app.listen(PORT, () => {
+    app.listen(PORT, () => {  
       console.log("Server connected!");
     });
   } catch (error) {

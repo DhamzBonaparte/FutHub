@@ -462,8 +462,8 @@ export default function Main() {
                       <span
                         style={{
                           padding: "6px 12px",
-                          background: "#0d1b2a",
-                          color: "#5efc82",
+                          color: "#0d1b2a",
+                          background: "#5be27bff",
                           borderRadius: "6px",
                         }}
                       >

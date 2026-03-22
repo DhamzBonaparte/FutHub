@@ -34,7 +34,7 @@ export default function OSidebar() {
       console.log(error);
       if (error?.response?.status === 401) {
         setError(error.message);
-        alert("You must Login to view dashboard!");
+        alert("You must Login to view dashboard!"); 
         navigate("/login");
       } else if (error.response?.status === 403) {
         setError("Session expired. Please login again.");

@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 export default function ASidebar() {
   const [data, setData] = useState({});
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const location = useLocation();
 
   const Logout = async () => {

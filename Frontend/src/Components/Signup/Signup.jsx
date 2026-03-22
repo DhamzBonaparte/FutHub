@@ -210,7 +210,7 @@ export default function Signup() {
                   className="form-input"
                   minLength={10}
                   maxLength={10}
-                  pattern="\d{10}"
+                  pattern="(97|98)\d{8}"
                   placeholder="Enter your phone number"
                   required
                   value={phone}
@@ -239,8 +239,7 @@ export default function Signup() {
                       padding: "20px",
                       textAlign: "center",
                       transition: "all 0.3s ease",
-                      color:roles=="owner"?"#193ca6ff":"black"
-                      
+                      color: roles == "owner" ? "#193ca6ff" : "black",
                     }}
                     className="hov"
                   >
@@ -272,7 +271,7 @@ export default function Signup() {
                       padding: "20px",
                       textAlign: "center",
                       transition: "all 0.3s ease",
-                      color:roles=="player"?"#193ca6ff":"black"
+                      color: roles == "player" ? "#193ca6ff" : "black",
                     }}
                     className="hov"
                   >

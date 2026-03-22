@@ -51,6 +51,7 @@ const getCredentials = async (req, res) => {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
+      maxAge:null
     });
 
     res.status(200).json({

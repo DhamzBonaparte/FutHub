@@ -251,7 +251,7 @@ export default function Futsal() {
             onChange={(e) => setContact(e.target.value)}
             minLength={10}
             maxLength={10}
-            pattern="\d{10}"
+            pattern="(97|98)\d{8}"
             required
           />
 

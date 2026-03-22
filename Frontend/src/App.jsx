@@ -47,7 +47,6 @@ function App() {
         <Route path="/admin-login" element={<AdminLogin />}></Route>
         <Route path="/admin" element={<Admin />}>
           <Route index element={<ADashboard />}></Route>
-
           <Route path="/admin/futsals" element={<Futsals />}></Route>
           <Route path="/admin/players" element={<Player />}></Route>
           <Route path="/admin/owners" element={<Owner />}></Route>
