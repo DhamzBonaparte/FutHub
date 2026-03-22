@@ -37,7 +37,7 @@ export default function Player() {
       setSearch(e);
       const data = await axios.post(
         "http://localhost:3000/api/v1/admin/search-player",
-        { value: e }
+        { value: e },
       );
       const fil = data.data.data.filter((items) => items.roles == "player");
       setData(fil);
@@ -60,6 +60,8 @@ export default function Player() {
       await getPlayers();
     } catch (error) {
       setError(error.message);
+    } finally {
+      await getPlayers()
     }
   };
   return (

@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-
 export default function Owner() {
   useEffect(() => {
     window.scrollTo({
@@ -33,7 +32,6 @@ export default function Owner() {
 
   const handleSearch = async (e) => {
     try {
-
       if (!e || e.trim() === "") {
         await getOwners();
       }
@@ -42,7 +40,7 @@ export default function Owner() {
       setSearch(e);
       const data = await axios.post(
         "http://localhost:3000/api/v1/admin/search-player",
-        { value: e }
+        { value: e },
       );
       const fil = data.data.data.filter((items) => items.roles == "owner");
       setOwners(fil);
@@ -57,13 +55,30 @@ export default function Owner() {
 
   const handleDelete = async (id) => {
     try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to delete this futsal owner?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
       await axios.delete(`http://localhost:3000/api/v1/admin/owners/${id}`);
-      Swal.fire({
+
+      await Swal.fire({
         title: "Deleted!",
         text: "This Futsal has been deleted.",
         icon: "success",
         confirmButtonColor: "#4CAF50",
       });
+
       await getOwners();
     } catch (Err) {
       setErr(Err.message);

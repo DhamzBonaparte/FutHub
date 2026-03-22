@@ -46,7 +46,7 @@ export default function Book() {
       const se = await axios.post(
         "http://localhost:3000/api/v1/player/search-futsal",
         { search },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setFutsals(se.data.data);
     } catch (err) {
@@ -61,10 +61,9 @@ export default function Book() {
     try {
       const allFutsal = await axios.get(
         "http://localhost:3000/api/v1/player/book-futsal",
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setFutsals(allFutsal.data.data);
-      
     } catch (err) {
       setError(err.message);
     } finally {
@@ -84,10 +83,25 @@ export default function Book() {
         return;
       }
 
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: `Do you want to confirm booking for: ${selected.time}?`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, confirm",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return; 
+      }
+
       await axios.patch(
         "http://localhost:3000/api/v1/player/confirm-futsal",
         { id, selected: selected.time },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       setSelected({ id: null, time: null });
@@ -192,7 +206,11 @@ export default function Book() {
       </div>
       <div className="opponents-grid" id="opponents-grid">
         {futsals?.map((futsal, i) => (
-          <div className="opponent-card" key={i} style={{display:futsal.approved?"block":"none"}}>
+          <div
+            className="opponent-card"
+            key={i}
+            style={{ display: futsal.approved ? "block" : "none" }}
+          >
             <div className="opponent-details">
               <Carousel>
                 {futsal.images.map((img, index) => (
@@ -220,7 +238,6 @@ export default function Book() {
                 <h2 style={headingStyle}>
                   {futsal.futsal.charAt(0).toUpperCase() +
                     futsal.futsal.slice(1)}
-                    
                 </h2>
                 <p style={textStyle}>
                   <span>
@@ -305,7 +322,7 @@ export default function Book() {
                 >
                   {alltimes.map((time, index) => {
                     const isBooked = futsal.bookings?.some(
-                      (b) => b.timeSlot === time
+                      (b) => b.timeSlot === time,
                     );
 
                     const isCurrentSelection =
@@ -329,13 +346,13 @@ export default function Book() {
                           background: isBooked
                             ? "#d3d3d3"
                             : isCurrentSelection
-                            ? "#d3d3d3"
-                            : "#e8f5e9",
+                              ? "#d3d3d3"
+                              : "#e8f5e9",
                           color: isBooked
                             ? "#000"
                             : isCurrentSelection
-                            ? "#000"
-                            : "#2e7d32",
+                              ? "#000"
+                              : "#2e7d32",
                           boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
                           transition: "all 0.3s ease",
                         }}

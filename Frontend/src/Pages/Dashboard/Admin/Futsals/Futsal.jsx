@@ -23,7 +23,7 @@ export default function Futsals() {
         "http://localhost:3000/api/v1/admin/futsals",
         {
           withCredentials: true,
-        }
+        },
       );
       setFutsals(allFutsal.data.data);
     } catch (err) {
@@ -35,12 +35,31 @@ export default function Futsals() {
 
   const handleApprove = async (fut) => {
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to approve this futsal?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, approve",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      // Proceed only if confirmed
       await axios.patch(
-        `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`
+        `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`,
       );
+
       await getFutsals();
+
       Swal.fire({
-        title: "Appproved!",
+        title: "Approved!",
         text: "This Futsal has been approved.",
         icon: "success",
         confirmButtonColor: "#4CAF50",
@@ -52,10 +71,29 @@ export default function Futsals() {
 
   const deleteFutsal = async (fut) => {
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to delete this futsal?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      // Proceed only if confirmed
       await axios.delete(
-        `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`
+        `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`,
       );
+
       await getFutsals();
+
       Swal.fire({
         title: "Deleted!",
         text: "This Futsal has been deleted.",
@@ -69,15 +107,34 @@ export default function Futsals() {
 
   const handleDisapprove = async (fut) => {
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to disapprove this futsal?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#f44336",
+        cancelButtonColor: "#4CAF50",
+        confirmButtonText: "Yes, disapprove",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      // Proceed only if confirmed
       await axios.patch(
-        `http://localhost:3000/api/v1/admin/disapprove-futsals/${fut}`
+        `http://localhost:3000/api/v1/admin/disapprove-futsals/${fut}`,
       );
+
       await getFutsals();
+
       Swal.fire({
         title: "Disapproved!",
         text: "This Futsal has been disapproved.",
         icon: "error",
-        confirmButtonColor: "#f44336", 
+        confirmButtonColor: "#f44336",
       });
     } catch (error) {
       setError(error.message);

@@ -7,7 +7,6 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
-
 export default function Futsal() {
   const [showMsg, setShowMsg] = useState(false);
   const [venue, setVenue] = useState({});
@@ -32,6 +31,7 @@ export default function Futsal() {
   const [capacity, setCapacity] = useState("");
   const [about, setAbout] = useState("");
   const [preview, setPreview] = useState(false);
+  const [reason, setReason] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -71,12 +71,49 @@ export default function Futsal() {
     setImages(previews);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "Delete Futsal",
+        text: "Type the reason for deleting your futsal:",
+        input: "text", // enables text input
+        inputPlaceholder: "Write here...",
+        showCancelButton: true,
+        confirmButtonText: "Submit",
+        cancelButtonText: "Cancel",
+        inputValidator: (value) => {
+          if (!value) {
+            return "You need to write something!";
+          }
+        },
+      });
+
+      if (result.isConfirmed) {
+        const reason = result.value;
+        setReason(reason);
+
+        await Swal.fire({
+          title: "Deleted!",
+          text: "Futsal has been deleted successfully.",
+          icon: "success",
+          confirmButtonColor: "#4CAF50",
+        });
+
+        // Optionally call your delete API here
+        // await axios.delete(`http://localhost:3000/api/v1/admin/futsals/${id}`, { data: { reason } });
+        // await getFutsals();
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const getFutsal = async () => {
     setLoading(true);
     try {
       const check = await axios.get(
         "http://localhost:3000/api/v1/owner/check-owner",
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setVenue(check.data.data);
       setOwner(check.data.data.owner);
@@ -107,11 +144,29 @@ export default function Futsal() {
   const handleChanges = async (e) => {
     e.preventDefault();
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to save these changes?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, save",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      // Proceed only if confirmed
       await axios.patch(
         "http://localhost:3000/api/v1/owner/check-owner",
         formData,
-        { withCredentials: true }
+        { withCredentials: true },
       );
+
       await getFutsal();
       setShowMsg(true);
       setTimeout(() => {
@@ -961,6 +1016,40 @@ export default function Futsal() {
                 onClick={() => setEdit(true)}
               >
                 Edit Futsal Details
+              </button>
+              <button
+                style={{
+                  background: "#dc3545", // Bootstrap danger red
+                  color: "#fff",
+                  border: "none",
+                  padding: "10px 18px",
+                  borderRadius: "6px",
+                  fontSize: "15px",
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  transition: "background 0.3s ease",
+                  marginTop: "20px",
+                }}
+                onClick={() => handleDelete(venue?._id)} // call your delete handler
+              >
+                Delete Futsal
+              </button>
+              <button
+                style={{
+                  background: "#6c757d", // neutral gray (Bootstrap secondary)
+                  color: "#fff",
+                  border: "none",
+                  padding: "10px 18px",
+                  borderRadius: "6px",
+                  fontSize: "15px",
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  transition: "background 0.3s ease",
+                  marginTop: "20px",
+                }}
+                onClick={() => console.log("Go to Maintenance clicked")}
+              >
+                Go to Maintenance
               </button>
             </div>
           </div>

@@ -11,7 +11,7 @@ import Male from "@mui/icons-material/Male";
 import Info from "@mui/icons-material/Info";
 import Edit from "@mui/icons-material/Edit";
 import Delete from "@mui/icons-material/Delete";
-import ContactPhoneIcon from '@mui/icons-material/ContactMail';
+import ContactPhoneIcon from "@mui/icons-material/ContactMail";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -74,7 +74,7 @@ export default function Teammate() {
         "http://localhost:3000/api/v1/player/check-teammate",
         {
           withCredentials: true,
-        }
+        },
       );
       setRegistered(check.data.registered);
     } catch (error) {
@@ -84,13 +84,32 @@ export default function Teammate() {
 
   const handleConfirm = async (id) => {
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to confirm this teammate?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#2196F3",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, confirm",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      // Proceed only if confirmed
       await axios.patch(
         "http://localhost:3000/api/v1/player/confirm-teammate",
         { id },
-        { withCredentials: true }
+        { withCredentials: true },
       );
+
       await getMyTeammateListings();
       await getTeams();
+
       Swal.fire({
         icon: "success",
         title: "Teammate Confirmed",
@@ -129,7 +148,7 @@ export default function Teammate() {
           available,
           about,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       await getMyTeammateListings();
       await getTeams();
@@ -145,18 +164,37 @@ export default function Teammate() {
       setError(err.message);
     }
   };
+
   const handleDelete = async () => {
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to delete this teammate listing?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
       await axios.delete(
         `http://localhost:3000/api/v1/player/my-teammate-listing/${myData?._id}`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
+
       Swal.fire({
         title: "Deleted!",
         text: "Your item has been deleted.",
         icon: "success",
         confirmButtonColor: "#4CAF50",
       });
+
       await getMyTeammateListings();
       await getTeams();
       navigate("/player/find-teammates");
@@ -171,7 +209,7 @@ export default function Teammate() {
       const se = await axios.post(
         "http://localhost:3000/api/v1/player/search-teammate",
         { search },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setData(se.data.data);
     } catch (err) {
@@ -185,7 +223,7 @@ export default function Teammate() {
     try {
       const myTeam = await axios.get(
         "http://localhost:3000/api/v1/player/my-teammate-listing",
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setMyData(myTeam.data.data);
     } catch (error) {
@@ -202,7 +240,7 @@ export default function Teammate() {
     try {
       const teams = await axios.get(
         "http://localhost:3000/api/v1/player/find-teammate",
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setData(teams.data.data);
       setLength(teams.data.length);
@@ -231,7 +269,7 @@ export default function Teammate() {
           available,
           about,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
     } catch (error) {
       setError(error.message);
@@ -870,7 +908,7 @@ export default function Teammate() {
                         required
                         minLength="10"
                         maxLength="10"
-                        pattern="[0-9]{10}"
+                        pattern="(97|98)\d{8}"
                         onChange={(e) => setContact(e.target.value)}
                         placeholder="Enter Contact Number"
                       />

@@ -46,15 +46,33 @@ export default function Opponent() {
     getMyOpponentListings();
   }, [length]);
 
-
   const handleConfirm = async (id) => {
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to confirm this opponent?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#2196F3",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, confirm",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      // Proceed only if confirmed
       await axios.patch(
         "http://localhost:3000/api/v1/player/confirm-opponent",
         { id },
         { withCredentials: true },
       );
+
       await getOpponents();
+
       Swal.fire({
         icon: "success",
         title: "Opponent Confirmed",
@@ -64,7 +82,7 @@ export default function Opponent() {
     } catch (error) {
       setError(error.message);
     }
-  };
+  };  
 
   async function getMyOpponentListings() {
     setLoading(true);
@@ -189,8 +207,25 @@ export default function Opponent() {
   }
 
   async function handleDelete(id) {
-    setLoading(true);
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to delete this item?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      setLoading(true);
+
       await axios.delete(
         `http://localhost:3000/api/v1/player/my-opponent-postings/${id}`,
         { withCredentials: true },
@@ -202,6 +237,7 @@ export default function Opponent() {
         icon: "success",
         confirmButtonColor: "#4CAF50",
       });
+
       getMyOpponentListings();
     } catch (err) {
       setError(err.message);
@@ -1215,7 +1251,7 @@ export default function Opponent() {
             </form>
           </div>
         </div>
-{/* here */}
+        {/* here */}
 
         {myOppPostings?.map((opp) => (
           <div
@@ -1321,7 +1357,7 @@ export default function Opponent() {
                     }}
                     onClick={() => handleDelete(opp._id)}
                   >
-                    Delete
+                    Delete 
                   </button>
                 </div>
               </div>

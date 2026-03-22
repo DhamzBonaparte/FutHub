@@ -16,10 +16,10 @@ const formatWithOrdinal = (dateString) => {
     day % 10 === 1 && day !== 11
       ? "st"
       : day % 10 === 2 && day !== 12
-      ? "nd"
-      : day % 10 === 3 && day !== 13
-      ? "rd"
-      : "th";
+        ? "nd"
+        : day % 10 === 3 && day !== 13
+          ? "rd"
+          : "th";
 
   return `${day}${suffix} ${month}`;
 };
@@ -54,7 +54,7 @@ export default function Main() {
       setLoading(true);
       const hi = await axios.get(
         "http://localhost:3000/api/v1/player/myBookings",
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setBookings(hi.data.data);
       setId(hi.data.userId);
@@ -65,10 +65,10 @@ export default function Main() {
             "Comparing booking userId:",
             b.userId,
             "with id:",
-            hi.data.userId
+            hi.data.userId,
           );
           return String(b.userId) === String(hi.data.userId);
-        })
+        }),
       );
 
       console.log("My bookings:", myBookings);
@@ -81,14 +81,33 @@ export default function Main() {
     }
   };
 
-  const handleCancelBookings = async (id,bid) => {
+  const handleCancelBookings = async (id, bid) => {
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to cancel this booking?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, cancel it",
+        cancelButtonText: "No, keep it",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      // Proceed only if confirmed
       await axios.patch(
         "http://localhost:3000/api/v1/player/myBookings",
-        { id,bid },
-        { withCredentials: true }
+        { id, bid },
+        { withCredentials: true },
       );
+
       await getMyBookings();
+
       Swal.fire({
         icon: "error",
         title: "Cancelled",
@@ -106,7 +125,7 @@ export default function Main() {
       setLoading(true);
       const hi = await axios.get(
         "http://localhost:3000/api/v1/player/myOpponents",
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setOpponents(hi.data.data);
       setOpp(hi.data.data.length);
@@ -123,12 +142,31 @@ export default function Main() {
 
   const handleCancelOpponents = async (id) => {
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to cancel this opponent?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, cancel",
+        cancelButtonText: "No, keep",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      // Proceed only if confirmed
       await axios.patch(
         "http://localhost:3000/api/v1/player/myOpponents",
         { id },
-        { withCredentials: true }
+        { withCredentials: true },
       );
+
       await getMyOpponents();
+
       Swal.fire({
         icon: "error",
         title: "Cancelled",
@@ -148,7 +186,7 @@ export default function Main() {
         "http://localhost:3000/api/v1/player/myTeammates",
         {
           withCredentials: true,
-        }
+        },
       );
       setTeammates(hi.data.data);
       setTem(hi.data.data.length);
@@ -161,12 +199,31 @@ export default function Main() {
 
   const handleCancelTeammates = async (id) => {
     try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to cancel this teammate?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, cancel",
+        cancelButtonText: "No, keep",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      // Proceed only if confirmed
       await axios.patch(
         "http://localhost:3000/api/v1/player/myTeammates",
         { id },
-        { withCredentials: true }
+        { withCredentials: true },
       );
+
       await getMyTeammates();
+
       Swal.fire({
         icon: "error",
         title: "Cancelled",
@@ -536,7 +593,7 @@ export default function Main() {
                           </span>
                         ))}
                       {items.bookings?.filter(
-                        (b) => String(b.userId) === String(id)
+                        (b) => String(b.userId) === String(id),
                       ).length === 0 && "No slots found"}
                     </span>
                   </div>
