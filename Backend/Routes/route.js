@@ -29,6 +29,7 @@ const {
   getFutsals,
   approve,
   delFutsal,
+  // reasonDisapprove,
   getPlayers,
   delPlayers,
   getOwners,
@@ -47,7 +48,9 @@ const {
   getBookers,
   getBooking,
   searchFutsal,
-  disapprove
+  disapprove,
+  deleteFutsal,
+  maintenance
 } = require("../Controllers/credentials");
 
 const storage = multer.diskStorage({
@@ -105,8 +108,11 @@ router
   .get(authorize, checkOwner)
   .patch(authorize, place.array("updatefutsalPic"), updateOwner);
 
-  router.route('/owner/get-Bookings').get(authorize,getBooking)
-  router.route('/owner/showBookers/:id').get(authorize,getBookers)
+router.route("/owner/get-Bookings").get(authorize, getBooking);
+router.route("/owner/showBookers/:id").get(authorize, getBookers);
+router.route('/owner/deleteFutsal/:id').delete(authorize,deleteFutsal)
+router.route('/owner/updateMaintainance/:id').patch(authorize,maintenance)
+
 //admin started
 router.route("/admin/login").post(adminCheck);
 router.route("/admin/approve-futsals/:id").patch(approve).delete(delFutsal);
@@ -116,17 +122,27 @@ router.route("/admin/players").get(getPlayers);
 router.route("/admin/owners").get(getOwners).post(getDetails);
 router.route("/admin/players/:id").delete(delPlayers);
 router.route("/admin/owners/:id").delete(delOwners);
-router.route('/admin/search-player').post(searchPlayer);
+router.route("/admin/search-player").post(searchPlayer);
+// router.route('/admin/disapprove-futsals/:id').patch(reasonDisapprove)
 
 //player confirmation
-router.route('/player/confirm-opponent').patch(authorize,confirmOpponent);
-router.route('/player/confirm-teammate').patch(authorize,confirmTeammate);
-router.route('/player/confirm-futsal').patch(authorize,confirmFutsal);
+router.route("/player/confirm-opponent").patch(authorize, confirmOpponent);
+router.route("/player/confirm-teammate").patch(authorize, confirmTeammate);
+router.route("/player/confirm-futsal").patch(authorize, confirmFutsal);
 
 //player dashboard data
-router.route('/player/myBookings').get(authorize,myBookings).patch(cancelBookings)
-router.route('/player/myOpponents').get(authorize,getMyOpponents).patch(cancelOpponents)
-router.route('/player/myTeammates').get(authorize,getMyTeammates).patch(cancelTeammates)
-router.route('/player/search-futsal').post(searchFutsal)
+router
+  .route("/player/myBookings")
+  .get(authorize, myBookings)
+  .patch(cancelBookings);
+router
+  .route("/player/myOpponents")
+  .get(authorize, getMyOpponents)
+  .patch(cancelOpponents);
+router
+  .route("/player/myTeammates")
+  .get(authorize, getMyTeammates)
+  .patch(cancelTeammates);
+router.route("/player/search-futsal").post(searchFutsal);
 
 module.exports = router;

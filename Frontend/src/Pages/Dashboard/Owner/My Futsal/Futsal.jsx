@@ -32,6 +32,7 @@ export default function Futsal() {
   const [about, setAbout] = useState("");
   const [preview, setPreview] = useState(false);
   const [reason, setReason] = useState("");
+  const [underMain, setUnderMain] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -71,6 +72,21 @@ export default function Futsal() {
     setImages(previews);
   };
 
+  const handleMaintenance = async (id) => {
+    try {
+      setUnderMain(!underMain);
+      await axios.patch(
+        `http://localhost:3000/api/v1/owner/updateMaintainance/${id}`,
+        { underMaintenance: underMain },
+        { withCredentials: true },
+      );
+
+      console.log(aa);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const handleDelete = async (id) => {
     try {
       const result = await Swal.fire({
@@ -98,10 +114,10 @@ export default function Futsal() {
           icon: "success",
           confirmButtonColor: "#4CAF50",
         });
-
-        // Optionally call your delete API here
-        // await axios.delete(`http://localhost:3000/api/v1/admin/futsals/${id}`, { data: { reason } });
-        // await getFutsals();
+        await axios.delete(
+          `http://localhost:3000/api/v1/owner/deleteFutsal/${id}`,
+          { data: { reason }, withCredentials: true },
+        );
       }
     } catch (error) {
       console.log(error.message);
@@ -1047,7 +1063,7 @@ export default function Futsal() {
                   transition: "background 0.3s ease",
                   marginTop: "20px",
                 }}
-                onClick={() => console.log("Go to Maintenance clicked")}
+                onClick={() => handleMaintenance(venue?._id)}
               >
                 Go to Maintenance
               </button>

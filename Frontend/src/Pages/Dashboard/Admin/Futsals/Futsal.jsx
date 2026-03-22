@@ -15,6 +15,7 @@ export default function Futsals() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [futsals, setFutsals] = useState([]);
+  const [reason, setReason] = useState("");
 
   const getFutsals = async () => {
     setLoading(true);
@@ -105,34 +106,45 @@ export default function Futsals() {
     }
   };
 
-  const handleDisapprove = async (fut) => {
+  const handleDisapprove = async (id) => {
     try {
-      // Ask for confirmation first
+      // Ask for reason with confirmation
       const result = await Swal.fire({
-        title: "Are you sure?",
-        text: "Do you really want to disapprove this futsal?",
+        title: "Disapprove Futsal",
+        text: "Please provide a reason for disapproving this futsal:",
         icon: "warning",
+        input: "text", // enables text input
+        inputPlaceholder: "Enter reason here...",
         showCancelButton: true,
         confirmButtonColor: "#f44336",
         cancelButtonColor: "#4CAF50",
         confirmButtonText: "Yes, disapprove",
         cancelButtonText: "No, cancel",
+        inputValidator: (value) => {
+          if (!value) {
+            return "You need to provide a reason!";
+          }
+        },
       });
 
       if (!result.isConfirmed) {
-        return; // user cancelled
+        return;
       }
 
-      // Proceed only if confirmed
-      await axios.patch(
-        `http://localhost:3000/api/v1/admin/disapprove-futsals/${fut}`,
-      );
+      const actReason = result.value;
+      setReason(actReason);
 
+      const aa = await axios.patch(
+        `http://localhost:3000/api/v1/admin/disapprove-futsals/${id}`,
+        { reasonofDisapproval: actReason }, // match schema
+      );
+      console.log(aa);
+      
       await getFutsals();
 
       Swal.fire({
         title: "Disapproved!",
-        text: "This Futsal has been disapproved.",
+        text: `This Futsal has been disapproved.`,
         icon: "error",
         confirmButtonColor: "#f44336",
       });

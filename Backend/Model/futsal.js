@@ -77,8 +77,12 @@ const futsalSchema = new mongoose.Schema(
         timeSlot: { type: String, required: true },
       },
     ],
+    reasonOfDelete: { type: String, trim: true, default: "" },
+    reasonOfDisapproval: { type: String, trim: true, default: "" },
+    underMaintenance: { type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Futsal", futsalSchema);

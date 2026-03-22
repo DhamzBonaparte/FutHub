@@ -8,6 +8,7 @@ const futsals = require("../Model/futsal");
 const teammate = require("../Model/teammate");
 const admin = require("../Model/admin");
 const path = require("path");
+const { log } = require("console");
 
 require("dotenv").config();
 
@@ -44,14 +45,14 @@ const getCredentials = async (req, res) => {
         role: approved.roles,
       },
       process.env.SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
-      maxAge:null
+      maxAge: null,
     });
 
     res.status(200).json({
@@ -237,7 +238,7 @@ const updateMyOpponents = async (req, res) => {
         timeFrom,
         timeTo,
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
     res.status(200).json({ msg: "update data", updatedData: update });
   } catch (err) {
@@ -387,7 +388,7 @@ const editMyPosting = async (req, res) => {
         availability: available,
         about,
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
     res.status(200).json({ msg: "update", data: upd });
   } catch (err) {
@@ -512,7 +513,7 @@ const updateOwner = async (req, res) => {
         capacity,
         about,
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
     res.status(200).json({ msg: "updated", data: upd });
   } catch (error) {
@@ -551,7 +552,7 @@ const approve = async (req, res) => {
     const appro = await futsals.findOneAndUpdate(
       { userId: id },
       { $set: { approved: true } },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
     res.status(200).json({ msg: "approved", data: appro });
   } catch (error) {
@@ -562,12 +563,13 @@ const approve = async (req, res) => {
 const disapprove = async (req, res) => {
   try {
     const { id } = req.params;
-    const appro = await futsals.findOneAndUpdate(
+    const { reasonofDisapproval } = req.body;
+        const appro = await futsals.findOneAndUpdate(
       { userId: id },
-      { $set: { approved: false } },
-      { new: true, runValidators: true }
+      { $set: { approved: false, reasonofDisapproval } },
+      { new: true, runValidators: true },
     );
-    res.status(200).json({ msg: "approved", data: appro });
+    res.status(200).json({ msg: "approved", data: appro, reasonofDisapproval });
   } catch (error) {
     res.status(400).json({ msg: error.message });
   }
@@ -666,7 +668,7 @@ const confirmOpponent = async (req, res) => {
     const find = await opponent.findByIdAndUpdate(
       id,
       { confirmedBy: userId },
-      { new: true }
+      { new: true },
     );
     res.status(200).json({ find });
   } catch (error) {
@@ -680,7 +682,7 @@ const cancelOpponents = async (req, res) => {
     const find = await opponent.findByIdAndUpdate(
       id,
       { confirmedBy: " " },
-      { new: true }
+      { new: true },
     );
     res.status(200).json({ find });
   } catch (error) {
@@ -695,7 +697,7 @@ const confirmTeammate = async (req, res) => {
     const find = await teammate.findByIdAndUpdate(
       id,
       { confirmedBy: userId },
-      { new: true }
+      { new: true },
     );
     res.status(200).json({ find });
   } catch (error) {
@@ -709,7 +711,7 @@ const cancelTeammates = async (req, res) => {
     const find = await teammate.findByIdAndUpdate(
       id,
       { confirmedBy: " " },
-      { new: true }
+      { new: true },
     );
     res.status(200).json({ find });
   } catch (error) {
@@ -725,7 +727,7 @@ const confirmFutsal = async (req, res) => {
       id,
       { $push: { bookings: { userId, timeSlot: selected } } },
       { bookedBy: userId, $push: { bookedTime: selected } },
-      { new: true }
+      { new: true },
     );
     res.status(200).json({ find });
   } catch (error) {
@@ -739,12 +741,12 @@ const cancelBookings = async (req, res) => {
     const find = await futsals.findByIdAndUpdate(
       id,
       { bookedBy: " " },
-      { new: true }
+      { new: true },
     );
     const updatedFutsal = await futsals.findByIdAndUpdate(
       id,
       { $pull: { bookings: { _id: bid } } },
-      { new: true }
+      { new: true },
     );
     res.status(200).json({ find, updatedFutsal });
   } catch (error) {
@@ -824,6 +826,47 @@ const searchFutsal = async (req, res) => {
   }
 };
 
+const deleteFutsal = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { reason } = req.body;
+    await futsals.findByIdAndUpdate(id, {
+      reasonOfDelete: reason,
+      isDeleted: true,
+    });
+    res
+      .status(200)
+      .json({ message: "Futsal deleted successfully", id, reason });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};
+
+const maintenance = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { underMaintenance } = req.body;
+
+    const futsal = await futsals.findByIdAndUpdate(
+      id,
+      { underMaintenance },
+      { new: true },
+    );
+
+    if (!futsal) {
+      return res.status(404).json({ msg: "Futsal not found" });
+    }
+
+    res.status(200).json({
+      message: "Maintenance status updated",
+      id,
+      underMaintenance,
+    });
+  } catch (error) {
+    res.status(400).json({ msg: error.message });
+  }
+};
+
 module.exports = {
   getCredentials,
   setCredentials,
@@ -869,4 +912,7 @@ module.exports = {
   getBookers,
   disapprove,
   searchFutsal,
+  deleteFutsal,
+  maintenance,
+  // reasonDisapprove,
 };
