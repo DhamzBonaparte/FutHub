@@ -49,6 +49,9 @@ export default function Main() {
   const [tem, setTem] = useState(0);
   const [err, setErr] = useState("");
 
+  console.log(bookings);
+  
+
   const getMyBookings = async () => {
     try {
       setLoading(true);

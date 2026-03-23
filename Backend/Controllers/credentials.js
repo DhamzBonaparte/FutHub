@@ -867,21 +867,22 @@ const maintenance = async (req, res) => {
   }
 };
 
-
 const approveTime = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { time } = req.body;
+    const { id } = req.params; // this is the player's userId
+    const { time } = req.body; // this is the timeSlot
+    console.log("approveTime params:", req.params, "body:", req.body);
 
     const futsal = await futsals.findOneAndUpdate(
       {
         "bookings.userId": id,
         "bookings.timeSlot": time,
       },
+      { $set: { "bookings.$[elem].isApproved": true } },
       {
-        $set: { "bookings.$.isApproved": true },
+        arrayFilters: [{ "elem.userId": id, "elem.timeSlot": time }],
+        new: true,
       },
-      { new: true }
     );
 
     if (!futsal) {

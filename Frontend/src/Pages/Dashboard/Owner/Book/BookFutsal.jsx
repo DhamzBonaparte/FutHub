@@ -26,7 +26,6 @@ export default function BookFutsal() {
       );
 
       setBookings(bookings);
-      // console.log(bookings.map((it)=>it.isApproved));
 
       const allBookers = [];
       for (const booking of bookings) {
@@ -50,15 +49,54 @@ export default function BookFutsal() {
     }
   };
 
+  const handleReject = async (id) => {
+    try {
+      // Ask for confirmation first
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to cancel this booking?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4CAF50",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, cancel it",
+        cancelButtonText: "No, keep it",
+      });
+
+      if (!result.isConfirmed) {
+        return; // user cancelled
+      }
+
+      // Proceed only if confirmed
+      await axios.patch(
+        "http://localhost:3000/api/v1/player/myBookings",
+        { id },
+        { withCredentials: true },
+      );
+
+      await getMyBookings();
+
+      Swal.fire({
+        icon: "error",
+        title: "Cancelled",
+        text: "Your booking has been cancelled.",
+        confirmButtonColor: "#4CAF50",
+        confirmButtonText: "OK",
+      });
+    } catch (error) {
+      setErr(error.message);
+    }
+  };
+
   const handleApprove = async (id, time) => {
-    console.log('kok');
+    console.log(id,time);
     
     const hi = await axios.patch(
       `http://localhost:3000/api/v1/owner/approveTime/${id}`,
       { time },
       { withCredentials: true },
     );
-    await getBookings()
+    await getBookings();
     console.log(hi);
   };
 
@@ -178,6 +216,29 @@ export default function BookFutsal() {
                 >
                   {players.isApproved ? "Approved" : "Approve"}
                 </button>
+                {/* <button
+                  style={{
+                    width: "100%",
+                    marginTop: "20px",
+                    padding: "10px 18px",
+                    border: "none",
+                    borderRadius: "6px",
+                    fontSize: "15px",
+                    fontWeight: 600,
+                    transition: "all 0.3s ease",
+                    background: players.isApproved
+                      ? "#e0e0e0" // faint gray if already approved
+                      : "linear-gradient(135deg, #dc3545, #a71d2a)", // vibrant red gradient if not approved
+                    color: players.isApproved ? "#7a7a7a" : "#fff",
+                    boxShadow: !players.isApproved
+                      ? "0 4px 6px rgba(0,0,0,0.1)"
+                      : "none",
+                    opacity: players.isApproved ? 0.7 : 1,
+                  }}
+                  onClick={() => handleReject(players?._id)}
+                >
+                  Reject
+                </button> */}
               </div>
             </div>
           );
