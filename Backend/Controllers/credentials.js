@@ -564,9 +564,9 @@ const disapprove = async (req, res) => {
   try {
     const { id } = req.params;
     const { reasonofDisapproval } = req.body;
-        const appro = await futsals.findOneAndUpdate(
+    const appro = await futsals.findOneAndUpdate(
       { userId: id },
-      { $set: { approved: false, reasonOfDisapproval:reasonofDisapproval } },
+      { $set: { approved: false, reasonOfDisapproval: reasonofDisapproval } },
       { new: true, runValidators: true },
     );
     res.status(200).json({ msg: "approved", data: appro, reasonofDisapproval });
@@ -825,7 +825,7 @@ const searchFutsal = async (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 };
- 
+
 const deleteFutsal = async (req, res) => {
   try {
     const { id } = req.params;
@@ -864,6 +864,37 @@ const maintenance = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({ msg: error.message });
+  }
+};
+
+
+const approveTime = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { time } = req.body;
+
+    const futsal = await futsals.findOneAndUpdate(
+      {
+        "bookings.userId": id,
+        "bookings.timeSlot": time,
+      },
+      {
+        $set: { "bookings.$.isApproved": true },
+      },
+      { new: true }
+    );
+
+    if (!futsal) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.json({
+      message: "Booking approved successfully",
+      futsal,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -914,5 +945,5 @@ module.exports = {
   searchFutsal,
   deleteFutsal,
   maintenance,
-  // reasonDisapprove,
+  approveTime,
 };

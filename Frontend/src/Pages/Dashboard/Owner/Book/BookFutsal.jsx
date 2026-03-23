@@ -4,6 +4,7 @@ import axios from "axios";
 
 export default function BookFutsal() {
   const [loading, setLoading] = useState(false);
+  const [booking, setBookings] = useState([]);
   const [err, setErr] = useState("");
   const [time, setTime] = useState("");
   const [data, setData] = useState([]);
@@ -13,31 +14,52 @@ export default function BookFutsal() {
       setLoading(true);
       const check = await axios.get(
         "http://localhost:3000/api/v1/owner/get-Bookings",
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       const bookings = check?.data?.data.flatMap((items) =>
         items.bookings.map((b) => ({
           userId: b.userId,
           timeSlot: b.timeSlot,
-        }))
+          isApproved: b.isApproved,
+        })),
       );
+
+      setBookings(bookings);
+      // console.log(bookings.map((it)=>it.isApproved));
 
       const allBookers = [];
       for (const booking of bookings) {
         const hi = await axios.get(
           `http://localhost:3000/api/v1/owner/showBookers/${booking.userId}`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
         const user = hi?.data?.msg[0];
-        allBookers.push({ ...user, timeSlot: booking.timeSlot });
-      }      
+        allBookers.push({
+          ...user,
+          timeSlot: booking.timeSlot,
+          isApproved: booking.isApproved,
+        });
+        console.log(hi);
+      }
       setData(allBookers);
     } catch (error) {
       setErr(error.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleApprove = async (id, time) => {
+    console.log('kok');
+    
+    const hi = await axios.patch(
+      `http://localhost:3000/api/v1/owner/approveTime/${id}`,
+      { time },
+      { withCredentials: true },
+    );
+    await getBookings()
+    console.log(hi);
   };
 
   useEffect(() => {
@@ -131,6 +153,31 @@ export default function BookFutsal() {
                 <p style={{ margin: "6px 0", color: "#444" }}>
                   <strong>Contact: </strong> {players?.phone}
                 </p>
+                <button
+                  style={{
+                    width: "100%",
+                    marginTop: "20px",
+                    padding: "10px 18px",
+                    border: "none",
+                    borderRadius: "6px",
+                    fontSize: "15px",
+                    fontWeight: 600,
+                    cursor: !players.isApproved ? "pointer" : "not-allowed",
+                    transition: "all 0.3s ease",
+                    background: !players.isApproved
+                      ? "linear-gradient(135deg, #28a745, #218838)"
+                      : "#e0e0e0",
+                    color: !players.isApproved ? "#fff" : "#7a7a7a",
+                    boxShadow: players.isApproved
+                      ? "0 4px 6px rgba(0,0,0,0.1)"
+                      : "none",
+                    opacity: !players.isApproved ? 1 : 0.7,
+                  }}
+                  onClick={() => handleApprove(players?._id, players?.timeSlot)}
+                  disabled={players.isApproved}
+                >
+                  {players.isApproved ? "Approved" : "Approve"}
+                </button>
               </div>
             </div>
           );

@@ -50,7 +50,8 @@ const {
   searchFutsal,
   disapprove,
   deleteFutsal,
-  maintenance
+  maintenance,
+  approveTime
 } = require("../Controllers/credentials");
 
 const storage = multer.diskStorage({
@@ -112,6 +113,7 @@ router.route("/owner/get-Bookings").get(authorize, getBooking);
 router.route("/owner/showBookers/:id").get(authorize, getBookers);
 router.route('/owner/deleteFutsal/:id').delete(authorize,deleteFutsal)
 router.route('/owner/updateMaintainance/:id').patch(authorize,maintenance)
+router.route('/owner/approveTime/:id').patch(approveTime)
 
 //admin started
 router.route("/admin/login").post(adminCheck);
@@ -123,7 +125,6 @@ router.route("/admin/owners").get(getOwners).post(getDetails);
 router.route("/admin/players/:id").delete(delPlayers);
 router.route("/admin/owners/:id").delete(delOwners);
 router.route("/admin/search-player").post(searchPlayer);
-// router.route('/admin/disapprove-futsals/:id').patch(reasonDisapprove)
 
 //player confirmation
 router.route("/player/confirm-opponent").patch(authorize, confirmOpponent);

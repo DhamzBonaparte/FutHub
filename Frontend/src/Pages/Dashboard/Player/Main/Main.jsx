@@ -589,7 +589,10 @@ export default function Main() {
                         ?.filter((b) => String(b.userId) === String(id))
                         .map((b, i) => (
                           <span key={i} style={{ display: "block" }}>
-                            {b.timeSlot}
+                            {b.timeSlot}{" "}
+                            <span style={{
+                              color:b.isApproved?'green':'red'
+                            }}>{b.isApproved?"(Approved)":"(Not Approved)"}</span>
                           </span>
                         ))}
                       {items.bookings?.filter(

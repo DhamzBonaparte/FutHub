@@ -75,6 +75,7 @@ const futsalSchema = new mongoose.Schema(
       {
         userId: { type: String, required: true },
         timeSlot: { type: String, required: true },
+        isApproved: {type:Boolean, required:true, default:false}
       },
     ],
     reasonOfDelete: { type: String, trim: true, default: "" },

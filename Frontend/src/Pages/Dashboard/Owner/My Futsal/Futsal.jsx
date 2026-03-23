@@ -1115,7 +1115,6 @@ export default function Futsal() {
                   cursor: approved ? "pointer" : "not-allowed",
                   transition: "background 0.3s ease",
                   background: !venue?.underMaintenance ? "#fd7e14" : "#28a745",
-                  // orange for maintenance, green for resume
                   color: "#fff",
                 }}
                 onClick={() => handleMaintenance(venue?._id)}
