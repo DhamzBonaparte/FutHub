@@ -29,7 +29,7 @@ const {
   getFutsals,
   approve,
   delFutsal,
-  // reasonDisapprove,
+  rejectBooking,
   getPlayers,
   delPlayers,
   getOwners,
@@ -114,6 +114,7 @@ router.route("/owner/showBookers/:id").get(authorize, getBookers);
 router.route('/owner/deleteFutsal/:id').delete(authorize,deleteFutsal)
 router.route('/owner/updateMaintainance/:id').patch(authorize,maintenance)
 router.route('/owner/approveTime/:id').patch(approveTime)
+router.route('/owner/rejectBooking').patch(rejectBooking)
 
 //admin started
 router.route("/admin/login").post(adminCheck);

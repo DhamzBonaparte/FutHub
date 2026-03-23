@@ -24,11 +24,9 @@ export default function Login() {
         "http://localhost:3000/api/v1/owner/check-owner",
         { withCredentials: true }
       );
-      if (check. data.data?.approved) {
         navigate("/owner");
-      } else {
-        navigate("/register");
-      }
+
+      // }
     } catch (e) {
       setErr(e.message);
     }

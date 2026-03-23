@@ -899,6 +899,32 @@ const approveTime = async (req, res) => {
   }
 };
 
+const rejectBooking = async (req, res) => {
+  try {
+    const { id, timeSlot } = req.body; 
+
+    console.log("rejectBooking body:", req.body);
+
+    const futsal = await futsals.findOneAndUpdate(
+      { "bookings.userId": id, "bookings.timeSlot": timeSlot },
+      { $pull: { bookings: { userId: id, timeSlot: timeSlot } } }, // remove matching booking
+      { new: true },
+    );
+
+    if (!futsal) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.json({
+      message: "Booking deleted successfully",
+      futsal,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   getCredentials,
   setCredentials,
@@ -947,4 +973,5 @@ module.exports = {
   deleteFutsal,
   maintenance,
   approveTime,
+  rejectBooking,
 };

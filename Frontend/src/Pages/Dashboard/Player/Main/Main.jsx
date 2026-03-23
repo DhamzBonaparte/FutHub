@@ -50,8 +50,6 @@ export default function Main() {
   const [err, setErr] = useState("");
 
   console.log(bookings);
-  
-
   const getMyBookings = async () => {
     try {
       setLoading(true);
@@ -593,9 +591,13 @@ export default function Main() {
                         .map((b, i) => (
                           <span key={i} style={{ display: "block" }}>
                             {b.timeSlot}{" "}
-                            <span style={{
-                              color:b.isApproved?'green':'red'
-                            }}>{b.isApproved?"(Approved)":"(Not Approved)"}</span>
+                            <span
+                              style={{
+                                color: b.isApproved ? "green" : "red",
+                              }}
+                            >
+                              {b.isApproved ? "(Approved)" : "(Not Approved)"}
+                            </span>
                           </span>
                         ))}
                       {items.bookings?.filter(

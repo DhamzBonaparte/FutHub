@@ -1,13 +1,27 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function BookFutsal() {
   const [loading, setLoading] = useState(false);
   const [booking, setBookings] = useState([]);
   const [err, setErr] = useState("");
   const [time, setTime] = useState("");
+  const [approved, setApproved] = useState(false);
   const [data, setData] = useState([]);
+
+  const getFutsal = async () => {
+    try {
+      const check = await axios.get(
+        "http://localhost:3000/api/v1/owner/check-owner",
+        { withCredentials: true },
+      );
+      setApproved(check.data.data.approved);
+    } catch (error) {
+      console.log("Error");
+    }
+  };
 
   const getBookings = async () => {
     try {
@@ -49,9 +63,8 @@ export default function BookFutsal() {
     }
   };
 
-  const handleReject = async (id) => {
+  const handleReject = async (id, timeSlot) => {
     try {
-      // Ask for confirmation first
       const result = await Swal.fire({
         title: "Are you sure?",
         text: "Do you really want to cancel this booking?",
@@ -59,22 +72,21 @@ export default function BookFutsal() {
         showCancelButton: true,
         confirmButtonColor: "#4CAF50",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, cancel it",
+        confirmButtonText: "Yes, reject it",
         cancelButtonText: "No, keep it",
       });
 
       if (!result.isConfirmed) {
-        return; // user cancelled
+        return;
       }
 
-      // Proceed only if confirmed
       await axios.patch(
-        "http://localhost:3000/api/v1/player/myBookings",
-        { id },
+        "http://localhost:3000/api/v1/owner/rejectBooking",
+        { id, timeSlot },
         { withCredentials: true },
       );
 
-      await getMyBookings();
+      await getBookings();
 
       Swal.fire({
         icon: "error",
@@ -89,24 +101,84 @@ export default function BookFutsal() {
   };
 
   const handleApprove = async (id, time) => {
-    console.log(id,time);
-    
-    const hi = await axios.patch(
-      `http://localhost:3000/api/v1/owner/approveTime/${id}`,
-      { time },
-      { withCredentials: true },
-    );
-    await getBookings();
-    console.log(hi);
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: `Do you really want to approve this booking for ${time}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, approve it",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      const hi = await axios.patch(
+        `http://localhost:3000/api/v1/owner/approveTime/${id}`,
+        { time },
+        { withCredentials: true },
+      );
+
+      await getBookings();
+
+      await Swal.fire({
+        icon: "success",
+        title: "Approved",
+        text: "The booking has been approved successfully.",
+        confirmButtonColor: "#28a745",
+        confirmButtonText: "OK",
+      });
+
+      console.log(hi);
+    } catch (error) {
+      console.error(error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong while approving the booking.",
+      });
+    }
   };
 
   useEffect(() => {
     getBookings();
+    getFutsal();
   }, []);
   return (
     <>
-      <div className="header">
-        <div className="dashboard-title" style={{ color: "gray" }}>
+      <div
+        className="msg"
+        style={{
+          display: approved || loading ? "none" : "block",
+          backgroundColor: "#fff3cd",
+          color: "#856404",
+          border: "1px solid #ffeeba",
+          borderRadius: "6px",
+          padding: "12px 20px",
+          margin: "20px auto",
+          maxWidth: "600px",
+          textAlign: "center",
+          fontSize: "16px",
+          fontWeight: 500,
+          boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+        }}
+      >
+        You will be able to access this page once our team approves your futsal.
+      </div>
+      <div className="header" style={{
+        display: approved?"block":"none",
+      }}>
+        <div
+          className="dashboard-title"
+          style={{
+            color: "gray",
+            filter: approved ? "blur(0px)" : "blur(9px)",
+          }}
+        >
           Booked Futsals
         </div>
       </div>
@@ -125,6 +197,7 @@ export default function BookFutsal() {
       <div
         style={{
           display: "grid",
+          filter: approved ? "blur(0px)" : "blur(9px)",
           gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
           gap: "20px",
         }}
@@ -212,11 +285,11 @@ export default function BookFutsal() {
                     opacity: !players.isApproved ? 1 : 0.7,
                   }}
                   onClick={() => handleApprove(players?._id, players?.timeSlot)}
-                  disabled={players.isApproved}
+                  disabled={players.isApproved || !approved}
                 >
                   {players.isApproved ? "Approved" : "Approve"}
                 </button>
-                {/* <button
+                <button
                   style={{
                     width: "100%",
                     marginTop: "20px",
@@ -226,19 +299,17 @@ export default function BookFutsal() {
                     fontSize: "15px",
                     fontWeight: 600,
                     transition: "all 0.3s ease",
-                    background: players.isApproved
-                      ? "#e0e0e0" // faint gray if already approved
-                      : "linear-gradient(135deg, #dc3545, #a71d2a)", // vibrant red gradient if not approved
-                    color: players.isApproved ? "#7a7a7a" : "#fff",
-                    boxShadow: !players.isApproved
-                      ? "0 4px 6px rgba(0,0,0,0.1)"
-                      : "none",
-                    opacity: players.isApproved ? 0.7 : 1,
+                    background: "linear-gradient(135deg, #dc3545, #a71d2a)", // vibrant red gradient
+                    color: "#fff",
+                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                    opacity: 1,
+                    cursor: "pointer",
                   }}
-                  onClick={() => handleReject(players?._id)}
+                  disabled={!approved}
+                  onClick={() => handleReject(players?._id, players?.timeSlot)}
                 >
                   Reject
-                </button> */}
+                </button>
               </div>
             </div>
           );
