@@ -566,7 +566,7 @@ const disapprove = async (req, res) => {
     const { reasonofDisapproval } = req.body;
         const appro = await futsals.findOneAndUpdate(
       { userId: id },
-      { $set: { approved: false, reasonofDisapproval } },
+      { $set: { approved: false, reasonOfDisapproval:reasonofDisapproval } },
       { new: true, runValidators: true },
     );
     res.status(200).json({ msg: "approved", data: appro, reasonofDisapproval });
@@ -825,7 +825,7 @@ const searchFutsal = async (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 };
-
+ 
 const deleteFutsal = async (req, res) => {
   try {
     const { id } = req.params;

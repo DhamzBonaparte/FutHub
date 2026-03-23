@@ -32,6 +32,7 @@ export default function Futsal() {
   const [about, setAbout] = useState("");
   const [preview, setPreview] = useState(false);
   const [reason, setReason] = useState("");
+  const [approved, setApproved] = useState("");
   const [underMain, setUnderMain] = useState(false);
   const navigate = useNavigate();
 
@@ -74,16 +75,46 @@ export default function Futsal() {
 
   const handleMaintenance = async (id) => {
     try {
-      setUnderMain(!underMain);
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to toggle maintenance mode for this futsal?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#f44336", // red
+        cancelButtonColor: "#4CAF50", // green
+        confirmButtonText: "Yes, update",
+        cancelButtonText: "No, cancel",
+      });
+
+      if (!result.isConfirmed) return;
+
+      // Compute new value first
+      const newStatus = !underMain;
+      setUnderMain(newStatus);
+
+      // Send update with the new value
       await axios.patch(
         `http://localhost:3000/api/v1/owner/updateMaintainance/${id}`,
-        { underMaintenance: underMain },
+        { underMaintenance: newStatus },
         { withCredentials: true },
       );
 
-      console.log(aa);
+      Swal.fire({
+        title: "Updated!",
+        text: `Maintenance status has been set to ${newStatus ? "ON" : "OFF"}.`,
+        icon: "success",
+        confirmButtonColor: "#4CAF50",
+      });
+
+      await getFutsal();
     } catch (error) {
       console.log(error.message);
+      Swal.fire({
+        title: "Error!",
+        text: "Something went wrong while updating.",
+        icon: "error",
+        confirmButtonColor: "#f44336",
+      });
     }
   };
 
@@ -92,7 +123,7 @@ export default function Futsal() {
       const result = await Swal.fire({
         title: "Delete Futsal",
         text: "Type the reason for deleting your futsal:",
-        input: "text", // enables text input
+        input: "text",
         inputPlaceholder: "Write here...",
         showCancelButton: true,
         confirmButtonText: "Submit",
@@ -149,7 +180,9 @@ export default function Futsal() {
       setPrice(check.data.data.price);
       setCapacity(check.data.data.capacity);
       setAbout(check.data.data.about);
-      console.log(check);
+      setApproved(check.data.data.approved);
+      setUnderMain(check.data.data.underMaintenance);
+      console.log(check.data.data.approved); //here
     } catch (error) {
       console.log(error.message);
     } finally {
@@ -160,7 +193,6 @@ export default function Futsal() {
   const handleChanges = async (e) => {
     e.preventDefault();
     try {
-      // Ask for confirmation first
       const result = await Swal.fire({
         title: "Are you sure?",
         text: "Do you really want to save these changes?",
@@ -173,10 +205,9 @@ export default function Futsal() {
       });
 
       if (!result.isConfirmed) {
-        return; // user cancelled
+        return;
       }
 
-      // Proceed only if confirmed
       await axios.patch(
         "http://localhost:3000/api/v1/owner/check-owner",
         formData,
@@ -681,9 +712,30 @@ export default function Futsal() {
       </div>
 
       <div
+        className="msg"
+        style={{
+          display: approved || loading ? "none" : "block",
+          backgroundColor: "#fff3cd",
+          color: "#856404",
+          border: "1px solid #ffeeba",
+          borderRadius: "6px",
+          padding: "12px 20px",
+          margin: "20px auto",
+          maxWidth: "600px",
+          textAlign: "center",
+          fontSize: "16px",
+          fontWeight: 500,
+          boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+        }}
+      >
+        You will be able to access this page once our team approves your futsal.
+      </div>
+
+      <div
         id="myVenues"
         className="venues-section"
         style={{
+          filter: !approved ? "blur(10px)" : "blur(0px)",
           padding: "40px",
           background: "linear-gradient(135deg, #f9f9f9, #eef2f7)",
           minHeight: "100vh",
@@ -1025,10 +1077,11 @@ export default function Futsal() {
                   borderRadius: "6px",
                   fontSize: "15px",
                   fontWeight: 500,
-                  cursor: "pointer",
+                  cursor: approved ? "pointer" : "not-allowed",
                   transition: "background 0.3s ease",
                   marginTop: "20px",
                 }}
+                disabled={!approved}
                 onClick={() => setEdit(true)}
               >
                 Edit Futsal Details
@@ -1042,30 +1095,35 @@ export default function Futsal() {
                   borderRadius: "6px",
                   fontSize: "15px",
                   fontWeight: 500,
-                  cursor: "pointer",
+                  cursor: approved ? "pointer" : "not-allowed",
                   transition: "background 0.3s ease",
                   marginTop: "20px",
                 }}
+                disabled={!approved}
                 onClick={() => handleDelete(venue?._id)} // call your delete handler
               >
                 Delete Futsal
               </button>
               <button
                 style={{
-                  background: "#6c757d", // neutral gray (Bootstrap secondary)
-                  color: "#fff",
-                  border: "none",
+                  marginTop: "20px",
                   padding: "10px 18px",
+                  border: "none",
                   borderRadius: "6px",
                   fontSize: "15px",
                   fontWeight: 500,
-                  cursor: "pointer",
+                  cursor: approved ? "pointer" : "not-allowed",
                   transition: "background 0.3s ease",
-                  marginTop: "20px",
+                  background: !venue?.underMaintenance ? "#fd7e14" : "#28a745",
+                  // orange for maintenance, green for resume
+                  color: "#fff",
                 }}
                 onClick={() => handleMaintenance(venue?._id)}
+                disabled={!approved}
               >
-                Go to Maintenance
+                {!venue?.underMaintenance
+                  ? "Go to Maintenance"
+                  : "Resume Operations"}
               </button>
             </div>
           </div>

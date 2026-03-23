@@ -64,6 +64,7 @@ export default function Book() {
         { withCredentials: true },
       );
       setFutsals(allFutsal.data.data);
+      console.log(allFutsal.data.data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -95,7 +96,7 @@ export default function Book() {
       });
 
       if (!result.isConfirmed) {
-        return; 
+        return;
       }
 
       await axios.patch(
@@ -333,7 +334,7 @@ export default function Book() {
                         key={index}
                         type="button"
                         onClick={() => handleSelect(futsal._id, time)}
-                        disabled={isBooked}
+                        disabled={isBooked || futsal.underMaintenance}
                         style={{
                           padding: "10px",
                           fontSize: "14px",
@@ -342,13 +343,13 @@ export default function Book() {
                           border: isCurrentSelection
                             ? "2px solid #555"
                             : "1px solid #4CAF50",
-                          cursor: isBooked ? "not-allowed" : "pointer",
-                          background: isBooked
+                          cursor: isBooked || futsal.underMaintenance? "not-allowed" : "pointer",
+                          background: isBooked || futsal.underMaintenance
                             ? "#d3d3d3"
                             : isCurrentSelection
                               ? "#d3d3d3"
                               : "#e8f5e9",
-                          color: isBooked
+                          color: isBooked || futsal.underMaintenance
                             ? "#000"
                             : isCurrentSelection
                               ? "#000"
@@ -374,20 +375,28 @@ export default function Book() {
                   style={{
                     marginTop: "15px",
                     padding: "8px 12px",
-                    background: "#0d1b2a",
-                    color: "rgba(86, 236, 98, 1)",
+                    background: futsal.underMaintenance ? "#d6d6d6" : "#0d1b2a", 
+                    color: futsal.underMaintenance
+                      ? "#7a7a7a"
+                      : "rgba(86, 236, 98, 1)", 
                     border: "none",
                     borderRadius: "6px",
-                    cursor: "pointer",
+                    cursor: futsal.underMaintenance ? "not-allowed" : "pointer",
                     fontSize: "14px",
                     display: "flex",
                     justifyContent: "center",
                     width: "100%",
                     transition: "background 0.3s ease",
+                    opacity: futsal.underMaintenance ? 0.7 : 1,
                   }}
                   onClick={() => handleConfirm(futsal._id)}
+                  disabled={futsal.underMaintenance}
                 >
-                  Book Futsal
+                  <span>
+                    {futsal.underMaintenance
+                      ? "Under Maintenance"
+                      : "Book Futsal"}
+                  </span>
                 </button>
               </div>
             </div>

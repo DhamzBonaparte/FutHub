@@ -78,7 +78,7 @@ const futsalSchema = new mongoose.Schema(
       },
     ],
     reasonOfDelete: { type: String, trim: true, default: "" },
-    reasonOfDisapproval: { type: String, trim: true, default: "" },
+    reasonOfDisapproval: { type: String, trim: true, default: "Not visited futsal yet" },
     underMaintenance: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
   },

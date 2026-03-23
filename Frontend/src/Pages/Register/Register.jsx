@@ -73,7 +73,7 @@ export default function Register() {
           withCredentials: true,
         }
       );
-      setShowMsg(true);
+      navigate('/owner')
     } catch (error) {
       console.log(error.message);
     }
