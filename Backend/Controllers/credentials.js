@@ -917,7 +917,7 @@ const rejectBooking = async (req, res) => {
 
     res.json({
       message: "Booking deleted successfully",
-      futsal,
+      futsal,  
     });
   } catch (error) {
     console.error(error);

@@ -22,11 +22,9 @@ export default function Login() {
     try {
       const check = await axios.get(
         "http://localhost:3000/api/v1/owner/check-owner",
-        { withCredentials: true }
+        { withCredentials: true },
       );
-        navigate("/owner");
-
-      // }
+      navigate("/register");
     } catch (e) {
       setErr(e.message);
     }
@@ -42,7 +40,7 @@ export default function Login() {
           email: email,
           password: pass,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setErr("");
 

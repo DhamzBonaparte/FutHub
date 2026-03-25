@@ -99,15 +99,15 @@ export default function OMain() {
                       <p
                         className="stat-value"
                         style={{
-                          color: info.approved ? "green" : "red",
+                          color: info?.approved ? "green" : "red",
                         }}
                       >
-                        {info.approved ? "Approved" : "Not Approved"}
+                        {info?.approved ? "Approved" : "Not Approved"}
                       </p>
                       <p
                         style={{
-                          color: info.approved ? "green" : "red",
-                          display: !info.approved ? "block" : "none",
+                          color: info?.approved ? "green" : "red",
+                          display: !info?.approved ? "block" : "none",
                           textAlign:"center"
                         }}
                       >
@@ -124,9 +124,9 @@ export default function OMain() {
                   <div className="stat-title">Under Maintainance</div>
                   <div className="stat-value" id="monthlyBookings">
                     <p style={{
-                      color:info.underMaintenance?"Red":"green"
+                      color:info?.underMaintenance?"Red":"green"
                     }}>
-                      {info.underMaintenance
+                      {info?.underMaintenance
                         ? "Under Maintainance"
                         : "Under proper Condition"}
                     </p>

@@ -82,7 +82,7 @@ export default function Opponent() {
     } catch (error) {
       setError(error.message);
     }
-  };  
+  };
 
   async function getMyOpponentListings() {
     setLoading(true);
@@ -387,7 +387,7 @@ export default function Opponent() {
               value={contact}
               minLength="10"
               maxLength="10"
-              pattern="[0-9]{10}"
+              pattern="(97|98)[0-9]{8}"
               placeholder="Enter contact number"
               onChange={(e) => setContact(e.target.value)}
               style={{
@@ -1357,7 +1357,7 @@ export default function Opponent() {
                     }}
                     onClick={() => handleDelete(opp._id)}
                   >
-                    Delete 
+                    Delete
                   </button>
                 </div>
               </div>

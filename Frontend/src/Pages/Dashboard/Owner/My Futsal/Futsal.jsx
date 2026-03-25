@@ -231,29 +231,6 @@ export default function Futsal() {
   console.log(showMsg);
   return (
     <>
-      <div>
-        <div
-          className="msg"
-          style={{
-            display: showMsg ? "block" : "none",
-            background: "#d4edda",
-            color: "#155724",
-            padding: "15px 20px",
-            borderRadius: "8px",
-            border: "1px solid #c3e6cb",
-            fontSize: "16px",
-            fontWeight: "500",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-            marginTop: "15px",
-          }}
-        >
-          <p style={{ margin: 0 }}>
-            You have updated the details of your futsal. Our team shall verify
-            and update them accordingly.
-          </p>
-        </div>
-      </div>
-
       <div
         className="load"
         style={{

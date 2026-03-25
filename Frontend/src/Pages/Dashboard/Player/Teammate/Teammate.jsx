@@ -391,7 +391,7 @@ export default function Teammate() {
                   value={contact}
                   minLength="10"
                   maxLength="10"
-                  pattern="(97|98)\d{8}"
+                  pattern="(97|98)[0-9]{8}"
                   style={{
                     width: "100%",
                     padding: "10px",

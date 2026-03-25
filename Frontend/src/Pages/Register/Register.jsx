@@ -655,29 +655,6 @@ export default function Register() {
           </form>
         </div>
       </div>
-
-      <div>
-        <div
-          className="msg"
-          style={{
-            display: showMsg ? "block" : "none",
-            background: "#d1ecf1", 
-            color: "#0c5460", 
-            padding: "15px 20px",
-            borderRadius: "8px",
-            border: "1px solid #bee5eb", 
-            fontSize: "16px",
-            fontWeight: "500",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-            marginTop: "15px",
-          }}
-        >
-          <p style={{ margin: 0 }}>
-            You have applied for registering your futsal. Our team will reach to
-            you and approve it!
-          </p>
-        </div>
-      </div>
     </>
   );
 }
