@@ -152,6 +152,23 @@ export default function Signup() {
                 />
               </div>
 
+              <small
+                id="passwordHelp"
+                className="form-text"
+                style={{
+                  display: "block",
+                  marginTop: "4px",
+                  fontSize: "0.85em",
+                  color: "#555",
+                  backgroundColor: "#f8f9fa",
+                  padding: "6px 10px",
+                  borderLeft: "3px solid #007bff",
+                  borderRadius: "4px",
+                }}
+              >
+                Password must contain at least one number and one special
+                character.
+              </small>
               <div className="form-group">
                 <label htmlFor="signup-password" className="form-label">
                   Password
@@ -164,6 +181,8 @@ export default function Signup() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{6,}$"
+                  title="Password must contain at least one number and one special character"
                 />
               </div>
 

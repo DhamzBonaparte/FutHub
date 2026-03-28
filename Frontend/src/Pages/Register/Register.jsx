@@ -75,7 +75,9 @@ export default function Register() {
       );
       navigate('/owner')
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
+      
+      // console.log(error.message);
     }
   };
 
@@ -87,8 +89,7 @@ export default function Register() {
       );
       setEm(check.data.user.email);
       setEmail(check.data.user.email);
-      
-
+  
       if (check.data.data) {
         setShowMsg(true);
       }
