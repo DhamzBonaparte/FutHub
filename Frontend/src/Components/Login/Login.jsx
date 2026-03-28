@@ -24,8 +24,17 @@ export default function Login() {
         "http://localhost:3000/api/v1/owner/check-owner",
         { withCredentials: true },
       );
-      navigate("/register");
+      console.log(check);
+
+      if (!check.data.data) {
+        navigate("/register");
+      } else if (check.data.data.approved) {
+        navigate("/owner");
+      } else {
+        navigate("/register");
+      }
     } catch (e) {
+      console.log(e);
       setErr(e.message);
     }
   };
@@ -50,6 +59,7 @@ export default function Login() {
 
       if (login.data.data.role === "owner") {
         await checkOwner();
+        // navigate('/register');
       }
     } catch (err) {
       if (err.response?.status === 401 || err.response?.status === 404) {
