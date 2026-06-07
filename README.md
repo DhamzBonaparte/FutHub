@@ -1,1 +1,1 @@
-"# FutHub-4th-sem-" 
+FutHub is a full‑stack application designed to make futsal more accessible and organized. It connects players and futsal owners with a streamlined booking system, while also helping teammates and opponents find each other for matches.

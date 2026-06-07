@@ -218,6 +218,22 @@ export default function Signup() {
                   onChange={(e) => setLocation(e.target.value)}
                 />
               </div>
+              <small
+                id="passwordHelp"
+                className="form-text"
+                style={{
+                  display: "block",
+                  marginTop: "4px",
+                  fontSize: "0.85em",
+                  color: "#555",
+                  backgroundColor: "#f8f9fa",
+                  padding: "6px 10px",
+                  borderLeft: "3px solid #007bff",
+                  borderRadius: "4px",
+                }}
+              >
+               Phone number must start with 97 or 98 and be 10 digits long.
+              </small>
 
               <div className="form-group">
                 <label htmlFor="signup-confirm-password" className="form-label">
