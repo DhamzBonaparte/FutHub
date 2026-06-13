@@ -1,5 +1,5 @@
 import "./PDash.css";
-import Sidebar from "d:/FutHub/Frontend/src/Components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../../../src/Components/Sidebar/Sidebar.jsx";
 import { Outlet } from "react-router-dom";
 import { useEffect, useRef } from "react";
 
