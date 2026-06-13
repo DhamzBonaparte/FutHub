@@ -1,3 +1,4 @@
+/* ===== YOUR EXISTING DESKTOP STYLES (unchanged) ===== */
 .sidebar {
   width: var(--sidebar-width);
   background: #0d1b2a;
@@ -7,7 +8,8 @@
   height: 100vh;
   overflow-y: auto;
   transition: var(--transition);
-  left:0;
+  left: 0;
+  height:100%;
 }
 
 .logo2 {
@@ -82,7 +84,7 @@
 .nav-menu a {
   display: flex;
   align-items: center;
-  padding: 0.8rem ;
+  padding: 0.8rem;
   color: var(--text-white);
   text-decoration: none;
   border-radius: 8px;
@@ -101,22 +103,53 @@
   width: 24px;
 }
 
+/* ===== MOBILE: ICON-ONLY SIDEBAR (VERTICAL, NOT BOTTOM) ===== */
 @media (max-width: 768px) {
+  /* Sidebar becomes narrow, icons only */
   .sidebar {
     width: 70px;
-    padding: 1rem;
+    padding: 1rem 0.5rem;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
   }
 
-  .logo2 h1,
-  .user-info,
+  /* Hide logo, user profile, and any text labels */
+  .logo2,
+  .user-profile,
   .nav-menu span {
     display: none;
   }
 
+  /* Keep navigation list vertical */
+  .nav-menu {
+    margin-top: 1rem;
+  }
+
+  .nav-menu li {
+    margin-bottom: 1rem;
+  }
+
+  /* Center icons and remove right margin */
+  .nav-menu a {
+    justify-content: center;
+    padding: 0.8rem 0;
+  }
+
+  .nav-menu i {
+    margin-right: 0;
+    font-size: 1.5rem;
+    width: auto;
+  }
+
+  /* Adjust main content to sit next to the narrow sidebar */
   .main-content {
     margin-left: 70px;
   }
 
+  /* Optional: adjust header and stats for better fit */
   .header {
     flex-direction: column;
     align-items: flex-start;
@@ -130,4 +163,4 @@
   .stats-container {
     grid-template-columns: 1fr;
   }
-} 
+}

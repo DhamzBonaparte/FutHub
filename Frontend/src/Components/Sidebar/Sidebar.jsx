@@ -8,6 +8,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
+import Swal from "sweetalert2";
 
 export default function Sidebar() {
   const [data, setData] = useState({});
@@ -50,15 +51,29 @@ export default function Sidebar() {
 
   const Logout = async () => {
     try {
-      axios.post(
-        `${url}/logout`,
-        {},
-        {
-          withCredentials: true,
-        },
-      );
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out of your session.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, logout",
+      });
+
+      // Only logout if confirmed
+      if (result.isConfirmed) {
+        await axios.post(`${url}/logout`, {}, { withCredentials: true });
+
+        Swal.fire(
+          "Logged out!",
+          "You have been successfully logged out.",
+          "success",
+        );
+      }
     } catch (err) {
       setError(err.message);
+      Swal.fire("Error", err.message, "error");
     }
   };
 

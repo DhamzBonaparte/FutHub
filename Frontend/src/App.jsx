@@ -16,7 +16,7 @@ import Review from "./Pages/Dashboard/Owner/Reviews/Review";
 import Futsal from "./Pages/Dashboard/Owner/My Futsal/Futsal";
 import Register from "./Pages/Register/Register";
 import Admin from "./Pages/Dashboard/Admin/Admin";
-import AdminLogin from "./Pages/Dashboard/Admin/adminLogin/adminLogin";
+import AdminLogin from "./Pages/Dashboard/Admin/adminLogin/AdminLogin";
 import Player from "./Pages/Dashboard/Admin/Players/Player";
 import Owner from "./Pages/Dashboard/Admin/Owners/Owner";
 import ADashboard from "./Pages/Dashboard/Admin/adminDashboard/ADashboard";
