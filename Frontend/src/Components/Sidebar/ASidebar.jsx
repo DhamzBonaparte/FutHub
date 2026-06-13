@@ -1,4 +1,3 @@
-import "./Osidebar.css";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import BookmarkAddedIcon from "@mui/icons-material/BookmarkAdded";
 import ReviewsIcon from "@mui/icons-material/Reviews";
@@ -18,15 +17,28 @@ export default function ASidebar() {
 
   const Logout = async () => {
     try {
-      axios.post(
-        `${url}/logout`,
-        {},
-        {
-          withCredentials: true,
-        },
-      );
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out of your session.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, logout",
+      });
+
+      if (result.isConfirmed) {
+        await axios.post(`${url}/logout`, {}, { withCredentials: true });
+
+        await Swal.fire(
+          "Logged out!",
+          "You have been successfully logged out.",
+          "success",
+        );
+      }
     } catch (err) {
       setError(err.message);
+      Swal.fire("Error", err.message, "error");
     }
   };
 

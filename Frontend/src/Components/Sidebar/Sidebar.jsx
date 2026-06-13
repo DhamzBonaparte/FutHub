@@ -61,11 +61,10 @@ export default function Sidebar() {
         confirmButtonText: "Yes, logout",
       });
 
-      // Only logout if confirmed
       if (result.isConfirmed) {
         await axios.post(`${url}/logout`, {}, { withCredentials: true });
 
-        Swal.fire(
+        await Swal.fire(
           "Logged out!",
           "You have been successfully logged out.",
           "success",
