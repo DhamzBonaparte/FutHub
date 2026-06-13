@@ -16,11 +16,12 @@ export default function ADashboard() {
   const [pending, setPending] = useState(0);
   const [error, setError] = useState("");
   const [allUsers, setAllUsers] = useState([]);
+  const url = import.meta.env.VITE_API_URL;
 
   const getPlayers = async () => {
     try {
       setLoading(true);
-      const all = await axios.get("http://localhost:3000/api/v1/admin/players");
+      const all = await axios.get(`${url}/admin/players`);
       const player = all.data.data.filter((items) => items.roles == "player");
       const owner = all.data.data.filter((items) => items.roles == "owner");
       setPlayers(player);
@@ -28,10 +29,10 @@ export default function ADashboard() {
       setAllUsers(all);
 
       const pending = await axios.get(
-        "http://localhost:3000/api/v1/admin/futsals"
+        `${url}/admin/futsals`,
       );
       const pend = pending.data.data.filter(
-        (items) => items.approved === false
+        (items) => items.approved === false,
       );
       setPending(pend);
     } catch (error) {

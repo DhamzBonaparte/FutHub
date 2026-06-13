@@ -11,7 +11,7 @@ export default function Login() {
       behavior: "smooth",
     });
   }, []);
-
+  const url = import.meta.env.VITE_API_URL;
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [err, setErr] = useState("");
@@ -21,7 +21,7 @@ export default function Login() {
   const checkOwner = async () => {
     try {
       const check = await axios.get(
-        "http://localhost:3000/api/v1/owner/check-owner",
+        `${url}/owner/check-owner`,
         { withCredentials: true },
       );
       console.log(check);
@@ -44,7 +44,7 @@ export default function Login() {
     setLoading(true);
     try {
       const login = await axios.post(
-        `http://localhost:3000/api/v1/login`,
+        `${url}/login`,
         {
           email: email,
           password: pass,

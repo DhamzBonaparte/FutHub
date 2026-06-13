@@ -5,7 +5,9 @@ export default function Player() {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const [search, setSearch] = useState("");
+  const url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     getPlayers();
@@ -18,7 +20,7 @@ export default function Player() {
   const getPlayers = async () => {
     try {
       setLoading(true);
-      const all = await axios.get("http://localhost:3000/api/v1/admin/players");
+      const all = await axios.get(`${url}/admin/players`);
       setData(all.data.data.filter((items) => items.roles == "player"));
     } catch (error) {
       setError(error.message);
@@ -36,7 +38,7 @@ export default function Player() {
       setLoading(true);
       setSearch(e);
       const data = await axios.post(
-        "http://localhost:3000/api/v1/admin/search-player",
+        `${url}/admin/search-player`,
         { value: e },
       );
       const fil = data.data.data.filter((items) => items.roles == "player");
@@ -50,7 +52,7 @@ export default function Player() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/v1/admin/players/${id}`);
+      await axios.delete(`${url}/admin/players/${id}`);
       Swal.fire({
         title: "Deleted!",
         text: "This user has been deleted.",
@@ -61,7 +63,7 @@ export default function Player() {
     } catch (error) {
       setError(error.message);
     } finally {
-      await getPlayers()
+      await getPlayers();
     }
   };
   return (

@@ -17,11 +17,12 @@ export default function Owner() {
   const [data, setData] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
   const [search, setSearch] = useState("");
+  const url = import.meta.env.VITE_API_URL;
 
   const getOwners = async () => {
     try {
       setLoading(true);
-      const all = await axios.get("http://localhost:3000/api/v1/admin/owners");
+      const all = await axios.get(`${url}/admin/owners`);
       setOwners(all.data.data.filter((items) => items.roles === "owner"));
     } catch (error) {
       setErr(error.message);
@@ -39,7 +40,7 @@ export default function Owner() {
       setLoading(true);
       setSearch(e);
       const data = await axios.post(
-        "http://localhost:3000/api/v1/admin/search-player",
+        `${url}/admin/search-player`,
         { value: e },
       );
       const fil = data.data.data.filter((items) => items.roles == "owner");
@@ -70,7 +71,7 @@ export default function Owner() {
         return; // user cancelled
       }
 
-      await axios.delete(`http://localhost:3000/api/v1/admin/owners/${id}`);
+      await axios.delete(`${url}/admin/owners/${id}`);
 
       await Swal.fire({
         title: "Deleted!",
@@ -90,7 +91,7 @@ export default function Owner() {
       setLoading(true);
       setShowDetails(true);
 
-      const hi = await axios.post("http://localhost:3000/api/v1/admin/owners", {
+      const hi = await axios.post(`${url}/admin/owners`, {
         email,
       });
 

@@ -23,8 +23,9 @@ export default function Register() {
   const [price, setPrice] = useState("");
   const [capacity, setCapacity] = useState("");
   const [about, setAbout] = useState("");
-  const [em,setEm]=useState("");
+  const [em, setEm] = useState("");
   const navigate = useNavigate();
+  const url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     checkOwner();
@@ -67,16 +68,16 @@ export default function Register() {
     e.preventDefault();
     try {
       const fut = await axios.post(
-        "http://localhost:3000/api/v1/upload",
+        `${url}/upload`,
         formData,
         {
           withCredentials: true,
-        }
+        },
       );
-      navigate('/owner')
+      navigate("/owner");
     } catch (error) {
       console.log(error);
-      
+
       // console.log(error.message);
     }
   };
@@ -84,12 +85,12 @@ export default function Register() {
   const checkOwner = async () => {
     try {
       const check = await axios.get(
-        "http://localhost:3000/api/v1/owner/check-owner",
-        { withCredentials: true }
+        `${url}/owner/check-owner`,
+        { withCredentials: true },
       );
       setEm(check.data.user.email);
       setEmail(check.data.user.email);
-  
+
       if (check.data.data) {
         setShowMsg(true);
       }
@@ -350,8 +351,8 @@ export default function Register() {
                     gridTemplateColumns:
                       "repeat(auto-fill, minmax(200px, 1fr))",
                     gap: "1.2 rem",
-                    justifyItems: "center", 
-                    alignItems: "center", 
+                    justifyItems: "center",
+                    alignItems: "center",
                   }}
                 >
                   <label>
@@ -453,8 +454,8 @@ export default function Register() {
                       name="facilities"
                       value="cafeteria"
                       style={{
-                        marginRight: "0.5rem", 
-                        verticalAlign: "middle", 
+                        marginRight: "0.5rem",
+                        verticalAlign: "middle",
                       }}
                     />
                     Cafeteria

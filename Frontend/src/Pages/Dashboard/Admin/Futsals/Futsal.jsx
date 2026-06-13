@@ -11,6 +11,7 @@ export default function Futsals() {
       behavior: "smooth",
     });
   }, []);
+  const url = import.meta.env.VITE_API_URL;
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,7 @@ export default function Futsals() {
     setLoading(true);
     try {
       const allFutsal = await axios.get(
-        "http://localhost:3000/api/v1/admin/futsals",
+        `${url}/admin/futsals`,
         {
           withCredentials: true,
         },
@@ -54,7 +55,7 @@ export default function Futsals() {
 
       // Proceed only if confirmed
       await axios.patch(
-        `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`,
+        `${url}/admin/approve-futsals/${fut}`,
       );
 
       await getFutsals();
@@ -90,7 +91,7 @@ export default function Futsals() {
 
       // Proceed only if confirmed
       await axios.delete(
-        `http://localhost:3000/api/v1/admin/approve-futsals/${fut}`,
+        `${url}/admin/approve-futsals/${fut}`,
       );
 
       await getFutsals();
@@ -135,7 +136,7 @@ export default function Futsals() {
       setReason(actReason);
 
       const aa = await axios.patch(
-        `http://localhost:3000/api/v1/admin/disapprove-futsals/${id}`,
+        `${url}/admin/disapprove-futsals/${id}`,
         { reasonofDisapproval: actReason }, // match schema
       );
       console.log(aa);

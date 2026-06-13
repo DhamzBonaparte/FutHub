@@ -7,22 +7,23 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [err, setError] = useState("");
   const navigate = useNavigate();
+  const url = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const check = await axios.post(
-        "http://localhost:3000/api/v1/admin/login",
+        `${url}/admin/login`,
         {
           username,
           password,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
-      navigate('/admin');
+      navigate("/admin");
     } catch (Err) {
-      if (Err.status === 403 || Err.status===400) {
+      if (Err.status === 403 || Err.status === 400) {
         setError("Invalid username or password!");
         setTimeout(() => {
           setError(" ");

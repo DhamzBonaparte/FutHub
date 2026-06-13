@@ -12,6 +12,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 export default function Sidebar() {
   const [data, setData] = useState({});
   const [error, setError] = useState("");
+  const url = import.meta.env.VITE_API_URL;
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,7 +23,7 @@ export default function Sidebar() {
 
   const getAllData = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/player", {
+      const res = await axios.get(`${url}/player`, {
         withCredentials: true,
       });
       setData(res.data.msg);
@@ -49,11 +51,11 @@ export default function Sidebar() {
   const Logout = async () => {
     try {
       axios.post(
-        "http://localhost:3000/api/v1/logout",
+        `${url}/logout`,
         {},
         {
           withCredentials: true,
-        }
+        },
       );
     } catch (err) {
       setError(err.message);
@@ -77,9 +79,9 @@ export default function Sidebar() {
           </div>
           <div className="user-info">
             <h3
-            style={{
-              fontSize:'1rem'
-            }}
+              style={{
+                fontSize: "1rem",
+              }}
             >
               {data?.firstName?.slice(0, 1).toUpperCase() +
                 data?.firstName?.slice(1)}{" "}

@@ -17,6 +17,7 @@ export default function Book() {
   const [futsals, setFutsals] = useState([]);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState({ id: null, time: null });
+  const url = import.meta.env.VITE_API_URL;
 
   const alltimes = [
     "6-7 AM",
@@ -44,7 +45,7 @@ export default function Book() {
         await getFutsals();
       }
       const se = await axios.post(
-        "http://localhost:3000/api/v1/player/search-futsal",
+        `${url}/player/search-futsal`,
         { search },
         { withCredentials: true },
       );
@@ -60,7 +61,7 @@ export default function Book() {
     setLoading(true);
     try {
       const allFutsal = await axios.get(
-        "http://localhost:3000/api/v1/player/book-futsal",
+        `${url}/player/book-futsal`,
         { withCredentials: true },
       );
       setFutsals(allFutsal.data.data);
@@ -100,7 +101,7 @@ export default function Book() {
       }
 
       await axios.patch(
-        "http://localhost:3000/api/v1/player/confirm-futsal",
+        `${url}/player/confirm-futsal`,
         { id, selected: selected.time },
         { withCredentials: true },
       );
@@ -343,17 +344,22 @@ export default function Book() {
                           border: isCurrentSelection
                             ? "2px solid #555"
                             : "1px solid #4CAF50",
-                          cursor: isBooked || futsal.underMaintenance? "not-allowed" : "pointer",
-                          background: isBooked || futsal.underMaintenance
-                            ? "#d3d3d3"
-                            : isCurrentSelection
+                          cursor:
+                            isBooked || futsal.underMaintenance
+                              ? "not-allowed"
+                              : "pointer",
+                          background:
+                            isBooked || futsal.underMaintenance
                               ? "#d3d3d3"
-                              : "#e8f5e9",
-                          color: isBooked || futsal.underMaintenance
-                            ? "#000"
-                            : isCurrentSelection
+                              : isCurrentSelection
+                                ? "#d3d3d3"
+                                : "#e8f5e9",
+                          color:
+                            isBooked || futsal.underMaintenance
                               ? "#000"
-                              : "#2e7d32",
+                              : isCurrentSelection
+                                ? "#000"
+                                : "#2e7d32",
                           boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
                           transition: "all 0.3s ease",
                         }}
@@ -375,10 +381,10 @@ export default function Book() {
                   style={{
                     marginTop: "15px",
                     padding: "8px 12px",
-                    background: futsal.underMaintenance ? "#d6d6d6" : "#0d1b2a", 
+                    background: futsal.underMaintenance ? "#d6d6d6" : "#0d1b2a",
                     color: futsal.underMaintenance
                       ? "#7a7a7a"
-                      : "rgba(86, 236, 98, 1)", 
+                      : "rgba(86, 236, 98, 1)",
                     border: "none",
                     borderRadius: "6px",
                     cursor: futsal.underMaintenance ? "not-allowed" : "pointer",

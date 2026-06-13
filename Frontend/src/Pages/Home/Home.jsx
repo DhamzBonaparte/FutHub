@@ -25,12 +25,14 @@ import PhoneSharpIcon from "@mui/icons-material/PhoneSharp";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import EmailSharpIcon from "@mui/icons-material/EmailSharp";
 
+
 export default function Home() {
   const home = useRef(null);
   const prop = useRef(null);
   const blog = useRef(null);
 
   const navigate = useNavigate();
+  const url = import.meta.env.VITE_API_URL;
 
   const [scroll, setScroll] = useState(0);
 

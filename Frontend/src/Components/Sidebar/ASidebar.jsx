@@ -12,17 +12,18 @@ import { useState, useEffect } from "react";
 export default function ASidebar() {
   const [data, setData] = useState({});
   const [error, setError] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const url = import.meta.env.VITE_API_URL;
   const location = useLocation();
 
   const Logout = async () => {
     try {
       axios.post(
-        "http://localhost:3000/api/v1/logout",
+        `${url}/logout`,
         {},
         {
           withCredentials: true,
-        }
+        },
       );
     } catch (err) {
       setError(err.message);
@@ -60,7 +61,7 @@ export default function ASidebar() {
               className={location.pathname === "/admin" ? "active" : ""}
             >
               <SpaceDashboardIcon
-                style={{ color:"gray", marginRight: "15px" }}
+                style={{ color: "gray", marginRight: "15px" }}
               />
               <span>Dashboard</span>
             </Link>
@@ -71,9 +72,7 @@ export default function ASidebar() {
               style={{ color: "white" }}
               className={location.pathname === "/admin/futsals" ? "active" : ""}
             >
-              <StorefrontIcon
-                style={{ color:"gray", marginRight: "15px" }}
-              />
+              <StorefrontIcon style={{ color: "gray", marginRight: "15px" }} />
               <span> Futsals</span>
             </Link>
           </li>
@@ -84,7 +83,7 @@ export default function ASidebar() {
               className={location.pathname === "/admin/players" ? "active" : ""}
             >
               <BookmarkAddedIcon
-                style={{ color:"gray", marginRight: "15px" }}
+                style={{ color: "gray", marginRight: "15px" }}
               />
               <span>Players</span>
             </Link>
@@ -95,7 +94,7 @@ export default function ASidebar() {
               style={{ color: "white" }}
               className={location.pathname === "/admin/owners" ? "active" : ""}
             >
-              <ReviewsIcon style={{ marginRight: "15px", color:"gray" }} />
+              <ReviewsIcon style={{ marginRight: "15px", color: "gray" }} />
               <span>Owners</span>
             </Link>
           </li>
@@ -106,7 +105,7 @@ export default function ASidebar() {
               className={location.pathname === "/" ? "active" : ""}
               onClick={Logout}
             >
-              <LogoutIcon style={{ marginRight: "15px",color:"gray" }} />
+              <LogoutIcon style={{ marginRight: "15px", color: "gray" }} />
               <span>Logout</span>
             </Link>
           </li>

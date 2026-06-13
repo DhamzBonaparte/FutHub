@@ -13,6 +13,7 @@ export default function Signup() {
       behavior: "smooth",
     });
   }, []);
+  const url = import.meta.env.VITE_API_URL;
 
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
@@ -53,7 +54,7 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      const submit = await axios.post("http://localhost:3000/api/v1/signup", {
+      const submit = await axios.post(`${url}/signup`, {
         firstName: fname,
         lastName: lname,
         email: email,
@@ -181,7 +182,6 @@ export default function Signup() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{6,}$"
                   title="Password must contain at least one number and one special character"
                 />
               </div>
@@ -232,7 +232,7 @@ export default function Signup() {
                   borderRadius: "4px",
                 }}
               >
-               Phone number must start with 97 or 98 and be 10 digits long.
+                Phone number must start with 97 or 98 and be 10 digits long.
               </small>
 
               <div className="form-group">

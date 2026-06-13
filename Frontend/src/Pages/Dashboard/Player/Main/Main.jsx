@@ -50,13 +50,14 @@ export default function Main() {
   const [err, setErr] = useState("");
 
   console.log(bookings);
+  const url = import.meta.env.VITE_API_URL;
+
   const getMyBookings = async () => {
     try {
       setLoading(true);
-      const hi = await axios.get(
-        "http://localhost:3000/api/v1/player/myBookings",
-        { withCredentials: true },
-      );
+      const hi = await axios.get(`${url}/player/myBookings`, {
+        withCredentials: true,
+      });
       setBookings(hi.data.data);
       setId(hi.data.userId);
 
@@ -102,7 +103,7 @@ export default function Main() {
 
       // Proceed only if confirmed
       await axios.patch(
-        "http://localhost:3000/api/v1/player/myBookings",
+        `${url}/player/myBookings`,
         { id, bid },
         { withCredentials: true },
       );
@@ -124,10 +125,9 @@ export default function Main() {
   const getMyOpponents = async () => {
     try {
       setLoading(true);
-      const hi = await axios.get(
-        "http://localhost:3000/api/v1/player/myOpponents",
-        { withCredentials: true },
-      );
+      const hi = await axios.get(`${url}/player/myOpponents`, {
+        withCredentials: true,
+      });
       setOpponents(hi.data.data);
       setOpp(hi.data.data.length);
     } catch (error) {
@@ -161,7 +161,7 @@ export default function Main() {
 
       // Proceed only if confirmed
       await axios.patch(
-        "http://localhost:3000/api/v1/player/myOpponents",
+        `${url}/player/myOpponents`,
         { id },
         { withCredentials: true },
       );
@@ -183,12 +183,9 @@ export default function Main() {
   const getMyTeammates = async () => {
     try {
       setLoading(true);
-      const hi = await axios.get(
-        "http://localhost:3000/api/v1/player/myTeammates",
-        {
-          withCredentials: true,
-        },
-      );
+      const hi = await axios.get(`${url}/player/myTeammates`, {
+        withCredentials: true,
+      });
       setTeammates(hi.data.data);
       setTem(hi.data.data.length);
     } catch (error) {
@@ -218,7 +215,7 @@ export default function Main() {
 
       // Proceed only if confirmed
       await axios.patch(
-        "http://localhost:3000/api/v1/player/myTeammates",
+        `${url}/player/myTeammates`,
         { id },
         { withCredentials: true },
       );

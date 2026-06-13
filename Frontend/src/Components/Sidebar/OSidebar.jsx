@@ -13,6 +13,8 @@ export default function OSidebar() {
   const [data, setData] = useState({});
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const url = import.meta.env.VITE_API_URL;
+
   const location = useLocation();
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function OSidebar() {
 
   const validate = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/owner", {
+      const res = await axios.get(`${url}/owner`, {
         withCredentials: true,
       });
       setData(res.data.data);
@@ -34,7 +36,7 @@ export default function OSidebar() {
       console.log(error);
       if (error?.response?.status === 401) {
         setError(error.message);
-        alert("You must Login to view dashboard!"); 
+        alert("You must Login to view dashboard!");
         navigate("/login");
       } else if (error.response?.status === 403) {
         setError("Session expired. Please login again.");
@@ -51,11 +53,11 @@ export default function OSidebar() {
   const Logout = async () => {
     try {
       axios.post(
-        "http://localhost:3000/api/v1/logout",
+        `${url}/logout`,
         {},
         {
           withCredentials: true,
-        }
+        },
       );
     } catch (err) {
       setError(err.message);
@@ -131,7 +133,7 @@ export default function OSidebar() {
           <li>
             <Link
               to="/owner/review"
-              style={{ color: "black",display:"none" }}
+              style={{ color: "black", display: "none" }}
               className={location.pathname === "/owner/review" ? "active" : ""}
             >
               <ReviewsIcon style={{ marginRight: "15px" }} />

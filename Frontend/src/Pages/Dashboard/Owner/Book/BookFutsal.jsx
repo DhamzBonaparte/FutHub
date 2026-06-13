@@ -10,11 +10,12 @@ export default function BookFutsal() {
   const [time, setTime] = useState("");
   const [approved, setApproved] = useState(false);
   const [data, setData] = useState([]);
+  const url = import.meta.env.VITE_API_URL;
 
   const getFutsal = async () => {
     try {
       const check = await axios.get(
-        "http://localhost:3000/api/v1/owner/check-owner",
+        `${url}/owner/check-owner`,
         { withCredentials: true },
       );
       setApproved(check.data.data.approved);
@@ -27,7 +28,7 @@ export default function BookFutsal() {
     try {
       setLoading(true);
       const check = await axios.get(
-        "http://localhost:3000/api/v1/owner/get-Bookings",
+        `${url}/owner/get-Bookings`,
         { withCredentials: true },
       );
 
@@ -44,7 +45,7 @@ export default function BookFutsal() {
       const allBookers = [];
       for (const booking of bookings) {
         const hi = await axios.get(
-          `http://localhost:3000/api/v1/owner/showBookers/${booking.userId}`,
+          `${url}/owner/showBookers/${booking.userId}`,
           { withCredentials: true },
         );
         const user = hi?.data?.msg[0];
@@ -81,7 +82,7 @@ export default function BookFutsal() {
       }
 
       await axios.patch(
-        "http://localhost:3000/api/v1/owner/rejectBooking",
+        `${url}/owner/rejectBooking`,
         { id, timeSlot },
         { withCredentials: true },
       );
@@ -118,7 +119,7 @@ export default function BookFutsal() {
       }
 
       const hi = await axios.patch(
-        `http://localhost:3000/api/v1/owner/approveTime/${id}`,
+        `${url}/owner/approveTime/${id}`,
         { time },
         { withCredentials: true },
       );
@@ -169,9 +170,12 @@ export default function BookFutsal() {
       >
         You will be able to access this page once our team approves your futsal.
       </div>
-      <div className="header" style={{
-        display: approved?"block":"none",
-      }}>
+      <div
+        className="header"
+        style={{
+          display: approved ? "block" : "none",
+        }}
+      >
         <div
           className="dashboard-title"
           style={{

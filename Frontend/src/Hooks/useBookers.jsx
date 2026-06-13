@@ -6,13 +6,14 @@ export default function useBookers() {
   const [datas, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
+  const url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const getBookings = async () => {
       try {
         setLoading(true);
         const check = await axios.get(
-          "http://localhost:3000/api/v1/owner/get-Bookings",
+          `${url}/owner/get-Bookings`,
           { withCredentials: true }
         );
 
@@ -26,7 +27,7 @@ export default function useBookers() {
         const allBookers = [];
         for (const booking of bookings) {
           const hi = await axios.get(
-            `http://localhost:3000/api/v1/owner/showBookers/${booking.userId}`,
+            `${url}/owner/showBookers/${booking.userId}`,
             { withCredentials: true }
           );
           const user = hi?.data?.msg[0];

@@ -24,12 +24,13 @@ export default function OMain() {
   const { datas } = useBookers();
   const [loading, setLoading] = useState(false);
   const [info, setInfo] = useState([]);
+  const url = import.meta.env.VITE_API_URL;
 
   const getFutsal = async () => {
     setLoading(true);
     try {
       const check = await axios.get(
-        "http://localhost:3000/api/v1/owner/check-owner",
+        `${url}/owner/check-owner`,
         { withCredentials: true },
       );
       setInfo(check.data.data);

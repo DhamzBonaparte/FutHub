@@ -34,6 +34,8 @@ export default function Futsal() {
   const [reason, setReason] = useState("");
   const [approved, setApproved] = useState("");
   const [underMain, setUnderMain] = useState(false);
+  const url = import.meta.env.VITE_API_URL;
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -94,7 +96,7 @@ export default function Futsal() {
 
       // Send update with the new value
       await axios.patch(
-        `http://localhost:3000/api/v1/owner/updateMaintainance/${id}`,
+        `${url}/owner/updateMaintainance/${id}`,
         { underMaintenance: newStatus },
         { withCredentials: true },
       );
@@ -146,7 +148,7 @@ export default function Futsal() {
           confirmButtonColor: "#4CAF50",
         });
         await axios.delete(
-          `http://localhost:3000/api/v1/owner/deleteFutsal/${id}`,
+          `${url}/owner/deleteFutsal/${id}`,
           { data: { reason }, withCredentials: true },
         );
       }
@@ -159,7 +161,7 @@ export default function Futsal() {
     setLoading(true);
     try {
       const check = await axios.get(
-        "http://localhost:3000/api/v1/owner/check-owner",
+        `${url}/owner/check-owner`,
         { withCredentials: true },
       );
       setVenue(check.data.data);
@@ -209,7 +211,7 @@ export default function Futsal() {
       }
 
       await axios.patch(
-        "http://localhost:3000/api/v1/owner/check-owner",
+        `${url}/owner/check-owner`,
         formData,
         { withCredentials: true },
       );

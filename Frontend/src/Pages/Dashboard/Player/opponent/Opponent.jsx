@@ -36,6 +36,7 @@ export default function Opponent() {
   const [main, setMain] = useState(true);
   const [myOppPostings, setMyOppPostings] = useState([]);
   const [ID, setId] = useState("");
+  const url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     handleFilter();
@@ -66,7 +67,7 @@ export default function Opponent() {
 
       // Proceed only if confirmed
       await axios.patch(
-        "http://localhost:3000/api/v1/player/confirm-opponent",
+        `${url}/player/confirm-opponent`,
         { id },
         { withCredentials: true },
       );
@@ -87,10 +88,9 @@ export default function Opponent() {
   async function getMyOpponentListings() {
     setLoading(true);
     try {
-      const value = await axios.get(
-        "http://localhost:3000/api/v1/player/my-opponent-postings",
-        { withCredentials: true },
-      );
+      const value = await axios.get(`${url}/player/my-opponent-postings`, {
+        withCredentials: true,
+      });
       setMyOppPostings(value.data.data);
     } catch (error) {
       setError(error.message);
@@ -108,7 +108,7 @@ export default function Opponent() {
     });
     try {
       const upd = await axios.patch(
-        `http://localhost:3000/api/v1/player/my-opponent-postings/${ID}`,
+        `${url}/player/my-opponent-postings/${ID}`,
         {
           teamName,
           location,
@@ -141,9 +141,7 @@ export default function Opponent() {
   async function getOpponents() {
     setLoading(true);
     try {
-      const oppo = await axios.get(
-        "http://localhost:3000/api/v1/player/find-opponent",
-      );
+      const oppo = await axios.get(`${url}/player/find-opponent`);
       setOpponents(oppo.data);
       setLength(opponents.length);
     } catch (error) {
@@ -157,7 +155,7 @@ export default function Opponent() {
     setLoading(true);
     try {
       const values = await axios.post(
-        "http://localhost:3000/api/v1/player/search-opponent",
+        `${url}/player/search-opponent`,
         { search },
         {
           withCredentials: true,
@@ -226,10 +224,9 @@ export default function Opponent() {
 
       setLoading(true);
 
-      await axios.delete(
-        `http://localhost:3000/api/v1/player/my-opponent-postings/${id}`,
-        { withCredentials: true },
-      );
+      await axios.delete(`${url}/player/my-opponent-postings/${id}`, {
+        withCredentials: true,
+      });
 
       Swal.fire({
         title: "Deleted!",
@@ -250,7 +247,7 @@ export default function Opponent() {
     setLoading(true);
     try {
       await axios.post(
-        "http://localhost:3000/api/v1/player/find-opponent",
+        `${url}/player/find-opponent`,
         {
           teamName,
           totalPlayers,

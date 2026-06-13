@@ -54,6 +54,7 @@ export default function Teammate() {
   const [search, setSearch] = useState("");
   const [register, setRegistered] = useState(false);
   const [myData, setMyData] = useState({});
+  const url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     checkTeammate();
@@ -70,12 +71,9 @@ export default function Teammate() {
 
   const checkTeammate = async () => {
     try {
-      const check = await axios.get(
-        "http://localhost:3000/api/v1/player/check-teammate",
-        {
-          withCredentials: true,
-        },
-      );
+      const check = await axios.get(`${url}/player/check-teammate`, {
+        withCredentials: true,
+      });
       setRegistered(check.data.registered);
     } catch (error) {
       setError(error.message);
@@ -102,7 +100,7 @@ export default function Teammate() {
 
       // Proceed only if confirmed
       await axios.patch(
-        "http://localhost:3000/api/v1/player/confirm-teammate",
+        `${url}/player/confirm-teammate`,
         { id },
         { withCredentials: true },
       );
@@ -136,7 +134,7 @@ export default function Teammate() {
     setLoading(true);
     try {
       const upd = await axios.patch(
-        `http://localhost:3000/api/v1/player/my-teammate-listing`,
+        `${url}/player/my-teammate-listing`,
         {
           name,
           location,
@@ -183,10 +181,9 @@ export default function Teammate() {
         return; // user cancelled
       }
 
-      await axios.delete(
-        `http://localhost:3000/api/v1/player/my-teammate-listing/${myData?._id}`,
-        { withCredentials: true },
-      );
+      await axios.delete(`${url}/player/my-teammate-listing/${myData?._id}`, {
+        withCredentials: true,
+      });
 
       Swal.fire({
         title: "Deleted!",
@@ -207,7 +204,7 @@ export default function Teammate() {
     setLoading(true);
     try {
       const se = await axios.post(
-        "http://localhost:3000/api/v1/player/search-teammate",
+        `${url}/player/search-teammate`,
         { search },
         { withCredentials: true },
       );
@@ -222,7 +219,7 @@ export default function Teammate() {
   const getMyTeammateListings = async () => {
     try {
       const myTeam = await axios.get(
-        "http://localhost:3000/api/v1/player/my-teammate-listing",
+        `${url}/player/my-teammate-listing`,
         { withCredentials: true },
       );
       setMyData(myTeam.data.data);
@@ -239,7 +236,7 @@ export default function Teammate() {
     setLoading(true);
     try {
       const teams = await axios.get(
-        "http://localhost:3000/api/v1/player/find-teammate",
+        `${url}/player/find-teammate`,
         { withCredentials: true },
       );
       setData(teams.data.data);
@@ -257,7 +254,7 @@ export default function Teammate() {
     setLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/player/find-teammate",
+        `${url}/player/find-teammate`,
         {
           name,
           age,
