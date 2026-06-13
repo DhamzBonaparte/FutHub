@@ -13,7 +13,7 @@ import OMain from "./Pages/Dashboard/Owner/Main/OMain";
 import Book from "./Pages/Dashboard/Player/Booking/Book";
 import BookFutsal from "./Pages/Dashboard/Owner/Book/BookFutsal";
 import Review from "./Pages/Dashboard/Owner/Reviews/Review";
-import Futsal from "./Pages/Dashboard/Owner/My Futsal/Futsal";
+import Futsal from "./Pages/Dashboard/Owner/MyFutsal/Futsal";
 import Register from "./Pages/Register/Register";
 import Admin from "./Pages/Dashboard/Admin/Admin";
 import AdminLogin from "./Pages/Dashboard/Admin/adminLogin/AdminLogin";
