@@ -39,7 +39,7 @@ npm install
 
 
 
-## 💻 Frontend
+## Frontend
 cd Frontend
 npm run dev
 
