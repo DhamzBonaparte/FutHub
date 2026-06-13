@@ -60,10 +60,9 @@ export default function Book() {
   const getFutsals = async () => {
     setLoading(true);
     try {
-      const allFutsal = await axios.get(
-        `${url}/player/book-futsal`,
-        { withCredentials: true },
-      );
+      const allFutsal = await axios.get(`${url}/player/book-futsal`, {
+        withCredentials: true,
+      });
       setFutsals(allFutsal.data.data);
       console.log(allFutsal.data.data);
     } catch (err) {
@@ -222,7 +221,7 @@ export default function Book() {
                     style={{ height: "250px" }}
                   >
                     <img
-                      src={`http://localhost:3000${img}`}
+                      src={`https://futhub.onrender.com${img}`}
                       alt={futsal.name}
                       style={{
                         width: "100%",
