@@ -50,9 +50,9 @@ const getCredentials = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      maxAge: null,
+      secure: true,
+      sameSite: "none",
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
     });
 
     res.status(200).json({
@@ -901,7 +901,7 @@ const approveTime = async (req, res) => {
 
 const rejectBooking = async (req, res) => {
   try {
-    const { id, timeSlot } = req.body; 
+    const { id, timeSlot } = req.body;
 
     console.log("rejectBooking body:", req.body);
 
@@ -917,7 +917,7 @@ const rejectBooking = async (req, res) => {
 
     res.json({
       message: "Booking deleted successfully",
-      futsal,  
+      futsal,
     });
   } catch (error) {
     console.error(error);

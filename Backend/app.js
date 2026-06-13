@@ -15,6 +15,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 console.log(path.join(__dirname, "uploads"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -28,7 +29,7 @@ app.use(
       }
     },
     credentials: true,
-  })
+  }),
 );
 app.use(cookieParser());
 app.use("/api/v1", credentials);
