@@ -15,8 +15,7 @@ FutHub is a full‑stack application designed to make futsal more accessible and
 - Teammate & Opponent Finder → Matchmaking system to connect players for games.
 - Admin Dashboard → Approve/reject bookings, track schedules, and manage users.
 - Transparent Workflows → Clear approval and cancellation logic for bookings.
-- User Feedback → Players share experiences to build trust.
-- Modern UI → Responsive design with React, SCSS, and Material UI.
+- Modern UI → Modern design with React, SCSS, and Material UI.
 
 ---
 
@@ -36,8 +35,6 @@ Clone the repo and install dependencies:
 git clone https://github.com/yourusername/futhub.git
 cd futhub
 npm install
-
-
 
 ## Frontend
 cd Frontend
