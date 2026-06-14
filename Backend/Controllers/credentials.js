@@ -52,7 +52,7 @@ const getCredentials = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
     res.status(200).json({

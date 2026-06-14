@@ -6,22 +6,30 @@ const connect = require("./Database/db");
 const credentials = require("./Routes/route");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
+const fs = require("fs");
+
+//  Ensure uploads folder exists
+const uploadPath = path.join(__dirname, "uploads");
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath);
+}
 
 const allowedOrigins = [
   "http://localhost:5173", // local dev
   "https://futhub.netlify.app", // production frontend
 ];
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-console.log(path.join(__dirname, "uploads"));
+
+// Serve uploads statically
+app.use("/uploads", express.static(uploadPath));
+console.log(uploadPath);
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (like curl, mobile apps)
       if (!origin) return callback(null, true);
-
       if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -31,6 +39,7 @@ app.use(
     credentials: true,
   }),
 );
+
 app.use(cookieParser());
 app.use("/api/v1", credentials);
 

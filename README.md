@@ -27,6 +27,17 @@ FutHub is a full‑stack application designed to make futsal more accessible and
 
 ---
 
+
+## For quick logins:
+
+## Player
+username: sulav@gmail.com
+password: sulav
+
+## Owner
+username: rajesh@gmail.com
+password: rajesh
+
 ## 🚀 Getting Started
 
 Clone the repo and install dependencies:
@@ -43,6 +54,7 @@ npm run dev
 ## Backend
 cd Backend
 node app.js
+
 
 
 
